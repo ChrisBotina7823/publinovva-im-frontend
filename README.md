@@ -1,1 +1,2 @@
-# Publinovva Investment Manager
+# publinovva-im-frontend
+React App por Publinovva Investment Manager
