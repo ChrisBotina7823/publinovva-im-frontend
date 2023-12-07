@@ -3,8 +3,8 @@ import { Route, Navigate } from "react-router-dom";
 
 const PrivateRoute = ({ element, ...rest }) => {
   const isAuthenticated = () => {
-    const token = localStorage.getItem("miToken");
-    return !!token; // Devuelve true si el token existe, false si no existe
+    const token = localStorage.getItem("token");
+    return !!token;
   };
 
   return isAuthenticated() ? element : <Navigate to="/authentication/sign-in" replace />;

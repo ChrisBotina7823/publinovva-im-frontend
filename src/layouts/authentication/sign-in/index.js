@@ -17,6 +17,8 @@ import { useState } from "react";
 
 // react-router-dom components
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -34,6 +36,7 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
+import MDBadge from "components/MDBadge";
 
 // Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
@@ -42,9 +45,39 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
 function Basic() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
+  const handleSignIn = async () => {
+    try {
+      console.log(username);
+      console.log(password);
+      const response = await axios.post(
+        "http://localhost:4000/auth/",
+        new URLSearchParams({
+          username,
+          password,
+        }),
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
+
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+      navigate("/dashboard");
+    } catch (error) {
+      console.log(error.response.data.error);
+      setError(error.response.data.error || "Error de inicio de sesión");
+    }
+  };
 
   return (
     <BasicLayout image={bgImage}>
@@ -84,10 +117,22 @@ function Basic() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth />
+              <MDInput
+                type="text"
+                label="Username"
+                fullWidth
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth />
+              <MDInput
+                type="password"
+                label="Password"
+                fullWidth
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -102,10 +147,15 @@ function Basic() {
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
-                sign in
+              <MDButton variant="gradient" color="info" fullWidth onClick={handleSignIn}>
+                Sign in
               </MDButton>
             </MDBox>
+            {error && (
+              <MDBox mt={2} mb={1} textAlign="center">
+                <MDBadge color="error">{error}</MDBadge>
+              </MDBox>
+            )}
             <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
                 Don&apos;t have an account?{" "}

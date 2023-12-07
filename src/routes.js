@@ -44,6 +44,7 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import PrivateRoute from "auth";
+import Logout from "layouts/authentication/logout";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -104,6 +105,15 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-up",
     component: <SignUp />,
+  },
+  {
+    type: "collapse",
+    name: "Logout",
+    key: "logout",
+    icon: <Icon fontSize="small">logout</Icon>,
+    route: "/logout",
+    // Add your Logout component as the element
+    component: <PrivateRoute element={<Logout />} />,
   },
 ];
 
