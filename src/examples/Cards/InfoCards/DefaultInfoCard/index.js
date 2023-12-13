@@ -24,8 +24,17 @@ import Icon from "@mui/material/Icon";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
+import { useNotification } from "components/NotificationContext";
+import copy from 'clipboard-copy'
 
-function DefaultInfoCard({ color, icon, title, description, value }) {
+function DefaultInfoCard({ color, icon, title, description, value, value_additional }) {
+  const { showNotification } = useNotification()
+
+  const handleCopy = async () => {
+    await copy(description)
+    showNotification("success", "Dirección copiada al portapapeles", `La dirección ${description} se ha copiado al portapapeles`)
+  }
+
   return (
     <Card>
       <MDBox p={2} mx={3} display="flex" justifyContent="center">
@@ -49,7 +58,7 @@ function DefaultInfoCard({ color, icon, title, description, value }) {
           {title}
         </MDTypography>
         {description && (
-          <MDTypography variant="caption" color="text" fontWeight="regular">
+          <MDTypography style={{cursor:"pointer"}} onClick={handleCopy} variant="caption" color="text" fontWeight="regular">
             {description}
           </MDTypography>
         )}
@@ -57,6 +66,11 @@ function DefaultInfoCard({ color, icon, title, description, value }) {
         {value && (
           <MDTypography variant="h5" fontWeight="medium">
             {value}
+          </MDTypography>
+        )}
+        {value_additional && (
+          <MDTypography variant="caption" color="text" fontWeight="regular">
+            {value_additional}
           </MDTypography>
         )}
       </MDBox>
