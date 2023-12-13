@@ -27,15 +27,24 @@ import MDTypography from "components/MDTypography";
 // Images
 import pattern from "assets/images/illustrations/pattern-tree.svg";
 import masterCardLogo from "assets/images/logos/mastercard.png";
+import copy from 'clipboard-copy';
+import { useNotification } from "components/NotificationContext";
 
-function MasterCard({ color, number, holder, expires }) {
+function MasterCard({ color, number, holder, expires, logo }) {
+  const { showNotification } = useNotification()
+
+  const handleDepositCopy = async () => {
+    await copy(number)
+    showNotification("success", "Dirección copiada al portapapeles", `La dirección de depósito ${number} se ha copiado en el portapapeles`)
+  }
+
   const numbers = [...`${number}`];
 
-  if (numbers.length < 16 || numbers.length > 16) {
-    throw new Error(
-      "Invalid value for the prop number, the value for the number prop shouldn't be greater than or less than 16 digits"
-    );
-  }
+  // if (numbers.length < 16 || numbers.length > 16) {
+  //   throw new Error(
+  //     "Invalid value for the prop number, the value for the number prop shouldn't be greater than or less than 16 digits"
+  //   );
+  // }
 
   const num1 = numbers.slice(0, 4).join("");
   const num2 = numbers.slice(4, 8).join("");
@@ -68,14 +77,17 @@ function MasterCard({ color, number, holder, expires }) {
         <MDBox color="white" p={1} lineHeight={0} display="inline-block">
           <Icon fontSize="default">wifi</Icon>
         </MDBox>
-        <MDTypography variant="h5" color="white" fontWeight="medium" sx={{ mt: 3, mb: 5, pb: 1 }}>
-          {num1}&nbsp;&nbsp;&nbsp;{num2}&nbsp;&nbsp;&nbsp;{num3}&nbsp;&nbsp;&nbsp;{num4}
+        <MDTypography variant="button" color="white" fontWeight="regular" opacity={0.8}>Dirección de Depósito</MDTypography>
+        <MDTypography style={{cursor:"pointer"}} onClick={ handleDepositCopy } variant="h5" color="white" fontWeight="medium" sx={{ mt: 3, mb: 5, pb: 1 }}>
+          {number}
+          {/* {num1}&nbsp;&nbsp;&nbsp;{num2}&nbsp;&nbsp;&nbsp;{num3}&nbsp;&nbsp;&nbsp;{num4} */}
+          <Icon fontSize="default" >copy</Icon>
         </MDTypography>
         <MDBox display="flex" justifyContent="space-between" alignItems="center">
           <MDBox display="flex" alignItems="center">
             <MDBox mr={3} lineHeight={1}>
               <MDTypography variant="button" color="white" fontWeight="regular" opacity={0.8}>
-                Card Holder
+                Entidad
               </MDTypography>
               <MDTypography
                 variant="h6"
@@ -87,16 +99,16 @@ function MasterCard({ color, number, holder, expires }) {
               </MDTypography>
             </MDBox>
             <MDBox lineHeight={1}>
-              <MDTypography variant="button" color="white" fontWeight="regular" opacity={0.8}>
+              {/* <MDTypography variant="button" color="white" fontWeight="regular" opacity={0.8}>
                 Expires
               </MDTypography>
               <MDTypography variant="h6" color="white" fontWeight="medium">
                 {expires}
-              </MDTypography>
+              </MDTypography> */}
             </MDBox>
           </MDBox>
           <MDBox display="flex" justifyContent="flex-end" width="20%">
-            <MDBox component="img" src={masterCardLogo} alt="master card" width="60%" mt={1} />
+            { logo && <MDBox component="img" src={logo} alt="master card" width="100%" mt={1} borderRadius={5}  />}
           </MDBox>
         </MDBox>
       </MDBox>
