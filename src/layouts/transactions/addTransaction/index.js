@@ -1,47 +1,36 @@
-import { useState } from "react";
-import Card from "@mui/material/Card";
+import React, { useState } from "react";
 import MDBox from "components/MDBox";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from "@mui/material/Select";
+import MenuItem from '@mui/material/MenuItem';
 import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
+import { useParams } from "react-router-dom";
 
-import { setOpenConfigurator, useMaterialUIController } from "context";
+const WalletTransactionForm = () => {
+    const user = JSON.parse(localStorage.getItem("user"))
 
-const AddPackageForm = () => {
-    const [packageName, setPackageName] = useState('');
-    const [minOpeningAmount, setMinOpeningAmount] = useState('');
-    const [minInvDays, setMinInvDays] = useState('');
-    const [revenueFreq, setRevenueFreq] = useState('');
-    const [revenuePercentage, setRevenuePercentage] = useState('');
-    const [globalAmount, setGlobalAmount] = useState('');
+    const [transactionAmount, setTransactionAmount] = useState("");
+    const [walletPassword, setWalletPassword] = useState("");
+    const [transactionType, setTransactionType] = useState("usd"); // Default to "usd"
 
     const { showNotification } = useNotification();
-    const [controller, dispatch] = useMaterialUIController();
 
-    const handleAddPackage = async () => {
-
+    const handleWalletTransaction = async () => {
         try {
-            setOpenConfigurator(dispatch, false)
-
-            const storedUser = localStorage.getItem("user");
-            const user = JSON.parse(storedUser);
-            console.log(user.username);
-
-            const response = await axiosInstance.post('/packages', {
-                name: packageName,
-                min_opening_amount: minOpeningAmount,
-                min_inv_days: minInvDays,
-                revenue_freq: revenueFreq,
-                revenue_percentage: revenuePercentage,
-                global_amount: globalAmount,
-                admin_username: user.username
+            const dest = transactionType;
+            const response = await axiosInstance.post(`/movements/wallet-transactions/${user.username}/${dest}`, {
+                transaction_amount: transactionAmount,
+                wallet_password: walletPassword,
             });
 
-            showNotification("success", "Paquete añadido correctamente", `El ID del paquete es ${response.data._id} `);
+            showNotification("success", "Transacción realizada correctamente", `ID de la transacción: ${response.data._id}`);
         } catch (error) {
-            console.error('Error adding package:', error.response.data.error);
-            showNotification("error", "Error al añadir el paquete", error.response.data.error);
+            console.error('Error in wallet transaction:', error.response.data.error);
+            showNotification("error", "Error en la transacción de la billetera", error.response.data.error);
         }
     };
 
@@ -49,65 +38,48 @@ const AddPackageForm = () => {
         <MDBox component="form" role="form">
             <MDBox mb={2}>
                 <MDInput
-                    type="text"
-                    label="Package Name"
+                    type="number"
+                    label="Monto de transacción"
                     fullWidth
-                    value={packageName}
-                    onChange={(e) => setPackageName(e.target.value)}
+                    value={transactionAmount}
+                    onChange={(e) => setTransactionAmount(e.target.value)}
                 />
             </MDBox>
+
+            <MDBox mb={2}>
+                <FormControl fullWidth>
+                    <InputLabel id="transaction-type">Destino</InputLabel>
+                    <Select
+                        value={transactionType}
+                        onChange={(e) => setTransactionType(e.target.value)}
+                        label="Tipo de Transacción"
+                        labelId="transaction-type"
+                        sx={{ paddingY: '8px' }}
+                        fullWidth
+                    >
+                        <MenuItem value="usd">Billetera USD</MenuItem>
+                        <MenuItem value="inv">Billetera de Inversiones</MenuItem>
+                    </Select>
+                </FormControl>
+            </MDBox>
+
             <MDBox mb={2}>
                 <MDInput
-                    type="number"
-                    label="Minimum Opening Amount"
+                    type="password"
+                    label="Wallet Password"
                     fullWidth
-                    value={minOpeningAmount}
-                    onChange={(e) => setMinOpeningAmount(e.target.value)}
+                    value={walletPassword}
+                    onChange={(e) => setWalletPassword(e.target.value)}
                 />
             </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="number"
-                    label="Minimum Investment Days"
-                    fullWidth
-                    value={minInvDays}
-                    onChange={(e) => setMinInvDays(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="number"
-                    label="Revenue Frequency"
-                    fullWidth
-                    value={revenueFreq}
-                    onChange={(e) => setRevenueFreq(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="number"
-                    label="Revenue Percentage"
-                    fullWidth
-                    value={revenuePercentage}
-                    onChange={(e) => setRevenuePercentage(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="number"
-                    label="Global Amount"
-                    fullWidth
-                    value={globalAmount}
-                    onChange={(e) => setGlobalAmount(e.target.value)}
-                />
-            </MDBox>
+
             <MDBox mt={4} mb={1}>
-                <MDButton variant="gradient" color="info" fullWidth onClick={handleAddPackage}>
-                    Add Package
+                <MDButton variant="gradient" color="info" fullWidth onClick={handleWalletTransaction}>
+                    Realizar Transacción
                 </MDButton>
             </MDBox>
         </MDBox>
     );
 };
 
-export default AddPackageForm;
+export default WalletTransactionForm;

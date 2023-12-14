@@ -9,6 +9,8 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from "@mui/material/Select"
+import { FormControlLabel } from "@mui/material";
+import { Switch } from "@mui/material";
 
 import { setOpenConfigurator, useMaterialUIController } from "context";
 
@@ -20,6 +22,15 @@ const EditClientForm = ({ id }) => {
     const [usdBalance, setUsdBalance] = useState(0);
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
+
+    const [showPassword, setShowPassword] = useState(false);
+    const [showIPassword, setShowIPassword] = useState(false);
+    const [showUsdPassword, setShowUsdPassword] = useState(false);
+
+    const [password, setPassword] = useState('');
+    const [iPassword, setIPassword] = useState('');
+    const [usdPassword, setUsdPassword] = useState('');
+
     const [initialClientData, setInitialClientData] = useState(null);
 
 
@@ -55,7 +66,7 @@ const EditClientForm = ({ id }) => {
         try {
             setOpenConfigurator(dispatch, false);
 
-            const response = await axiosInstance.put(`/clients/${id}`, {
+            const requestData = {
                 username,
                 email,
                 fullname,
@@ -63,7 +74,13 @@ const EditClientForm = ({ id }) => {
                 phone,
                 account_state: accountState,
                 usd_balance: usdBalance,
-            });
+            };
+
+            if (showPassword && password) requestData.password = password;
+            if (showIPassword && iPassword) requestData.i_password = iPassword;
+            if (showUsdPassword && usdPassword) requestData.usd_password = usdPassword;
+
+            const response = await axiosInstance.put(`/clients/${id}`, requestData);
 
             showNotification("success", "Cliente editado correctamente", `El ID del cliente es ${response.data._id}`);
         } catch (error) {
@@ -141,12 +158,86 @@ const EditClientForm = ({ id }) => {
             <MDBox mb={2}>
                 <MDInput
                     type="number"
-                    label="USD Balance"
+                    label="Saldo Billetera USD"
                     fullWidth
                     value={usdBalance}
                     onChange={(e) => setUsdBalance(e.target.value)}
                 />
             </MDBox>
+
+            <MDBox mb={1}>
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={showPassword}
+                            onChange={() => setShowPassword(!showPassword)}
+                            inputProps={{ 'aria-label': 'toggle-password' }}
+                        />
+                    }
+                    label="Cambiar Contraseña"
+                />
+            </MDBox>
+            {showPassword && (
+                <MDBox mb={2}>
+                    <MDInput
+                        type="password"
+                        label="Contraseña perfil"
+                        fullWidth
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </MDBox>
+            )}
+
+            <MDBox mb={1}>
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={showIPassword}
+                            onChange={() => setShowIPassword(!showIPassword)}
+                            inputProps={{ 'aria-label': 'toggle-i-password' }}
+                        />
+                    }
+                    label="Contraseña Billetera de Inversiones"
+                />
+            </MDBox>
+            {showIPassword && (
+                <MDBox mb={2}>
+                    <MDInput
+                        type="password"
+                        label="Contraseña Inversiones"
+                        fullWidth
+                        value={iPassword}
+                        onChange={(e) => setIPassword(e.target.value)}
+                    />
+                </MDBox>
+            )}
+
+            <MDBox mb={1}>
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={showUsdPassword}
+                            onChange={() => setShowUsdPassword(!showUsdPassword)}
+                            inputProps={{ 'aria-label': 'toggle-usd-password' }}
+                        />
+                    }
+                    label="Contraseña Billetera USD"
+                />
+            </MDBox>
+
+            {showUsdPassword && (
+                <MDBox mb={2}>
+                    <MDInput
+                        type="password"
+                        label="Contraseña USD"
+                        fullWidth
+                        value={showUsdPassword}
+                        onChange={(e) => setShowUsdPassword(e.target.value)}
+                    />
+                </MDBox>
+            )}
+
 
 
             <MDBox mt={4} mb={1}>

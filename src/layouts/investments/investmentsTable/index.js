@@ -26,12 +26,35 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
+import { useState } from "react";
+import Configurator from "components/Configurator";
+import ConfiguratorButton from "components/ConfiguratorButton";
+import { useMaterialUIController, setOpenConfigurator } from "context";
 
 // Data
 import investmentsTableData from "layouts/investments/investmentsTable/data/investmentsTableData";
+import axiosInstance from "axiosInstance";
+import { useNotification } from "components/NotificationContext";
+
+import EditInvestment from 'layouts/investments/editInvestment';
 
 function Tables() {
-  const { columns, rows } = investmentsTableData();
+  const [customContent, setCustomContent] = useState(null);
+  const { showNotification } = useNotification();
+
+  const [controller, dispatch] = useMaterialUIController();
+  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, true);
+
+
+  const handleEditClick = (id) => {
+    handleConfiguratorOpen()
+    setCustomContent(
+      <EditInvestment investmentId={id} />
+    );
+  };
+
+
+  const { columns, rows } = investmentsTableData(handleEditClick);
 
   return (
     <DashboardLayout>
@@ -67,6 +90,8 @@ function Tables() {
           </Grid>
         </Grid>
       </MDBox>
+      <Configurator customContent={customContent} />
+      <ConfiguratorButton icon="add" pos={1} />
       <Footer />
     </DashboardLayout>
   );

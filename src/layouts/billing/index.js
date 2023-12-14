@@ -33,32 +33,42 @@ import BillingInformation from "layouts/billing/components/BillingInformation";
 import Transactions from "layouts/billing/components/Transactions";
 
 function Billing() {
+
+  const user = JSON.parse(localStorage.getItem("user"))
+
+  const admin = user.__t == "Client" ? user.admin : user
+
   return (
     <DashboardLayout>
       <DashboardNavbar absolute isMini />
       <MDBox mt={8}>
         <MDBox mb={3}>
           <Grid container spacing={3}>
-            <Grid item xs={12} lg={8}>
+            <Grid item xs={12} lg={12}>
               <Grid container spacing={3}>
                 <Grid item xs={12} xl={6}>
-                  <MasterCard number={4562112245947852} holder="jack peterson" expires="11/22" />
+                  <MasterCard number={admin.deposit_address} holder={admin.entity_name} logo={admin.deposit_qr} expires="11/22" />
                 </Grid>
-                <Grid item xs={12} md={6} xl={3}>
-                  <DefaultInfoCard
-                    icon="account_balance"
-                    title="salary"
-                    description="Belong Interactive"
-                    value="+$2000"
-                  />
+                <Grid item xs={12} md={8} xl={3}>
+                  { user.usd_wallet &&
+                    <DefaultInfoCard
+                      icon="wallet"
+                      title="Billetera USD"
+                      description={user.usd_wallet._id}
+                      value={`$${user.usd_wallet.available_amount}`}
+                    />
+                   }
                 </Grid>
-                <Grid item xs={12} md={6} xl={3}>
-                  <DefaultInfoCard
-                    icon="paypal"
-                    title="paypal"
-                    description="Freelance Payment"
-                    value="$455.00"
-                  />
+                <Grid item xs={12} md={8} xl={3}>
+                  { user.i_wallet &&
+                    <DefaultInfoCard
+                      icon="wallet"
+                      title="Billetera de Inversiones"
+                      description={user.i_wallet._id}
+                      value={`$${user.i_wallet.available_amount}`}
+                      value_additional={`($${user.i_wallet.investment_amount} en inversión)`}
+                    />
+                   }
                 </Grid>
                 <Grid item xs={12}>
                   <PaymentMethod />

@@ -55,6 +55,8 @@ import brandDark from "assets/images/logo-ct-dark.png";
 
 import { NotificationProvider } from 'components/NotificationContext';
 import Notification from 'components/Notification';
+import socket from "socketInstance";
+import axiosInstance from "axiosInstance";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -125,6 +127,22 @@ export default function App() {
 
       return null;
     });
+
+  
+  useEffect( () => {
+  
+      socket.on("usersUpdate", async () => {
+        const prevUser = JSON.parse(localStorage.getItem("user"))
+        const response = await axiosInstance.get(`users/${prevUser.username}`)
+        const user = response.data
+        console.log(user)
+        localStorage.setItem("user", JSON.stringify(user))
+      })
+
+    return () => {
+      socket.off("usersUpdate")
+    }
+  }, [])
 
   return (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
