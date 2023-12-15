@@ -56,28 +56,20 @@ function Tables() {
       )
     }
     
-    const handleEditClick = (id) => {
-      handleConfiguratorOpen()
-      setCustomContent(
-        <EditTicket id={id} />
-      )
+    const handleStateChange = async (id, movement_state) => {
+      try {
+        const response = await axiosInstance.put(`movements/change-state/${id}`, {movement_state})
+        showNotification("success", "Tiquete actualizado correctamente", `El estado del tiquete identificado con ID ${response.data._id} se ha cambiado a ${response.data.movement_state}`);
+        return true;
+      } catch(error) {
+        console.error('Error fetching investment data:', error.response.data.error);
+        showNotification("error", "Error al editar la inversión", error.response.data.error);
+        return false;
+      }
+
     }
 
-    const handleDeleteClick = (id) => {
-      const deleteTicket = async () => {
-        try {
-          const response = await axiosInstance.delete(`/packages/${id}`)
-          showNotification("success", "Transacción eliminada correctamente", `El ID de la transacción es ${response.data._id} `);
-        } catch (error) {
-            console.error('Error adding Ticket:', error.response.data.error);
-            showNotification("error", "Error al editar la transacción", error.response.data.error);
-        }
-
-      }  
-      deleteTicket()
-    }
-
-    const { columns, rows } = TicketTableData(handleEditClick, handleDeleteClick);
+    const { columns, rows } = TicketTableData(handleStateChange);
     
   return (
     <DashboardLayout>

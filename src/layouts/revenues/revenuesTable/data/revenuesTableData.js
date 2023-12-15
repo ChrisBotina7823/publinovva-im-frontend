@@ -36,6 +36,7 @@ export default function DataTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log("fetching data...")
         const response = await axiosInstance.get(`/investments/revenues/${user.username}`);
         
         const dataRows = mapDataToJSX(response.data)

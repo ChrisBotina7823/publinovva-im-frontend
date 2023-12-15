@@ -43,6 +43,7 @@ export default function DataTable(handleEditClick) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log("fetching data...")
         const response = await axiosInstance.get('/investments');
         const dataRows = mapDataToJSX(response.data);
 

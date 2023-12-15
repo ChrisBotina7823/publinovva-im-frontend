@@ -108,7 +108,7 @@ function MasterCard({ color, number, holder, expires, logo }) {
             </MDBox>
           </MDBox>
           <MDBox display="flex" justifyContent="flex-end" width="20%">
-            { logo && <MDBox component="img" src={logo} alt="master card" width="100%" mt={1} borderRadius={5}  />}
+            { logo && <MDBox component="img" src={logo} alt="master card" width="100%" mt={1} borderRadius={"5px"}  />}
           </MDBox>
         </MDBox>
       </MDBox>
@@ -124,7 +124,7 @@ MasterCard.defaultProps = {
 // Typechecking props for the MasterCard
 MasterCard.propTypes = {
   color: PropTypes.oneOf(["primary", "secondary", "info", "success", "warning", "error", "dark"]),
-  number: PropTypes.number.isRequired,
+  number: PropTypes.string.isRequired,
   holder: PropTypes.string.isRequired,
   expires: PropTypes.string.isRequired,
 };

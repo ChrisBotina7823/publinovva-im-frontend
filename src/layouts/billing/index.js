@@ -13,30 +13,36 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-// @mui material components
-import Grid from "@mui/material/Grid";
-
-// Material Dashboard 2 React components
+import React, { useState } from "react";
 import MDBox from "components/MDBox";
-
-// Material Dashboard 2 React examples
+import Grid from "@mui/material/Grid";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import MasterCard from "examples/Cards/MasterCard";
 import DefaultInfoCard from "examples/Cards/InfoCards/DefaultInfoCard";
-
-// Billing page components
 import PaymentMethod from "layouts/billing/components/PaymentMethod";
 import Invoices from "layouts/billing/components/Invoices";
 import BillingInformation from "layouts/billing/components/BillingInformation";
 import Transactions from "layouts/billing/components/Transactions";
+import Configurator from "components/Configurator";
+import ConfiguratorButton from "components/ConfiguratorButton";
+import { useMaterialUIController, setOpenConfigurator } from "context";
+import AddTransaction from "layouts/billing/addTransaction";
 
 function Billing() {
 
-  const user = JSON.parse(localStorage.getItem("user"))
+  const user = JSON.parse(localStorage.getItem("user"));
+  const admin = user.__t === "Client" ? user.admin : user;
 
-  const admin = user.__t == "Client" ? user.admin : user
+  const [controller, dispatch] = useMaterialUIController();
+  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, true);
+  const [customContent, setCustomContent] = useState(null);
+
+  const handleAddTransactionClick = () => {
+    handleConfiguratorOpen();
+    setCustomContent(<AddTransaction />);
+  };
 
   return (
     <DashboardLayout>
@@ -91,6 +97,8 @@ function Billing() {
           </Grid>
         </MDBox>
       </MDBox>
+      <Configurator customContent={customContent} />
+      <ConfiguratorButton icon="add" f={handleAddTransactionClick} pos={1} />
       <Footer />
     </DashboardLayout>
   );
