@@ -1,15 +1,18 @@
 // Import necessary dependencies
+import { useUser } from "context/userContext";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+
 const Logout = () => {
+  const { removeUser } = useUser()
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Clear the token from local storage
-    localStorage.removeItem("token");
-    localStorage.removeItem("user")
-
+    const update = async () => {
+      await removeUser()
+    }
+    update()
     // Redirect to the sign-in page
     navigate("/authentication/sign-in");
   }, [navigate]);

@@ -48,7 +48,7 @@ import {
   setDarkMode,
 } from "context";
 
-function Configurator({customContent}) {
+function Configurator({customContent, customTitle, customDescription}) {
   const [controller, dispatch] = useMaterialUIController();
   const {
     openConfigurator,
@@ -138,9 +138,9 @@ function Configurator({customContent}) {
         px={3}
       >
         <MDBox>
-          <MDTypography variant="h5">Material UI Configurator</MDTypography>
+          <MDTypography variant="h5">{customTitle}</MDTypography>
           <MDTypography variant="body2" color="text">
-            See our dashboard options.
+            {customDescription}
           </MDTypography>
         </MDBox>
 

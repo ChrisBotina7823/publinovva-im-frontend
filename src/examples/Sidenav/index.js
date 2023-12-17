@@ -46,8 +46,11 @@ import {
   setTransparentSidenav,
   setWhiteSidenav,
 } from "context";
+import { useUser } from "context/userContext";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
+  const { user } = useUser()
+
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = controller;
   const location = useLocation();
@@ -84,7 +87,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   }, [dispatch, location]);
 
   // Render all the routes from the routes.js (All the visible items on the Sidenav)
-  const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, href, route }) => {
+  const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, href, route, hidden }) => {
     let returnValue;
 
     if (type === "collapse") {
@@ -137,6 +140,16 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       );
     }
 
+    let display = true 
+    if(hidden) {
+      for(const h of hidden) {
+        if(user?.__t == h || (h == "Superuser" && !user?.__t) ) {
+          display = false
+        }
+      }
+    }
+    if(!display) returnValue = <MDBox/>
+
     return returnValue;
   });
 
@@ -179,19 +192,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         }
       />
       <List>{renderRoutes}</List>
-      <MDBox p={2} mt="auto">
-        <MDButton
-          component="a"
-          href="https://www.creative-tim.com/product/material-dashboard-pro-react"
-          target="_blank"
-          rel="noreferrer"
-          variant="gradient"
-          color={sidenavColor}
-          fullWidth
-        >
-          upgrade to pro
-        </MDButton>
-      </MDBox>
     </SidenavRoot>
   );
 }

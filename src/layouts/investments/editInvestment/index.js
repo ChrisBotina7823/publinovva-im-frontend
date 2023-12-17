@@ -17,6 +17,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
+import { setOpenConfigurator, useMaterialUIController } from "context";
+
 
 const EditInvestmentForm = ({ investmentId }) => {
     console.log(investmentId)
@@ -28,11 +30,12 @@ const EditInvestmentForm = ({ investmentId }) => {
     const [showState, setShowState] = useState(false);  // Nuevo estado para controlar la visibilidad del campo de estado
 
     const { showNotification } = useNotification();
+    const [controller, dispatch] = useMaterialUIController();
 
     useEffect(() => {
         const fetchInvestmentData = async (investmentId) => {
             try {
-                const response = await axiosInstance.get(`/investments/${investmentId}`);
+                const response = await axiosInstance().get(`/investments/${investmentId}`);
                 console.log(response)
                 const investmentData = response.data;
 
@@ -51,6 +54,7 @@ const EditInvestmentForm = ({ investmentId }) => {
 
     const handleEditInvestment = async () => {
         try {
+            setOpenConfigurator(dispatch, false);
             const requestData = {
                 actual_start_date: actualStartDate.toISOString(),
                 end_date: endDate.toISOString(),
@@ -58,7 +62,7 @@ const EditInvestmentForm = ({ investmentId }) => {
                 ...(showState && { state }),
             };
 
-            const response = await axiosInstance.put(`/investments/${investmentId}`, requestData);
+            const response = await axiosInstance().put(`/investments/${investmentId}`, requestData);
 
             showNotification("success", "Inversión editada correctamente", `La inversión con ID ${response.data._id} se ha editado correctamente`);
         } catch (error) {

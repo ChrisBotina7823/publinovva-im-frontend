@@ -38,6 +38,7 @@ import EditClient from 'layouts/clients/editClient'; // Updated path
 import axiosInstance from "axiosInstance";
 
 import { useNotification } from "components/NotificationContext";
+import { useUser } from "context/userContext";
 
 function Tables() {
 
@@ -46,7 +47,9 @@ function Tables() {
 
   
   const [customContent, setCustomContent] = useState(null);
-
+  const [customTitle, setCustomTitle] = useState(null);
+  const [customDescription, setCustomDescription] = useState(null);
+  const { user } = useUser()
   const { showNotification } = useNotification();
   
   const handleAddClick = () => {
@@ -54,6 +57,8 @@ function Tables() {
     setCustomContent(
       <AddClient />
       )
+      setCustomTitle("Añadir cliente")
+      setCustomDescription("Ingresa la información del cliente")
     }
     
     const handleEditClick = (id) => {
@@ -61,12 +66,14 @@ function Tables() {
       setCustomContent(
         <EditClient id={id} />
       )
+      setCustomTitle("Editar cliente")
+      setCustomDescription("Cambia los datos del cliente")
     }
 
     const handleDeleteClick = (username) => {
       const deletePackage = async () => {
         try {
-          const response = await axiosInstance.delete(`/clients/${username}`); // Updated path
+          const response = await axiosInstance().delete(`/clients/${username}`); // Updated path
           showNotification("success", "Cliente eliminado correctamente", `El cliente identificado con ${username} se ha eliminado`);
         } catch (error) {
           console.error(error)
@@ -115,9 +122,10 @@ function Tables() {
         </Grid>
       </MDBox>
 
-      <Configurator customContent={customContent} />
-      <ConfiguratorButton icon="add" f={handleAddClick} pos={1} />
-
+      <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
+      {user?.__t == "Admin" &&
+        <ConfiguratorButton icon="add" f={handleAddClick} pos={1} />
+      }
       <Footer />
     </DashboardLayout>
   );

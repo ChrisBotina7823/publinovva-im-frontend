@@ -38,48 +38,54 @@ import EditPackage from 'layouts/packages/editPackage'
 import axiosInstance from "axiosInstance";
 
 import { useNotification } from "components/NotificationContext";
+import { useUser } from "context/userContext";
 
 function Tables() {
 
   const [controller, dispatch] = useMaterialUIController();
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, true);
 
-  
+
   const [customContent, setCustomContent] = useState(null);
+  const [customTitle, setCustomTitle] = useState(null);
+  const [customDescription, setCustomDescription] = useState(null);
+  const { user } = useUser()
 
   const { showNotification } = useNotification();
-  
+
   const handleAddClick = () => {
     handleConfiguratorOpen()
+    setCustomContent(<AddPackage />)
+    setCustomTitle("Añadir Paquete")
+    setCustomDescription("Ingresa la información del paquete")
+  }
+
+  const handleEditClick = (id) => {
+    handleConfiguratorOpen()
     setCustomContent(
-      <AddPackage />
-      )
-    }
-    
-    const handleEditClick = (id) => {
-      handleConfiguratorOpen()
-      setCustomContent(
-        <EditPackage id={id} />
-      )
-    }
+      <EditPackage id={id} />
+    )
+    setCustomTitle("Editar Paquete")
+    setCustomDescription("Cambia los datos del paquete")
+  }
 
-    const handleDeleteClick = (id) => {
-      const deletePackage = async () => {
-        try {
-          const response = await axiosInstance.delete(`/packages/${id}`)
-          showNotification("success", "Paquete eliminado correctamente", `El paquete identificado con ${id} se ha eliminado `);
-        } catch (error) {
-          console.error(error)
-            console.error('Error deleting package:', error.response.data.error);
-            showNotification("error", "Error al eliminar el paquete", error.response.data.error);
-        }
+  const handleDeleteClick = (id) => {
+    const deletePackage = async () => {
+      try {
+        const response = await axiosInstance().delete(`/packages/${id}`)
+        showNotification("success", "Paquete eliminado correctamente", `El paquete identificado con ${id} se ha eliminado `);
+      } catch (error) {
+        console.error(error)
+        console.error('Error deleting package:', error.response.data.error);
+        showNotification("error", "Error al eliminar el paquete", error.response.data.error);
+      }
 
-      }  
-      deletePackage()
     }
+    deletePackage()
+  }
 
-    const { columns, rows } = packageTableData(handleEditClick, handleDeleteClick);
-    
+  const { columns, rows } = packageTableData(handleEditClick, handleDeleteClick);
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -115,8 +121,10 @@ function Tables() {
         </Grid>
       </MDBox>
 
-      <Configurator customContent={customContent} />
-      <ConfiguratorButton icon="add" f={handleAddClick} pos={1} />
+      <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
+      {user?.__t == "Admin" &&
+        <ConfiguratorButton icon="add" f={handleAddClick} pos={1} />
+      }
 
       <Footer />
     </DashboardLayout>

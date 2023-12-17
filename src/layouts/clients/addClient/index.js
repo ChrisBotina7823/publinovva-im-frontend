@@ -6,6 +6,7 @@ import MDButton from "components/MDButton";
 import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
 import { setOpenConfigurator, useMaterialUIController } from "context";
+import { useUser } from "context/userContext";
 
 const AddClientForm = () => {
     const [username, setUsername] = useState('');
@@ -23,14 +24,14 @@ const AddClientForm = () => {
     const { showNotification } = useNotification();
     const [controller, dispatch] = useMaterialUIController();
 
-    const user = JSON.parse(localStorage.getItem("user"))
+    const {user, setUser} = useUser()
 
 
     const handleAddClient = async () => {
         try {
             if(user.__t == "Admin") setAdminUsername(user.username)
             console.log(adminUsername)
-            const response = await axiosInstance.post('/clients', {
+            const response = await axiosInstance().post('/clients', {
                 username,
                 password,
                 email,

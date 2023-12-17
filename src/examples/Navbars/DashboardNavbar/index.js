@@ -53,10 +53,11 @@ import {
   setOpenConfigurator,
 } from "context";
 import MDTypography from "components/MDTypography";
+import { useUser } from "context/userContext";
 
 function DashboardNavbar({ absolute, light, isMini }) {
   
-  const user = JSON.parse(localStorage.getItem("user"))
+  const { user, setUser } = useUser()
 
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
@@ -139,9 +140,9 @@ function DashboardNavbar({ absolute, light, isMini }) {
         </MDBox>
         {isMini ? null : (
           <MDBox sx={(theme) => navbarRow(theme, { isMini })}>
-            <MDBox pr={1}>
+            {/* <MDBox pr={1}>
               <MDInput label="Search here" />
-            </MDBox>
+            </MDBox> */}
             <MDBox color={light ? "white" : "inherit"}>
               
               <MDTypography variant="caption">{user.username}</MDTypography>

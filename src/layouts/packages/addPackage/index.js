@@ -7,6 +7,7 @@ import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
 
 import { setOpenConfigurator, useMaterialUIController } from "context";
+import { useUser } from "context/userContext";
 
 const AddPackageForm = () => {
     const [packageName, setPackageName] = useState('');
@@ -18,16 +19,14 @@ const AddPackageForm = () => {
 
     const { showNotification } = useNotification();
     const [controller, dispatch] = useMaterialUIController();
+    const {user,setUser} = useUser()
 
     const handleAddPackage = async () => {
 
         try {
             
-            const storedUser = localStorage.getItem("user");
-            const user = JSON.parse(storedUser);
-            console.log(user.username);
             
-            const response = await axiosInstance.post('/packages', {
+            const response = await axiosInstance().post('/packages', {
                 name: packageName,
                 min_opening_amount: minOpeningAmount,
                 min_inv_days: minInvDays,

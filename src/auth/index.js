@@ -1,9 +1,10 @@
+import { useUser } from "context/userContext";
 import PropTypes from "prop-types";
 import { Route, Navigate } from "react-router-dom";
 
 const PrivateRoute = ({ element, ...rest }) => {
   const isAuthenticated = () => {
-    const token = localStorage.getItem("token");
+    const { token } = useUser()
     return !!token;
   };
 

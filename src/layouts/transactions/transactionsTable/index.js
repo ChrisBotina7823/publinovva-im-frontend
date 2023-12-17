@@ -38,14 +38,18 @@ import EditWalletTransaction from 'layouts/transactions/editTransaction'
 import axiosInstance from "axiosInstance";
 
 import { useNotification } from "components/NotificationContext";
+import { useUser } from "context/userContext";
 
 function Tables() {
 
   const [controller, dispatch] = useMaterialUIController();
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, true);
 
+  const {user} = useUser()
   
   const [customContent, setCustomContent] = useState(null);
+  const [customTitle, setCustomTitle] = useState(null);
+  const [customDescription, setCustomDescription] = useState(null);
 
   const { showNotification } = useNotification();
   
@@ -54,19 +58,27 @@ function Tables() {
     setCustomContent(
       <AddWalletTransaction />
       )
+      setCustomTitle("Realizar transacción")
+      setCustomDescription("Ingresa la información del transacción")
     }
     
-    const handleEditClick = (id) => {
-      handleConfiguratorOpen()
-      setCustomContent(
-        <EditWalletTransaction id={id} />
-      )
+    const handleStateChange = async (id, movement_state) => {
+      try {
+        const response = await axiosInstance().put(`movements/change-state/${id}`, {movement_state})
+        showNotification("success", "Tiquete actualizado correctamente", `El estado del tiquete identificado con ID ${response.data._id} se ha cambiado a ${response.data.movement_state}`);
+        return true;
+      } catch(error) {
+        console.error('Error fetching investment data:', error.response.data.error);
+        showNotification("error", "Error al editar la inversión", error.response.data.error);
+        return false;
+      }
+
     }
 
     const handleDeleteClick = (id) => {
       const deleteWalletTransaction = async () => {
         try {
-          const response = await axiosInstance.delete(`/packages/${id}`)
+          const response = await axiosInstance().delete(`/packages/${id}`)
           showNotification("success", "Transacción eliminada correctamente", `El ID de la transacción es ${response.data._id} `);
         } catch (error) {
             console.error('Error adding walletTransaction:', error.response.data.error);
@@ -77,7 +89,7 @@ function Tables() {
       deleteWalletTransaction()
     }
 
-    const { columns, rows } = walletTransactionTableData(handleEditClick, handleDeleteClick);
+    const { columns, rows } = walletTransactionTableData(handleStateChange);
     
   return (
     <DashboardLayout>
@@ -114,8 +126,10 @@ function Tables() {
         </Grid>
       </MDBox>
 
-      <Configurator customContent={customContent} />
-      <ConfiguratorButton icon="add" f={handleAddClick} pos={1} />
+      <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
+      { user.__t == "Client" &&
+        <ConfiguratorButton icon="add" f={handleAddClick} pos={1} />
+      }
 
       <Footer />
     </DashboardLayout>

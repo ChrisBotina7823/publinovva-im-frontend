@@ -1,146 +1,74 @@
-import { useState, useEffect } from "react";
-import Card from "@mui/material/Card";
+import React, { useState } from "react";
 import MDBox from "components/MDBox";
-import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
+import { FormControlLabel, Switch, TextField } from "@mui/material";
 import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
 
-import { setOpenConfigurator, useMaterialUIController } from "context";
+const TransactionActionForm = ({ dataItem }) => {
+  const [approveToggle, setApproveToggle] = useState(false);
+  const [receivedAmount, setReceivedAmount] = useState('');
+    const { showNotification } = useNotification()
 
-const EditPackageForm = ({id}) => {
-    const [packageName, setPackageName] = useState('');
-    const [minOpeningAmount, setMinOpeningAmount] = useState('');
-    const [minInvDays, setMinInvDays] = useState('');
-    const [revenueFreq, setRevenueFreq] = useState('');
-    const [revenuePercentage, setRevenuePercentage] = useState('');
-    const [globalAmount, setGlobalAmount] = useState('');
+  const handleTransactionAction = async () => {
+    try {
+        console.log(dataItem._id)
+      if (approveToggle) {
+        // Enviar solicitud para aprobar la transacción
+        const response = await axiosInstance().post(`/movements/approve-transaction/${dataItem._id}`, {
+          received_amount: receivedAmount,
+        });
+        showNotification("success", "Transacción Aprobada", `La transacción fue aprobada correctamente. ID de transacción: ${response.data._id}`);
+      } else {
+        // Enviar solicitud para rechazar la transacción
+        const response = await axiosInstance().post(`/movements/reject-transaction/${dataItem._id}`);
+        showNotification("success", "Transacción Rechazada", `La transacción fue rechazada correctamente. ID de transacción: ${response.data._id}`);
+      }
 
-    const { showNotification } = useNotification();
-    const [controller, dispatch] = useMaterialUIController();
+      // Puedes agregar lógica adicional según tus necesidades, como actualizar la interfaz de usuario, etc.
+    } catch (error) {
+      console.error('Error al procesar la transacción:', error.response.data.error);
+      showNotification("error", "Error al Procesar la Transacción", error.response.data.error);
+    }
+  };
 
-    // Otros estados...
-  
-    const [initialPackageData, setInitialPackageData] = useState(null); // Nuevo estado
-  
-    useEffect(() => {
-      const fetchPackageData = async (id) => {
-        try {
-        console.log(id)
-          const response = await axiosInstance.get(`/packages/${id}`);
-          const packageData = response.data;
-  
-          // Almacena los datos del paquete en el estado
-          setInitialPackageData(packageData);
-  
-          // Establece los valores iniciales del formulario
-          setPackageName(packageData.name || ''); // Puedes ajustar según tus necesidades
-          setMinOpeningAmount(packageData.min_opening_amount || '');
-          setMinInvDays(packageData.min_inv_days || '');
-          setRevenueFreq(packageData.revenue_freq || '');
-          setRevenuePercentage(packageData.revenue_percentage || '');
-          setGlobalAmount(packageData.global_amount || '');
-        } catch (error) {
-          console.error('Error fetching package data:', error.response.data.error);
-          // Manejar el error según tus necesidades
-        }
-      };
-  
-      // Llama a la función para obtener los datos del paquete
-      fetchPackageData(id);
-    }, []); // Ejecuta esta solicitud solo cuando el componente monta
-  
+  return (
+    <MDBox component="form" role="form">
+      {/* Toggle para aprobar o rechazar */}
+      <MDBox mb={1}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={approveToggle}
+              onChange={() => setApproveToggle(!approveToggle)}
+              inputProps={{ 'aria-label': 'toggle-approve-reject' }}
+            />
+          }
+          label="Aprobar Transacción"
+        />
+      </MDBox>
 
-    const handleEditPackage = async () => {
-
-        try {
-            setOpenConfigurator(dispatch, false)
-
-            const storedUser = localStorage.getItem("user");
-            const user = JSON.parse(storedUser);
-            console.log(user.username);
-
-            console.log(id)
-
-            const response = await axiosInstance.put(`/packages/${id}`, {
-                name: packageName,
-                min_opening_amount: minOpeningAmount,
-                min_inv_days: minInvDays,
-                revenue_freq: revenueFreq,
-                revenue_percentage: revenuePercentage,
-                global_amount: globalAmount
-            });
-
-            showNotification("success", "Paquete editado correctamente", `El ID del paquete es ${response.data._id} `);
-        } catch (error) {
-            console.error('Error adding package:', error.response.data.error);
-            showNotification("error", "Error al editar el paquete", error.response.data.error);
-        }
-    };
-
-    return (
-        <MDBox component="form" role="form">
-            <MDBox mb={2}>
-                <MDInput
-                    type="text"
-                    label="Package Name"
-                    fullWidth
-                    value={packageName}
-                    onChange={(e) => setPackageName(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="number"
-                    label="Minimum Opening Amount"
-                    fullWidth
-                    value={minOpeningAmount}
-                    onChange={(e) => setMinOpeningAmount(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="number"
-                    label="Minimum Investment Days"
-                    fullWidth
-                    value={minInvDays}
-                    onChange={(e) => setMinInvDays(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="number"
-                    label="Revenue Frequency"
-                    fullWidth
-                    value={revenueFreq}
-                    onChange={(e) => setRevenueFreq(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="number"
-                    label="Revenue Percentage"
-                    fullWidth
-                    value={revenuePercentage}
-                    onChange={(e) => setRevenuePercentage(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="number"
-                    label="Global Amount"
-                    fullWidth
-                    value={globalAmount}
-                    onChange={(e) => setGlobalAmount(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mt={4} mb={1}>
-                <MDButton variant="gradient" color="info" fullWidth onClick={handleEditPackage}>
-                    Edit Package
-                </MDButton>
-            </MDBox>
+      {/* Campo de monto de transacción si el toggle está activo */}
+      {approveToggle && (
+        <MDBox mb={2}>
+          <TextField
+            label="Monto recibido"
+            type="number"
+            fullWidth
+            value={receivedAmount}
+            onChange={(e) => setReceivedAmount(e.target.value)}
+          />
         </MDBox>
-    );
+      )}
+
+      {/* Botón para realizar la acción */}
+      <MDBox mb={1}>
+        <MDButton variant="gradient" color="info" fullWidth onClick={handleTransactionAction}>
+          Realizar Acción
+        </MDButton>
+      </MDBox>
+    </MDBox>
+  );
 };
 
-export default EditPackageForm;
+export default TransactionActionForm;

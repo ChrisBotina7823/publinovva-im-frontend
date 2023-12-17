@@ -35,13 +35,17 @@ import ConfiguratorButton from "components/ConfiguratorButton";
 
 // Data
 import revenuesTableData from "layouts/revenues/revenuesTable/data/revenuesTableData";
+import { useUser } from "context/userContext";
 
 function Tables() {
 
   const [controller, dispatch] = useMaterialUIController();
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, true);
 
+  const {user} = useUser()
   const [customContent, setCustomContent] = useState(null);
+  const [customTitle, setCustomTitle] = useState(null);
+  const [customDescription, setCustomDescription] = useState(null);
 
   const { showNotification } = useNotification();
 
@@ -50,6 +54,8 @@ function Tables() {
     setCustomContent(
       <RequestInvestmentForm   />
     );
+    setCustomTitle("Solicitar inversión")
+    setCustomDescription("Ingresa la información del inversión")
   };
 
   const { columns, rows } = revenuesTableData();
@@ -89,8 +95,10 @@ function Tables() {
         </Grid>
       </MDBox>
 
-      <Configurator customContent={customContent} />
-      <ConfiguratorButton icon="add" f={handleAddClick} pos={1} />
+      <Configurator customDescription={customDescription} customTitle={customTitle}  customContent={customContent} />
+      {user.__t == "Client" &&
+        <ConfiguratorButton icon="add" f={handleAddClick} pos={1} />
+      }
 
       <Footer />
     </DashboardLayout>

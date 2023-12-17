@@ -40,6 +40,9 @@ import EditInvestment from 'layouts/investments/editInvestment';
 
 function Tables() {
   const [customContent, setCustomContent] = useState(null);
+  const [customTitle, setCustomTitle] = useState(null);
+  const [customDescription, setCustomDescription] = useState(null);
+
   const { showNotification } = useNotification();
 
   const [controller, dispatch] = useMaterialUIController();
@@ -51,6 +54,9 @@ function Tables() {
     setCustomContent(
       <EditInvestment investmentId={id} />
     );
+    setCustomTitle("Editar Inversión")
+    setCustomDescription("Cambia los datos de la inversión")
+
   };
 
 
@@ -90,8 +96,7 @@ function Tables() {
           </Grid>
         </Grid>
       </MDBox>
-      <Configurator customContent={customContent} />
-      <ConfiguratorButton icon="add" pos={1} />
+      <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
       <Footer />
     </DashboardLayout>
   );

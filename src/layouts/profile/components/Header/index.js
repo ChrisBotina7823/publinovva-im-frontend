@@ -37,8 +37,39 @@ import breakpoints from "assets/theme/base/breakpoints";
 // Images
 import burceMars from "assets/images/bruce-mars.jpg";
 import backgroundImage from "assets/images/bg-profile.jpeg";
+import { useUser } from "context/userContext";
 
-function Header({ children }) {
+function Header({ children, fn }) {
+
+  const editIcons = [
+    <Icon fontSize="small" sx={{ mt: -0.25 }}>
+    edit
+  </Icon>,
+  <Icon fontSize="small" sx={{ mt: -0.25 }}>
+  cancel
+</Icon>
+  ]
+  const editLabels = [
+    "Editar perfil",
+    "Cancelar"
+  ]
+
+  const handleChange = () => {
+    fn();
+    // switchEditIcons();
+  }
+
+  const{ user, setUser } = useUser()
+  const [ idx, setIdx ] = useState(0)
+  const [ editIcon,  setEditIcon ] = useState(editIcons[idx])
+  const [ editLabel,  setEditLabel ] = useState(editLabels[idx])
+
+  const switchEditIcons = () => {
+    setIdx(idx ^ 1)
+    setEditIcon(editIcons[idx])
+    setEditLabel(editLabels[idx])
+  }
+
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
 
@@ -64,6 +95,7 @@ function Header({ children }) {
 
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
 
+
   return (
     <MDBox position="relative" mb={5}>
       <MDBox
@@ -86,7 +118,7 @@ function Header({ children }) {
       <Card
         sx={{
           position: "relative",
-          mt: -8,
+          mt: -20,
           mx: 3,
           py: 2,
           px: 2,
@@ -94,44 +126,27 @@ function Header({ children }) {
       >
         <Grid container spacing={3} alignItems="center">
           <Grid item>
-            <MDAvatar src={burceMars} alt="profile-image" size="xl" shadow="sm" />
+            <MDAvatar src={user.profile_picture} alt="profile-image" size="xl" shadow="sm" />
           </Grid>
           <Grid item>
             <MDBox height="100%" mt={0.5} lineHeight={1}>
               <MDTypography variant="h5" fontWeight="medium">
-                Richard Davis
+                { user.username }
               </MDTypography>
               <MDTypography variant="button" color="text" fontWeight="regular">
-                CEO / Co-Founder
+                { user._id }
               </MDTypography>
             </MDBox>
           </Grid>
-          <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
+          <Grid item xs={12} md={6} lg={2} sx={{ ml: "auto" }}>
             <AppBar position="static">
               <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
                 <Tab
-                  label="App"
+                  label={editLabel}
                   icon={
-                    <Icon fontSize="small" sx={{ mt: -0.25 }}>
-                      home
-                    </Icon>
+                    editIcon
                   }
-                />
-                <Tab
-                  label="Message"
-                  icon={
-                    <Icon fontSize="small" sx={{ mt: -0.25 }}>
-                      email
-                    </Icon>
-                  }
-                />
-                <Tab
-                  label="Settings"
-                  icon={
-                    <Icon fontSize="small" sx={{ mt: -0.25 }}>
-                      settings
-                    </Icon>
-                  }
+                  onClick={handleChange}
                 />
               </Tabs>
             </AppBar>

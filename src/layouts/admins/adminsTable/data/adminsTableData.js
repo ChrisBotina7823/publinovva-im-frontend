@@ -1,34 +1,98 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/function-component-definition */
 import React, { useState, useEffect } from 'react';
-import Icon from "@mui/material/Icon";
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
-import MDAvatar from "components/MDAvatar";
-import MDProgress from "components/MDProgress";
+import MDBox from 'components/MDBox';
+import MDTypography from 'components/MDTypography';
 import axiosInstance from 'axiosInstance';
+import socket from 'socketInstance'; // Asegúrate de importar el objeto socket que creamos
+import MDAvatar from 'components/MDAvatar';
+import MDCopyable from 'components/MDCopyable';
+import MDBadge from 'components/MDBadge';
 
-export default function DataTable() {
+export default function DataTable(handleEditClick, handleDeleteClick) {
+  const colorsDict = {
+    "suspendido": "error",
+    "activo": "success"
+  }
+  
   const [tableData, setTableData] = useState({
     columns: [
-      { Header: "Administrador", accessor: "admin", width: "30%", align: "left" },
+      { Header: 'id', accessor: 'id', width: '30%', align: 'left' },
+      { Header: 'Perfil', accessor: 'profile', width: '30%', align: 'left' },
+      { Header: 'Depósito', accessor: 'deposit_info', width: '30%', align: 'center' },
+      { Header: 'Estado', accessor: 'state', width: '30%', align: 'center' },
+      // { Header: 'Administrador', accessor: 'admin', width: '30%', align: 'left' },
+      { Header: 'action', accessor: 'action', align: 'center' },
     ],
     rows: [],
   });
 
+  const mapDataToJSX = (data) => {
+    return data.map((dataItem) => ({
+      // admin: (
+      //   <MDBox key={dataItem.username}>
+      //     <MDTypography>
+      //       {JSON.stringify(dataItem)}
+      //     </MDTypography>
+      //   </MDBox>
+      // ),
+      id: (
+        <MDCopyable variant="thin" vl={dataItem._id}/>
+        ),
+      profile: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+        <MDAvatar src={dataItem.profile_picture} name={dataItem.entity_name} size="sm" />
+        <MDBox ml={2} lineHeight={1}>
+          <MDTypography my={0} display="block"fontWeight="medium">
+            {dataItem.username}
+          </MDTypography>
+          <MDTypography variant="h6" display="block">{dataItem.entity_name}</MDTypography>
+          <MDCopyable vl={dataItem.email} variant="caption"></MDCopyable>
+        </MDBox>
+      </MDBox>
+      ),
+      deposit_info:(
+        <MDBox>
+          <MDBox sx={{height:"3vh"}} onError={(e) => e.target.src = "https://thumbs.dreamstime.com/b/seamless-circle-diagonal-stripe-pattern-vector-soft-background-regular-white-texture-90383470.jpg"} component="img" src={dataItem.deposit_qr} alt="deposit_qr"/>
+          <MDCopyable variant="thin" vl={dataItem.deposit_address}/>
+        </MDBox>
+      ),
+      state: (
+        <MDBox ml={-1}>
+          <MDBadge badgeContent={dataItem.account_state} color={colorsDict[dataItem.account_state]} variant="gradient" size="md" />
+        </MDBox>
+      ),
+      action: (
+        <MDBox key={dataItem.username}>
+          <MDTypography
+            component="a"
+            href="#"
+            variant="caption"
+            color="secondary"
+            fontWeight="medium"
+            onClick={() => handleEditClick(dataItem.username)}
+          >
+            Edit
+          </MDTypography>
+          <MDTypography
+            component="a"
+            href="#"
+            variant="caption"
+            color="error"
+            fontWeight="medium"
+            onClick={() => handleDeleteClick(dataItem.username)}
+          >
+            Delete
+          </MDTypography>
+        </MDBox>
+      ),
+    }));
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get('admins');
-        const dataRows = response.data.map((dataItem) => ({
-          admin: (
-            <MDBox>
-              <MDTypography>
-                {JSON.stringify(dataItem)}
-              </MDTypography>
-            </MDBox>
-          ),
-        }));
+        console.log("fetching data...")
+        const response = await axiosInstance().get('admins');
+        const dataRows = mapDataToJSX(response.data);
 
         setTableData({
           columns: tableData.columns,
@@ -40,7 +104,17 @@ export default function DataTable() {
     };
 
     fetchData();
-  }, []); // Empty dependency array ensures that the effect runs once when the component mounts
+
+    // Escuchar eventos de actualización desde el servidor Socket.IO
+    socket.on('adminsUpdate', () => {
+      fetchData();
+    });
+
+    // Limpieza del efecto
+    return () => {
+      socket.off('adminsUpdate');
+    };
+  }, []); // Agrega tableData.columns al array de dependencias para que useEffect se ejecute cuando cambie
 
   return {
     columns: tableData.columns,

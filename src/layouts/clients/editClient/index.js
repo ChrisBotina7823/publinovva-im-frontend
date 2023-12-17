@@ -14,7 +14,7 @@ import { Switch } from "@mui/material";
 
 import { setOpenConfigurator, useMaterialUIController } from "context";
 
-const EditClientForm = ({ id }) => {
+const EditClientForm = ({ id, f }) => {
     const [fullname, setFullname] = useState('');
     const [country, setCountry] = useState('');
     const [phone, setPhone] = useState('');
@@ -31,6 +31,10 @@ const EditClientForm = ({ id }) => {
     const [iPassword, setIPassword] = useState('');
     const [usdPassword, setUsdPassword] = useState('');
 
+    const [uploadPicture, setUploadPicture] = useState(false);
+    const [profilePicture, setProfilePicture] = useState(null);
+    
+
     const [initialClientData, setInitialClientData] = useState(null);
 
 
@@ -41,8 +45,7 @@ const EditClientForm = ({ id }) => {
     useEffect(() => {
         const fetchClientData = async (id) => {
             try {
-                const response = await axiosInstance.get(`/clients/${id}`);
-                console.log(response)
+                const response = await axiosInstance().get(`/clients/${id}`);
                 const clientData = response.data;
 
                 setInitialClientData(clientData);
@@ -65,6 +68,7 @@ const EditClientForm = ({ id }) => {
     const handleEditClient = async () => {
         try {
             setOpenConfigurator(dispatch, false);
+            if(f) f()
 
             const requestData = {
                 username,
@@ -80,8 +84,15 @@ const EditClientForm = ({ id }) => {
             if (showIPassword && iPassword) requestData.i_password = iPassword;
             if (showUsdPassword && usdPassword) requestData.usd_password = usdPassword;
 
-            const response = await axiosInstance.put(`/clients/${id}`, requestData);
+            const response = await axiosInstance().put(`/clients/${id}`, requestData);
 
+            if (uploadPicture && profilePicture) {
+                const pictureFormData = new FormData();
+                pictureFormData.append("profile_picture", profilePicture);
+                
+                axiosInstance().post(`/users/profile-picture/${id}`, pictureFormData);
+            }
+            
             showNotification("success", "Cliente editado correctamente", `El ID del cliente es ${response.data._id}`);
         } catch (error) {
             console.error('Error editing client:', error.response.data.error);
@@ -234,6 +245,29 @@ const EditClientForm = ({ id }) => {
                         fullWidth
                         value={showUsdPassword}
                         onChange={(e) => setShowUsdPassword(e.target.value)}
+                    />
+                </MDBox>
+            )}
+
+            <MDBox mb={1}>
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={uploadPicture}
+                            onChange={() => setUploadPicture(!uploadPicture)}
+                            inputProps={{ 'aria-label': 'toggle-upload-picture' }}
+                        />
+                    }
+                    label="Subir Foto de Perfil"
+                />
+            </MDBox>
+
+            {uploadPicture && (
+                <MDBox mb={2}>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setProfilePicture(e.target.files[0])}
                     />
                 </MDBox>
             )}

@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -26,18 +11,66 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
+import { useState } from "react";
+import Configurator from "components/Configurator";
+import ConfiguratorButton from "components/ConfiguratorButton";
 
 // Data
-import adminsTableData from "layouts/admins/adminsTable/data/adminsTableData";
+import adminsTableData from "layouts/admins/adminsTable/data/adminsTableData"; // Updated path
+import { setOpenConfigurator, useMaterialUIController } from "context";
+import AddAdmin from 'layouts/admins/addAdmin'; // Reemplaza con el componente adecuado
+import EditAdmin from 'layouts/admins/editAdmin'; // Reemplaza con el componente adecuado
+import axiosInstance from "axiosInstance";
+
+import { useNotification } from "components/NotificationContext";
 
 function Tables() {
-  const { columns, rows } = adminsTableData();
+  const [controller, dispatch] = useMaterialUIController();
+  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, true);
+
+  const [customContent, setCustomContent] = useState(null);
+
+  const { showNotification } = useNotification();
+
+  const handleAddClick = () => {
+    handleConfiguratorOpen();
+    setCustomContent(
+      <AddAdmin /> // Reemplaza con el componente adecuado
+    );
+  };
+
+  const handleEditClick = (id) => {
+    handleConfiguratorOpen();
+    setCustomContent(
+      <EditAdmin id={id} /> // Reemplaza con el componente adecuado
+    );
+  };
+
+  const handleDeleteClick = (username) => {
+    const deleteAdmin = async () => {
+      try {
+        const response = await axiosInstance().delete(`/admins/${username}`); // Reemplaza con la ruta adecuada
+        showNotification(
+          "success",
+          "Administrador eliminado correctamente",
+          `El administrador identificado con ${username} se ha eliminado`
+        );
+      } catch (error) {
+        console.error(error);
+        console.error('Error deleting admin:', error.response.data.error);
+        showNotification("error", "Error al eliminar el administrador", error.response.data.error);
+      }
+    };
+
+    deleteAdmin();
+  };
+
+  const { columns, rows } = adminsTableData(handleEditClick, handleDeleteClick); // Reemplaza con la función adecuada
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox pt={6} pb={3}>
-        
         <Grid container spacing={6}>
           <Grid item xs={12}>
             <Card>
@@ -68,6 +101,10 @@ function Tables() {
           </Grid>
         </Grid>
       </MDBox>
+
+      <Configurator customContent={customContent} />
+      <ConfiguratorButton icon="add" f={handleAddClick} pos={1} />
+
       <Footer />
     </DashboardLayout>
   );

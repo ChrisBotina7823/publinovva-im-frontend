@@ -9,26 +9,32 @@ import MDProgress from "components/MDProgress";
 import axiosInstance from 'axiosInstance';
 import socket from 'socketInstance';
 import data from 'layouts/dashboard/components/Projects/data';
+import { useUser } from 'context/userContext';
+import MDCopyable from 'components/MDCopyable';
 
 export default function DataTable() {
 
-  const user = JSON.parse(localStorage.getItem("user"))
+  const { user } = useUser()
 
   const [tableData, setTableData] = useState({
     columns: [
-      { Header: "Ingresos", accessor: "revenue", width: "30%", align: "left" },
+      { Header: 'Inversión', accessor: 'investment', width: '30%', align: 'left' },
+      { Header: 'Fecha', accessor: 'date', width: '10%', align: 'center' },
+      { Header: 'Días de Inversión', accessor: 'daysDiff', width: '30%', align: 'center' },
+      { Header: 'Ingreso', accessor: 'revenue_amount', width: '30%', align: 'center' },
     ],
     rows: [],
   });
 
   const mapDataToJSX = (rows) => {
     return rows.map((dataItem) => ({
-      revenue: (
-        <MDBox>
-          <MDTypography>
-            {JSON.stringify(dataItem)}
-          </MDTypography>
-        </MDBox>
+      investment: <MDCopyable variant="thin" vl={dataItem.investment} />,
+      date: <span>{(new Date(dataItem.date)).toLocaleDateString()}</span>,
+      daysDiff: <span>{dataItem.days_diff}</span>,
+      revenue_amount: (
+        <MDTypography variant="h5">
+          {`$${dataItem.revenue_amount}`}
+        </MDTypography>
       ),
     }));
   }
@@ -37,7 +43,7 @@ export default function DataTable() {
     const fetchData = async () => {
       try {
         console.log("fetching data...")
-        const response = await axiosInstance.get(`/investments/revenues/${user.username}`);
+        const response = await axiosInstance().get(`/investments/revenues/${user.username}`);
         
         const dataRows = mapDataToJSX(response.data)
   

@@ -29,10 +29,11 @@ import Configurator from "components/Configurator";
 import ConfiguratorButton from "components/ConfiguratorButton";
 import { useMaterialUIController, setOpenConfigurator } from "context";
 import AddTransaction from "layouts/billing/addTransaction";
+import { useUser } from "context/userContext";
 
 function Billing() {
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const {user, setUser} = useUser()
   const admin = user.__t === "Client" ? user.admin : user;
 
   const [controller, dispatch] = useMaterialUIController();
@@ -76,24 +77,24 @@ function Billing() {
                     />
                    }
                 </Grid>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                   <PaymentMethod />
-                </Grid>
+                </Grid> */}
               </Grid>
             </Grid>
-            <Grid item xs={12} lg={4}>
+            {/* <Grid item xs={12} lg={4}>
               <Invoices />
-            </Grid>
+            </Grid> */}
           </Grid>
         </MDBox>
         <MDBox mb={3}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={7}>
+            {/* <Grid item xs={12} md={7}>
               <BillingInformation />
             </Grid>
             <Grid item xs={12} md={5}>
               <Transactions />
-            </Grid>
+            </Grid> */}
           </Grid>
         </MDBox>
       </MDBox>

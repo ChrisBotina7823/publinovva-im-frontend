@@ -35,6 +35,14 @@ Coded by www.creative-tim.com
   10. The `component` key is used to store the component of its route.
 */
 
+import QuestionAnswerRoundedIcon from '@mui/icons-material/QuestionAnswerRounded';
+import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
+import ContactlessOutlinedIcon from '@mui/icons-material/ContactlessOutlined';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+import GroupsIcon from '@mui/icons-material/Groups';
+import SsidChartIcon from '@mui/icons-material/SsidChart';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
 import Packages from "layouts/packages/packagesTable";
@@ -53,7 +61,7 @@ import Admins from "layouts/admins/adminsTable"
 import Revenues from "layouts/revenues/revenuesTable"
 
 // @mui icons
-import Icon from "@mui/material/Icon";
+import Icon from "@mui/material/Icon"; 
 
 const routes = [
   {
@@ -63,60 +71,58 @@ const routes = [
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
     component: <PrivateRoute element={<Dashboard />} />,
+    hidden: []
   },
   {
     type: "collapse",
     name: "Packages",
     key: "packages",
-    icon: <Icon fontSize="small">packages</Icon>,
+    icon: <Inventory2OutlinedIcon fontSize="small"></Inventory2OutlinedIcon>,
     route: "/packages",
     component: <PrivateRoute element={<Packages />} />,
+    hidden: []
   },
   {
     type: "collapse",
     name: "Clients",
     key: "clients",
-    icon: <Icon fontSize="small">client</Icon>,
+    icon: <GroupsIcon fontSize="small"></GroupsIcon>,
     route: "/clients",
     component: <PrivateRoute element={<Clients />} />,
+    hidden: ["Client"]
   },
   {
     type: "collapse",
     name: "Admins",
     key: "admins",
-    icon: <Icon fontSize="small">admin</Icon>,
+    icon: <SupervisorAccountIcon fontSize="small"></SupervisorAccountIcon>,
     route: "/admins",
     component: <PrivateRoute element={<Admins />} />,
+    hidden: ["Client", "Admin"]
   },
   {
     type: "collapse",
     name: "Investments",
     key: "investments",
-    icon: <Icon fontSize="small">investment</Icon>,
+    icon: <SsidChartIcon fontSize="small"></SsidChartIcon>,
     route: "/investments",
     component: <PrivateRoute element={<Investments />} />,
+    hidden: ["Client"]
   },
   {
     type: "collapse",
     name: "Revenues",
     key: "revenues",
-    icon: <Icon fontSize="small">revenue</Icon>,
+    icon: <MonetizationOnOutlinedIcon fontSize="small"></MonetizationOnOutlinedIcon>,
     route: "/revenues",
     component: <PrivateRoute element={<Revenues />} />,
-  },
-  {
-    type: "collapse",
-    name: "Billing",
-    key: "billing",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/billing",
-    component: <PrivateRoute element={<Billing />} />,
+    hidden: ["Admin", "Superuser"]
   },
   {
     type: "collapse",
     name: "Transactions",
     key: "transactions",
-    icon: <Icon fontSize="small">Transactions</Icon>,
+    icon: <ContactlessOutlinedIcon fontSize="small"></ContactlessOutlinedIcon>,
     route: "/transactions",
     component: <PrivateRoute element={<Transactions />} />,
   },
@@ -124,7 +130,7 @@ const routes = [
     type: "collapse",
     name: "Tickets",
     key: "tickets",
-    icon: <Icon fontSize="small">Tickets</Icon>,
+    icon: <QuestionAnswerRoundedIcon fontSize="small"></QuestionAnswerRoundedIcon>,
     route: "/tickets",
     component: <PrivateRoute element={<Tickets />} />,
   },
@@ -135,6 +141,16 @@ const routes = [
     icon: <Icon fontSize="small">notifications</Icon>,
     route: "/notifications",
     component: <PrivateRoute element={<Notifications />} />,
+    hidden: ["Client", "Admin", "Superuser"]
+  },
+  {
+    type: "collapse",
+    name: "Billing",
+    key: "billing",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/billing",
+    component: <PrivateRoute element={<Billing />} />,
+    hidden: ["Superuser"]
   },
   {
     type: "collapse",
@@ -143,6 +159,7 @@ const routes = [
     icon: <Icon fontSize="small">person</Icon>,
     route: "/profile",
     component: <PrivateRoute element={<Profile />} />,
+    hidden: []
   },
   {
     type: "collapse",
@@ -151,6 +168,7 @@ const routes = [
     icon: <Icon fontSize="small">login</Icon>,
     route: "/authentication/sign-in",
     component: <SignIn />,
+    hidden: ["Client", "Admin", "Superuser"]
   },
   {
     type: "collapse",
@@ -159,6 +177,7 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-up",
     component: <SignUp />,
+    hidden: ["Client", "Admin", "Superuser"]
   },
   {
     type: "collapse",
@@ -166,8 +185,8 @@ const routes = [
     key: "logout",
     icon: <Icon fontSize="small">logout</Icon>,
     route: "/logout",
-    // Add your Logout component as the element
     component: <PrivateRoute element={<Logout />} />,
+    hidden: ["Client", "Admin", "Superuser"]
   },
 ];
 

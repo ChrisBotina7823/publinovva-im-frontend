@@ -46,8 +46,10 @@ import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 import { LocalSeeOutlined } from "@mui/icons-material";
 import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
+import { useUser } from "context/userContext";
 
 function Basic() {
+  const { user, updateUser } = useUser()
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -60,19 +62,18 @@ function Basic() {
   const handleSignIn = async () => {
     try {
 
-      const response = await axiosInstance.post("/auth", {
+      const response = await axiosInstance().post("/auth", {
         username,
         password
       })
       const token = response.data.token;
-      const user = response.data.user;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user))
+      const newUser = response.data.user;
+      await updateUser(newUser, token)
       navigate("/dashboard");
-      showNotification("success", "Inicio de sesión exitoso", `Bienvenido, ${user.username} `);
+      showNotification("success", "Inicio de sesión exitoso", `Bienvenido, ${newUser.username} `);
     } catch (error) {
-        console.error(error.response.data.error);
-        showNotification("error", "Error al iniciar sesión", error.response.data.error);
+      console.error(error.response.data.error);
+      showNotification("error", "Error al iniciar sesión", error.response.data.error);
     }
   };
 
@@ -90,11 +91,14 @@ function Basic() {
           mb={1}
           textAlign="center"
         >
-          <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Sign in
-          </MDTypography>
+          <MDBox>
+            <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
+              Iniciar Sesión
+            </MDTypography>
+            <MDTypography color="white" variant="caption">Investment Manager</MDTypography>
+          </MDBox>
           <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
-            <Grid item xs={2}>
+            {/* <Grid item xs={2}>
               <MDTypography component={MuiLink} href="#" variant="body1" color="white">
                 <FacebookIcon color="inherit" />
               </MDTypography>
@@ -108,7 +112,7 @@ function Basic() {
               <MDTypography component={MuiLink} href="#" variant="body1" color="white">
                 <GoogleIcon color="inherit" />
               </MDTypography>
-            </Grid>
+            </Grid> */}
           </Grid>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
@@ -131,7 +135,7 @@ function Basic() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </MDBox>
-            <MDBox display="flex" alignItems="center" ml={-1}>
+            {/* <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
               <MDTypography
                 variant="button"
@@ -142,7 +146,7 @@ function Basic() {
               >
                 &nbsp;&nbsp;Remember me
               </MDTypography>
-            </MDBox>
+            </MDBox> */}
             <MDBox mt={4} mb={1}>
               <MDButton variant="gradient" color="info" fullWidth onClick={handleSignIn}>
                 Sign in
@@ -153,7 +157,7 @@ function Basic() {
                 <MDBadge color="error">{error}</MDBadge>
               </MDBox>
             )}
-            <MDBox mt={3} mb={1} textAlign="center">
+            {/* <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
                 Don&apos;t have an account?{" "}
                 <MDTypography
@@ -167,7 +171,7 @@ function Basic() {
                   Sign up
                 </MDTypography>
               </MDTypography>
-            </MDBox>
+            </MDBox> */}
           </MDBox>
         </MDBox>
       </Card>

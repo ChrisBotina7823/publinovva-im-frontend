@@ -11,22 +11,21 @@ import dayjs from "dayjs";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useUser } from "context/userContext";
 
 
 const InvestmentRequestForm = () => {
     const [packageId, setPackageId] = useState('');
     const [endDate, setEndDate] = useState(dayjs());
     const [invAmount, setInvAmount] = useState('');
-
+    const { user } = useUser()
     const { showNotification } = useNotification();
     const [controller, dispatch] = useMaterialUIController();
 
     const handleInvestmentRequest = async () => {
         try {
-            const storedUser = localStorage.getItem("user");
-            const user = JSON.parse(storedUser);
 
-            const response = await axiosInstance.post(`/investments/${user.username}`, {
+            const response = await axiosInstance().post(`/investments/${user.username}`, {
                 package_id: packageId,
                 end_date: endDate.format("YYYY-MM-DD"),
                 inv_amount: invAmount,

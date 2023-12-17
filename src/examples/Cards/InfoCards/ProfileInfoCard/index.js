@@ -67,7 +67,7 @@ function ProfileInfoCard({ title, description, info, social, action, shadow }) {
   ));
 
   // Render the card social media icons
-  const renderSocial = social.map(({ link, icon, color }) => (
+  const renderSocial = social?.map(({ link, icon, color }) => (
     <MDBox
       key={color}
       component="a"
@@ -90,29 +90,27 @@ function ProfileInfoCard({ title, description, info, social, action, shadow }) {
         <MDTypography variant="h6" fontWeight="medium" textTransform="capitalize">
           {title}
         </MDTypography>
-        <MDTypography component={Link} to={action.route} variant="body2" color="secondary">
-          <Tooltip title={action.tooltip} placement="top">
-            <Icon>edit</Icon>
-          </Tooltip>
-        </MDTypography>
+        {action && 
+          <MDTypography component={Link} to={action.route} variant="body2" color="secondary">
+            <Tooltip title={action.tooltip} placement="top">
+              <Icon>edit</Icon>
+            </Tooltip>
+          </MDTypography>
+        }
       </MDBox>
       <MDBox p={2}>
+        { description &&
         <MDBox mb={2} lineHeight={1}>
           <MDTypography variant="button" color="text" fontWeight="light">
             {description}
           </MDTypography>
         </MDBox>
+        }
         <MDBox opacity={0.3}>
           <Divider />
         </MDBox>
         <MDBox>
           {renderItems}
-          <MDBox display="flex" py={1} pr={2}>
-            <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
-              social: &nbsp;
-            </MDTypography>
-            {renderSocial}
-          </MDBox>
         </MDBox>
       </MDBox>
     </Card>
@@ -127,9 +125,9 @@ ProfileInfoCard.defaultProps = {
 // Typechecking props for the ProfileInfoCard
 ProfileInfoCard.propTypes = {
   title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  description: PropTypes.string,
   info: PropTypes.objectOf(PropTypes.string).isRequired,
-  social: PropTypes.arrayOf(PropTypes.object).isRequired,
+  social: PropTypes.arrayOf(PropTypes.object),
   action: PropTypes.shape({
     route: PropTypes.string.isRequired,
     tooltip: PropTypes.string.isRequired,

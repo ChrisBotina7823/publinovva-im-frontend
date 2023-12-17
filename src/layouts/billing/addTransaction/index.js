@@ -9,12 +9,14 @@ import MenuItem from "@mui/material/MenuItem";
 import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
 import { setOpenConfigurator, useMaterialUIController } from "context";
+import { useUser } from "context/userContext";
 
 const DepositWithdrawForm = () => {
   const [transactionType, setTransactionType] = useState("deposit");
   const [transactionAmount, setTransactionAmount] = useState("");
   const [usdPassword, setUsdPassword] = useState("");
   const [showUsdPassword, setShowUsdPassword] = useState(false);
+  const {user} = useUser()
 
   const { showNotification } = useNotification();
   const [controller, dispatch] = useMaterialUIController();
@@ -26,8 +28,6 @@ const DepositWithdrawForm = () => {
 
   const handleTransaction = async () => {
     try {
-      const storedUser = localStorage.getItem("user");
-      const user = JSON.parse(storedUser);
 
       const endpoint =
         transactionType === "deposit"
@@ -42,7 +42,7 @@ const DepositWithdrawForm = () => {
         requestBody.wallet_password = usdPassword;
       }
 
-      const response = await axiosInstance.post(endpoint, requestBody);
+      const response = await axiosInstance().post(endpoint, requestBody);
 
       setOpenConfigurator(dispatch, false);
       showNotification(

@@ -57,6 +57,7 @@ import { NotificationProvider } from 'components/NotificationContext';
 import Notification from 'components/Notification';
 import socket from "socketInstance";
 import axiosInstance from "axiosInstance";
+import { UserProvider } from 'context/userContext';
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -128,44 +129,31 @@ export default function App() {
       return null;
     });
 
-  
-  useEffect( () => {
-  
-      socket.on("usersUpdate", async () => {
-        const prevUser = JSON.parse(localStorage.getItem("user"))
-        const response = await axiosInstance.get(`users/${prevUser.username}`)
-        const user = response.data
-        console.log(user)
-        localStorage.setItem("user", JSON.stringify(user))
-      })
-
-    return () => {
-      socket.off("usersUpdate")
-    }
-  }, [])
-
   return (
-    <ThemeProvider theme={darkMode ? themeDark : theme}>
-      <NotificationProvider>
-        <CssBaseline />
-        {layout === "dashboard" && (
-          <>
-            <Sidenav
-              color={sidenavColor}
-              brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-              brandName="Investment Manager"
-              routes={routes}
-              onMouseEnter={handleOnMouseEnter}
-              onMouseLeave={handleOnMouseLeave}
-            />
-          </>
-        )}
-        <Routes>
-          {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/dashboard" />} />
-        </Routes>
-        <Notification />
-      </NotificationProvider>
-    </ThemeProvider>
+    <UserProvider>
+      <ThemeProvider theme={darkMode ? themeDark : theme}>
+        <NotificationProvider>
+          <CssBaseline />
+          {layout === "dashboard" && (
+            <>
+              <Sidenav
+                color={sidenavColor}
+                brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
+                brandName="Investment Manager"
+                routes={routes}
+                onMouseEnter={handleOnMouseEnter}
+                onMouseLeave={handleOnMouseLeave}
+              />
+            </>
+          )}
+          <Routes>
+            {getRoutes(routes)}
+            <Route path="*" element={<Navigate to="/dashboard" />} />
+          </Routes>
+          <Notification />
+
+        </NotificationProvider>
+      </ThemeProvider>
+    </UserProvider>
   );
 }

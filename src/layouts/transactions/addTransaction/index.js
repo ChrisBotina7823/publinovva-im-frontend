@@ -9,9 +9,10 @@ import MenuItem from '@mui/material/MenuItem';
 import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
 import { useParams } from "react-router-dom";
+import { useUser } from "context/userContext";
 
 const WalletTransactionForm = () => {
-    const user = JSON.parse(localStorage.getItem("user"))
+    const {user, setUser} = useUser()
 
     const [transactionAmount, setTransactionAmount] = useState("");
     const [walletPassword, setWalletPassword] = useState("");
@@ -22,7 +23,7 @@ const WalletTransactionForm = () => {
     const handleWalletTransaction = async () => {
         try {
             const dest = transactionType;
-            const response = await axiosInstance.post(`/movements/wallet-transactions/${user.username}/${dest}`, {
+            const response = await axiosInstance().post(`/movements/wallet-transactions/${user.username}/${dest}`, {
                 transaction_amount: transactionAmount,
                 wallet_password: walletPassword,
             });

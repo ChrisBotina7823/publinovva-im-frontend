@@ -3,11 +3,25 @@
   import MDTypography from 'components/MDTypography';
   import axiosInstance from 'axiosInstance';
   import socket from 'socketInstance'; // Importa el objeto socket que creamos
+import MDCopyable from 'components/MDCopyable';
+import MDAvatar from 'components/MDAvatar';
+import MDBadge from 'components/MDBadge';
 
   export default function DataTable(handleEditClick, handleDeleteClick) {
+    const colorsDict = {
+      "en revision": "secondary",
+      "suspendido": "error",
+      "activo": "success"
+    }
+
     const [tableData, setTableData] = useState({
       columns: [
-        { Header: 'Cliente', accessor: 'client', width: '30%', align: 'left' },
+        // { Header: 'Cliente', accessor: 'client', width: '30%', align: 'center' },
+        { Header: 'id', accessor: 'id', width: '30%', align: 'left' },
+        { Header: 'Perfil', accessor: 'profile', width: '30%', align: 'left' },
+        { Header: 'Datos Personales', accessor: 'personal_data', width: '30%', align: 'center' },
+        { Header: 'Estado', accessor: 'state', width: '30%', align: 'center' },
+        { Header: 'Saldo USD', accessor: 'usd_balance', width: '30%', align: 'center' },
         { Header: 'action', accessor: 'action', align: 'center' },
       ],
       rows: [],
@@ -15,9 +29,40 @@
 
     const mapDataToJSX = (data) => {
       return data.map((dataItem) => ({
-        client: (
-          <MDTypography key={dataItem.username}>
-            {JSON.stringify(dataItem)}
+        // client: (
+        //   <MDTypography key={dataItem.username}>
+        //     {JSON.stringify(dataItem)}
+        //   </MDTypography>
+        // ),
+        id: (
+          <MDCopyable variant="thin" vl={dataItem._id}/>
+          ),
+        profile: (
+          <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDAvatar src={dataItem.profile_picture} name={dataItem.fullname} size="sm" />
+          <MDBox ml={2} lineHeight={1}>
+            <MDTypography my={0} display="block"fontWeight="medium">
+              {dataItem.username}
+            </MDTypography>
+            <MDTypography variant="h6" display="block">{dataItem.fullname}</MDTypography>
+            <MDCopyable vl={dataItem.email} variant="caption"></MDCopyable>
+          </MDBox>
+        </MDBox>
+        ),
+        personal_data: (
+          <MDBox lineHeight={1}>
+            <MDTypography >{dataItem.country}</MDTypography>
+            <MDCopyable variant="caption" vl={dataItem.phone}></MDCopyable>
+          </MDBox>
+        ),
+        state: (
+          <MDBox ml={-1}>
+            <MDBadge badgeContent={dataItem.account_state} color={colorsDict[dataItem.account_state]} variant="gradient" size="md" />
+          </MDBox>
+        ),
+        usd_balance: (
+          <MDTypography variant="h5">
+            {`$${dataItem.usd_wallet.available_amount}`}
           </MDTypography>
         ),
         action: (
@@ -38,6 +83,7 @@
               variant="caption"
               color="error"
               fontWeight="medium"
+              ml={1}
               onClick={() => handleDeleteClick(dataItem.username)}
             >
               Delete
@@ -50,7 +96,7 @@
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axiosInstance.get('/admins/clients');
+          const response = await axiosInstance().get('/admins/clients');
           const dataRows = mapDataToJSX(response.data);
 
           setTableData((prevTableData) => ({

@@ -7,6 +7,7 @@ import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
 
 import { setOpenConfigurator, useMaterialUIController } from "context";
+import { useUser } from "context/userContext";
 
 const EditPackageForm = ({id}) => {
     const [packageName, setPackageName] = useState('');
@@ -15,7 +16,7 @@ const EditPackageForm = ({id}) => {
     const [revenueFreq, setRevenueFreq] = useState('');
     const [revenuePercentage, setRevenuePercentage] = useState('');
     const [globalAmount, setGlobalAmount] = useState('');
-
+    const { user, setUser } = useUser()
     const { showNotification } = useNotification();
     const [controller, dispatch] = useMaterialUIController();
 
@@ -27,7 +28,7 @@ const EditPackageForm = ({id}) => {
       const fetchPackageData = async (id) => {
         try {
         console.log(id)
-          const response = await axiosInstance.get(`/packages/${id}`);
+          const response = await axiosInstance().get(`/packages/${id}`);
           const packageData = response.data;
   
           // Almacena los datos del paquete en el estado
@@ -56,13 +57,9 @@ const EditPackageForm = ({id}) => {
         try {
             setOpenConfigurator(dispatch, false)
 
-            const storedUser = localStorage.getItem("user");
-            const user = JSON.parse(storedUser);
-            console.log(user.username);
-
             console.log(id)
 
-            const response = await axiosInstance.put(`/packages/${id}`, {
+            const response = await axiosInstance().put(`/packages/${id}`, {
                 name: packageName,
                 min_opening_amount: minOpeningAmount,
                 min_inv_days: minInvDays,
