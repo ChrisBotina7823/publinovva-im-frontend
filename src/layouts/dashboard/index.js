@@ -34,6 +34,10 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 // Dashboard components
 import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
+import MDTypography from "components/MDTypography";
+import publinovvaLogo from "assets/images/logo-ct-dark.png"
+
+import banner from "assets/images/index-bg.jpg"
 
 function Dashboard() {
   const { sales, tasks } = reportsLineChartData;
@@ -41,7 +45,21 @@ function Dashboard() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox py={3}>
+      <MDBox align="center">
+        <Grid container justifyContent="center" textAlign="center" alignItems="center" spacing={2}>
+          <Grid item>
+            <MDBox maxHeight="10vh" lg={4} component="img" src={publinovvaLogo} alt="logo"></MDBox>
+          </Grid>
+          <Grid item>
+            <MDBox my={2}>
+              <MDTypography my={0} variant="h2">Publinovva</MDTypography>
+              <MDTypography my={0} variant="h6">Investment Manager</MDTypography>
+            </MDBox>
+          </Grid>
+        </Grid>
+        <MDBox borderRadius="100%" maxWidth="80vw" maxHeight="50vh" component="img" src={banner} alt="banner"></MDBox>
+      </MDBox>
+      {/* <MDBox py={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
@@ -154,7 +172,7 @@ function Dashboard() {
             </Grid>
           </Grid>
         </MDBox>
-      </MDBox>
+      </MDBox> */}
       <Footer />
     </DashboardLayout>
   );

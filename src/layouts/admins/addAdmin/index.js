@@ -51,7 +51,6 @@ const AddAdminForm = () => {
       });
 
       setOpenConfigurator(dispatch, false);
-      console.log(response.data)
       showNotification("success", "Administrador añadido correctamente", `El ID del administrador es ${response.data._id}`);
     } catch (error) {
       console.error('Error adding admin:', error.response.data.error);

@@ -14,7 +14,6 @@ export default ({vl, variant}) => {
     const handleCopy = async () => {
         try {
             await copy(vl)
-            console.log("a")
             showNotification("success", "Valor Copiado", `El valor ${vl} ha sido copiado al portapapeles`)        
         } catch(err) {
             console.error(err)

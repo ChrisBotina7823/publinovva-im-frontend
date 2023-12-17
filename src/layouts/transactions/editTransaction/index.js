@@ -12,7 +12,6 @@ const TransactionActionForm = ({ dataItem }) => {
 
   const handleTransactionAction = async () => {
     try {
-        console.log(dataItem._id)
       if (approveToggle) {
         // Enviar solicitud para aprobar la transacción
         const response = await axiosInstance().post(`/movements/approve-transaction/${dataItem._id}`, {

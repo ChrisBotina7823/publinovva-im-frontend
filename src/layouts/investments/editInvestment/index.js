@@ -21,7 +21,6 @@ import { setOpenConfigurator, useMaterialUIController } from "context";
 
 
 const EditInvestmentForm = ({ investmentId }) => {
-    console.log(investmentId)
     const [actualStartDate, setActualStartDate] = useState(dayjs());
     const [endDate, setEndDate] = useState(dayjs());
     const [state, setState] = useState('');
@@ -36,7 +35,6 @@ const EditInvestmentForm = ({ investmentId }) => {
         const fetchInvestmentData = async (investmentId) => {
             try {
                 const response = await axiosInstance().get(`/investments/${investmentId}`);
-                console.log(response)
                 const investmentData = response.data;
 
                 setInitialInvestmentData(investmentData);

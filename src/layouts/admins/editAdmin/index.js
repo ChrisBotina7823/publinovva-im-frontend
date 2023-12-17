@@ -42,9 +42,6 @@ const EditAdminForm = ({ id, f }) => {
                 const response = await axiosInstance().get(`/admins/${id}`);
                 const adminData = response.data;
 
-                console.log(id)
-                console.log(response)
-
                 setEntityName(adminData.entity_name || '');
                 setDepositAddress(adminData.deposit_address || '');
                 setAvailableDays(adminData.available_days || 0);
@@ -89,7 +86,6 @@ const EditAdminForm = ({ id, f }) => {
                 profilePictureFormData.append("profile_picture", profilePicture);
 
                 response = await axiosInstance().post(`/users/profile-picture/${id}`, profilePictureFormData);
-                console.log(response.data)
             }
 
             if (uploadDepositQR && depositQR) {
@@ -97,7 +93,6 @@ const EditAdminForm = ({ id, f }) => {
                 depositQRFormData.append("deposit_qr", depositQR);
 
                 response = await axiosInstance().post(`/admins/deposit-qr/${id}`, depositQRFormData);
-                console.log(response.data)
             }
 
         } catch (error) {

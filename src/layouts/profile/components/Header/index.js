@@ -38,6 +38,7 @@ import breakpoints from "assets/theme/base/breakpoints";
 import burceMars from "assets/images/bruce-mars.jpg";
 import backgroundImage from "assets/images/bg-profile.jpeg";
 import { useUser } from "context/userContext";
+import MDCopyable from "components/MDCopyable";
 
 function Header({ children, fn }) {
 
@@ -133,9 +134,7 @@ function Header({ children, fn }) {
               <MDTypography variant="h5" fontWeight="medium">
                 { user.username }
               </MDTypography>
-              <MDTypography variant="button" color="text" fontWeight="regular">
-                { user._id }
-              </MDTypography>
+              <MDCopyable variant="caption" vl={user._id}></MDCopyable>
             </MDBox>
           </Grid>
           <Grid item xs={12} md={6} lg={2} sx={{ ml: "auto" }}>

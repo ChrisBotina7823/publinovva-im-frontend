@@ -27,7 +27,6 @@ const EditPackageForm = ({id}) => {
     useEffect(() => {
       const fetchPackageData = async (id) => {
         try {
-        console.log(id)
           const response = await axiosInstance().get(`/packages/${id}`);
           const packageData = response.data;
   

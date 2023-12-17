@@ -120,7 +120,7 @@ function Basic() {
             <MDBox mb={2}>
               <MDInput
                 type="text"
-                label="Username"
+                label="Usuario"
                 fullWidth
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -129,7 +129,7 @@ function Basic() {
             <MDBox mb={2}>
               <MDInput
                 type="password"
-                label="Password"
+                label="Contraseña"
                 fullWidth
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -149,7 +149,7 @@ function Basic() {
             </MDBox> */}
             <MDBox mt={4} mb={1}>
               <MDButton variant="gradient" color="info" fullWidth onClick={handleSignIn}>
-                Sign in
+                Iniciar Sesión
               </MDButton>
             </MDBox>
             {error && (

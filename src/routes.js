@@ -66,7 +66,7 @@ import Icon from "@mui/material/Icon";
 const routes = [
   {
     type: "collapse",
-    name: "Dashboard",
+    name: "Inicio",
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
@@ -75,7 +75,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Packages",
+    name: "Paquetes de Inversión",
     key: "packages",
     icon: <Inventory2OutlinedIcon fontSize="small"></Inventory2OutlinedIcon>,
     route: "/packages",
@@ -84,7 +84,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Clients",
+    name: "Clientes",
     key: "clients",
     icon: <GroupsIcon fontSize="small"></GroupsIcon>,
     route: "/clients",
@@ -93,7 +93,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Admins",
+    name: "Administradores",
     key: "admins",
     icon: <SupervisorAccountIcon fontSize="small"></SupervisorAccountIcon>,
     route: "/admins",
@@ -102,7 +102,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Investments",
+    name: "Inversiones",
     key: "investments",
     icon: <SsidChartIcon fontSize="small"></SsidChartIcon>,
     route: "/investments",
@@ -111,7 +111,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Revenues",
+    name: "Ingresos",
     key: "revenues",
     icon: <MonetizationOnOutlinedIcon fontSize="small"></MonetizationOnOutlinedIcon>,
     route: "/revenues",
@@ -120,7 +120,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Transactions",
+    name: "Transacciones",
     key: "transactions",
     icon: <ContactlessOutlinedIcon fontSize="small"></ContactlessOutlinedIcon>,
     route: "/transactions",
@@ -128,7 +128,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Tickets",
+    name: "Tickets de Soporte",
     key: "tickets",
     icon: <QuestionAnswerRoundedIcon fontSize="small"></QuestionAnswerRoundedIcon>,
     route: "/tickets",
@@ -136,7 +136,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Notifications",
+    name: "Notificaciones",
     key: "notifications",
     icon: <Icon fontSize="small">notifications</Icon>,
     route: "/notifications",
@@ -145,7 +145,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Billing",
+    name: "Facturación",
     key: "billing",
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/billing",
@@ -154,7 +154,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Profile",
+    name: "Perfil",
     key: "profile",
     icon: <Icon fontSize="small">person</Icon>,
     route: "/profile",
@@ -163,7 +163,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Sign In",
+    name: "Iniciar Sesión",
     key: "sign-in",
     icon: <Icon fontSize="small">login</Icon>,
     route: "/authentication/sign-in",
@@ -172,7 +172,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Sign Up",
+    name: "Registrarse",
     key: "sign-up",
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-up",
@@ -181,7 +181,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Logout",
+    name: "Cerrar Sesión",
     key: "logout",
     icon: <Icon fontSize="small">logout</Icon>,
     route: "/logout",

@@ -105,7 +105,7 @@ function useMaterialUIController() {
 
 // Typechecking props for the MaterialUIControllerProvider
 MaterialUIControllerProvider.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
 };
 
 // Context module functions

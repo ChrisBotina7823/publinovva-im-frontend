@@ -148,7 +148,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         }
       }
     }
-    if(!display) returnValue = <MDBox/>
+    if(!display) returnValue = <MDBox key={key}/>
 
     return returnValue;
   });
