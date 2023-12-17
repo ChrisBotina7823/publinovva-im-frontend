@@ -29,6 +29,7 @@ const AddClientForm = () => {
 
     const handleAddClient = async () => {
         try {
+            setOpenConfigurator(dispatch, false);
             if(user.__t == "Admin") setAdminUsername(user.username)
             console.log(adminUsername)
             const response = await axiosInstance().post('/clients', {
@@ -46,7 +47,6 @@ const AddClientForm = () => {
                 usd_password: usdPassword, 
             });
             
-            setOpenConfigurator(dispatch, false);
             showNotification("success", "Cliente añadido correctamente", `El ID del cliente es ${response.data._id}`);
         } catch (error) {
             console.error('Error adding client:', error.response.data.error);

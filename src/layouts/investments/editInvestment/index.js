@@ -58,7 +58,6 @@ const EditInvestmentForm = ({ investmentId }) => {
             const requestData = {
                 actual_start_date: actualStartDate.toISOString(),
                 end_date: endDate.toISOString(),
-                // Agrega el campo de estado solo si showState es verdadero
                 ...(showState && { state }),
             };
 

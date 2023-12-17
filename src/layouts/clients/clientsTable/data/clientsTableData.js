@@ -20,8 +20,8 @@ import MDBadge from 'components/MDBadge';
         { Header: 'id', accessor: 'id', width: '30%', align: 'left' },
         { Header: 'Perfil', accessor: 'profile', width: '30%', align: 'left' },
         { Header: 'Datos Personales', accessor: 'personal_data', width: '30%', align: 'center' },
-        { Header: 'Estado', accessor: 'state', width: '30%', align: 'center' },
         { Header: 'Saldo USD', accessor: 'usd_balance', width: '30%', align: 'center' },
+        { Header: 'Estado', accessor: 'state', width: '30%', align: 'center' },
         { Header: 'action', accessor: 'action', align: 'center' },
       ],
       rows: [],
@@ -55,15 +55,15 @@ import MDBadge from 'components/MDBadge';
             <MDCopyable variant="caption" vl={dataItem.phone}></MDCopyable>
           </MDBox>
         ),
-        state: (
-          <MDBox ml={-1}>
-            <MDBadge badgeContent={dataItem.account_state} color={colorsDict[dataItem.account_state]} variant="gradient" size="md" />
-          </MDBox>
-        ),
         usd_balance: (
           <MDTypography variant="h5">
             {`$${dataItem.usd_wallet.available_amount}`}
           </MDTypography>
+        ),
+        state: (
+          <MDBox ml={-1}>
+            <MDBadge badgeContent={dataItem.account_state} color={colorsDict[dataItem.account_state]} variant="gradient" size="md" />
+          </MDBox>
         ),
         action: (
           <MDBox key={dataItem.username}>
