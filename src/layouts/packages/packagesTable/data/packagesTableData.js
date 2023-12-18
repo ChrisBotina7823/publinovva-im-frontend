@@ -6,7 +6,7 @@ import socket from 'socketInstance';
 import MDCopyable from 'components/MDCopyable';
 import { useUser } from 'context/userContext';
 
-export default function DataTable({ handleEditClick, handleDeleteClick }) {
+export default function DataTable(handleEditClick, handleDeleteClick) {
   const { user } = useUser();
   const [tableData, setTableData] = useState({
     columns: [
