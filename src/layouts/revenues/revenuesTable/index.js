@@ -96,7 +96,7 @@ function Tables() {
       </MDBox>
 
       <Configurator customDescription={customDescription} customTitle={customTitle}  customContent={customContent} />
-      {user.__t == "Client" &&
+      {user?.__t == "Client" &&
         <ConfiguratorButton icon="add" f={handleAddClick} pos={1} />
       }
 

@@ -28,7 +28,7 @@ import MDBadge from 'components/MDBadge';
     });
 
     const mapDataToJSX = (data) => {
-      return data.map((dataItem) => ({
+      return data.reverse().map((dataItem) => ({
         // client: (
         //   <MDTypography key={dataItem.username}>
         //     {JSON.stringify(dataItem)}

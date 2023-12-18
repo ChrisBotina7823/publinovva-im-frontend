@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Publinovva Investment Manager</string>
+    <string name="title_activity_main">Publinovva Investment Manager</string>
+    <string name="package_name">io.ionic.publinovva.investmentmanager</string>
+    <string name="custom_url_scheme">io.ionic.publinovva.investmentmanager</string>
+</resources>

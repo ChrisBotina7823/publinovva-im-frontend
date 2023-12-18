@@ -42,6 +42,7 @@ import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SsidChartIcon from '@mui/icons-material/SsidChart';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
@@ -62,6 +63,7 @@ import Revenues from "layouts/revenues/revenuesTable"
 
 // @mui icons
 import Icon from "@mui/material/Icon"; 
+import { QuestionAnswerRounded } from '@mui/icons-material';
 
 const routes = [
   {
@@ -70,7 +72,7 @@ const routes = [
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
-    component: <PrivateRoute element={<Dashboard />} />,
+    component: <PrivateRoute element={<Billing />} />,
     hidden: []
   },
   {
@@ -145,20 +147,20 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Facturación",
-    key: "billing",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/billing",
-    component: <PrivateRoute element={<Billing />} />,
-    hidden: ["Superuser"]
-  },
-  {
-    type: "collapse",
     name: "Perfil",
     key: "profile",
     icon: <Icon fontSize="small">person</Icon>,
     route: "/profile",
     component: <PrivateRoute element={<Profile />} />,
+    hidden: []
+  },
+  {
+    type: "collapse",
+    name: "Acerca de",
+    key: "billing",
+    icon: <HelpOutlineIcon fontSize="small"></HelpOutlineIcon>,
+    route: "/billing",
+    component: <PrivateRoute element={<Dashboard />} />,
     hidden: []
   },
   {

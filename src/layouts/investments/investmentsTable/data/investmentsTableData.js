@@ -21,12 +21,12 @@ export default function DataTable(handleEditClick) {
   const [tableData, setTableData] = useState({
     columns: [
       { Header: 'ID', accessor: 'id', width: '30%', align: 'left' },
+      { Header: 'Paquete', accessor: 'package', width: '30%', align: 'center' },
+      { Header: 'Cliente', accessor: 'client', width: '30%', align: 'center' },
       { Header: 'Fecha de Solicitud', accessor: 'start_date', width: '30%', align: 'left' },
       { Header: 'Fecha de Inicio', accessor: 'actual_start_date', width: '30%', align: 'center' },
       { Header: 'Fecha de Fin', accessor: 'end_date', width: '30%', align: 'center' },
-      { Header: 'Paquete', accessor: 'package', width: '30%', align: 'center' },
       { Header: 'Estado', accessor: 'state', width: '30%', align: 'center' },
-      { Header: 'Cliente', accessor: 'client', width: '30%', align: 'center' },
       { Header: 'Monto de Inversión', accessor: 'inv_amount', width: '30%', align: 'center' },
       { Header: 'Ingresos', accessor: 'revenue', width: '30%', align: 'center' },
       { Header: 'Acción', accessor: 'action', align: 'center' },
@@ -35,7 +35,7 @@ export default function DataTable(handleEditClick) {
   });
 
   const mapDataToJSX = (data) => {
-    return data.map((dataItem) => ({
+    return data.reverse().map((dataItem) => ({
       id: <MDCopyable variant="thin" vl={dataItem._id} />,
       start_date: <span>{(new Date(dataItem.start_date)).toLocaleDateString()}</span>,
       actual_start_date: (
@@ -47,7 +47,10 @@ export default function DataTable(handleEditClick) {
         <span>{(new Date(dataItem.end_date)).toLocaleDateString()}</span>
       </MDBox>),
       package: (<MDBox>
-        <span>{dataItem.package}</span>
+        <MDBox>
+          <MDTypography>{dataItem.package?.name}</MDTypography>
+          <MDCopyable variant="caption" vl={dataItem.package?._id} />
+        </MDBox>
       </MDBox>),
       state: (
         <MDBox ml={-1}>
@@ -55,14 +58,10 @@ export default function DataTable(handleEditClick) {
         </MDBox>
       ),
       client: (
-        <MDCopyable variant="thin" vl={dataItem.client}>
-          <span>{dataItem.client}</span>
-        </MDCopyable>
-      ),
-      package: (
-        <MDCopyable variant="thin" vl={dataItem.package}>
-          <span>{dataItem.package}</span>
-        </MDCopyable>
+        <MDBox>
+          <MDTypography>{dataItem.client?.fullname}</MDTypography>
+          <MDCopyable variant="caption" vl={dataItem.client?._id} />
+      </MDBox>
       ),
       inv_amount: (
         <MDTypography variant="h5">

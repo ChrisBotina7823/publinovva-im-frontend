@@ -95,9 +95,11 @@ const DepositWithdrawForm = () => {
         </MDBox>
       )}
       <MDBox mt={4} mb={1}>
-        <MDButton variant="gradient" color="info" fullWidth onClick={handleTransaction}>
-          {transactionType === "deposit" ? "Realizar Depósito" : "Realizar Retiro"}
-        </MDButton>
+        { user?.__t == "Client" &&
+          <MDButton variant="gradient" color="info" fullWidth onClick={handleTransaction}>
+            {transactionType === "deposit" ? "Realizar Depósito" : "Realizar Retiro"}
+          </MDButton>        
+        }
       </MDBox>
     </MDBox>
   );

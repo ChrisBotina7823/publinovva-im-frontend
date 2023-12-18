@@ -1,0 +1,7 @@
+{
+    "name": "Publinovva Investment Manager",
+    "integrations": {
+      "capacitor": {}
+    },
+    "type": "react"
+  }

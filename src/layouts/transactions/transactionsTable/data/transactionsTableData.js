@@ -25,10 +25,10 @@ export default function DataTable(handleEditClick) {
   const [tableData, setTableData] = useState({
     columns: [
       { Header: 'ID', accessor: 'id', width: '20%', align: 'left' },
+      { Header: 'Cliente', accessor: 'client', width: '15%', align: 'center' },
+      { Header: 'Administrador', accessor: 'admin', width: '15%', align: 'center' },
       { Header: 'Fecha', accessor: 'date', width: '15%', align: 'left' },
       { Header: 'Estado', accessor: 'movement_state', width: '15%', align: 'center' },
-      { Header: 'Administrador', accessor: 'admin', width: '15%', align: 'center' },
-      { Header: 'Cliente', accessor: 'client', width: '15%', align: 'center' },
       { Header: 'Monto de Transacción', accessor: 'transaction_amount', width: '20%', align: 'center' },
       { Header: 'Tipo de Transacción', accessor: 'transaction_type', width: '20%', align: 'center' },
     ],
@@ -40,7 +40,7 @@ export default function DataTable(handleEditClick) {
       console.log("Fetching data...");
       try {
         const response = await axiosInstance().get(`/movements/wallet-transactions/${user._id}`);
-        const dataRows = response.data.map((dataItem) => ({
+        const dataRows = response.data.reverse().map((dataItem) => ({
           id: <MDCopyable variant="thin" vl={dataItem._id} />,
           date: <span>{(new Date(dataItem.date)).toLocaleDateString()}</span>,
           movement_state: (
@@ -48,9 +48,26 @@ export default function DataTable(handleEditClick) {
               <MDBadge badgeContent={dataItem.movement_state} color={colorsDict[dataItem.movement_state]} variant="gradient" size="md" />
             </MDBox>
           ),
-          admin: <MDCopyable variant="thin" vl={dataItem.admin} />,
-          client: <MDCopyable variant="thin" vl={dataItem.client} />,
-          transaction_amount: <span>{dataItem.transaction_amount}</span>,
+          admin: (
+            <MDBox>
+              <MDTypography>{dataItem.admin?.entity_name}</MDTypography>
+              <MDCopyable variant="caption" vl={dataItem.admin?._id} />
+          </MDBox>
+          ),
+          client: (
+            <MDBox>
+              <MDTypography>{dataItem.client?.fullname}</MDTypography>
+              <MDCopyable variant="caption" vl={dataItem.client?._id} />
+            </MDBox>
+          ),
+          transaction_amount: (
+            <MDBox>
+              {dataItem.received_amount > 0 &&
+                <MDTypography variant="h6">{`$${dataItem.received_amount}`}</MDTypography>
+              }
+              <MDTypography variant="caption" fontWeight="bold">{`($${dataItem.transaction_amount} solicitados)`}</MDTypography>
+            </MDBox>
+          ),
           transaction_type: <span>{dataItem.transaction_type}</span>,
           action: (
             <MDBox>
@@ -61,11 +78,13 @@ export default function DataTable(handleEditClick) {
           ),
         }));
 
-        const columns = tableData.columns.filter((column) => column.accessor !== 'action');
+        const columns = tableData.columns.filter((column) => column.accessor !== 'action' && !(user.__t === 'Admin' || user.__t === 'Client' && column.accessor === 'admin'));
+
         setTableData({
           columns: user.__t !== 'Client' ? [...columns, { Header: 'action', accessor: 'action', align: 'center' }] : columns,
           rows: dataRows,
         });
+        
       } catch (error) {
         console.error('Error al obtener los datos:', error.response.data.error);
       }

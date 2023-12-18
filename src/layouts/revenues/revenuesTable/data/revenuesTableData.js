@@ -27,7 +27,7 @@ export default function DataTable() {
   });
 
   const mapDataToJSX = (rows) => {
-    return rows.map((dataItem) => ({
+    return rows.reverse().map((dataItem) => ({
       investment: <MDCopyable variant="thin" vl={dataItem.investment} />,
       date: <span>{(new Date(dataItem.date)).toLocaleDateString()}</span>,
       daysDiff: <span>{dataItem.days_diff}</span>,

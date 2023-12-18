@@ -35,6 +35,7 @@ const InvestmentRequestForm = () => {
 
             showNotification("success", "Solicitud de inversión realizada correctamente", `El ID de la inversión es ${response.data._id}`);
         } catch (error) {
+            console.log(error)
             console.error('Error requesting investment:', error.response.data.error);
             showNotification("error", "Error al solicitar la inversión", error.response.data.error);
         }

@@ -41,7 +41,7 @@ export default function DataTable(handleEditClick) {
     try {
       console.log("fetching data...");
       const response = await axiosInstance().get(`/movements/support-tickets/${user._id}`);
-      const dataRows = response.data.map((dataItem) => ({
+      const dataRows = response.data.reverse().map((dataItem) => ({
         id: <MDCopyable variant="thin" vl={dataItem._id} />,
         date: <span>{(new Date(dataItem.date)).toLocaleDateString()}</span>,
         movement_state: (

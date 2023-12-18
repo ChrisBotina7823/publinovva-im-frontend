@@ -26,7 +26,7 @@ export default function DataTable(handleEditClick, handleDeleteClick) {
   });
 
   const mapDataToJSX = (data) => {
-    return data.map((dataItem) => ({
+    return data.reverse().map((dataItem) => ({
       // admin: (
       //   <MDBox key={dataItem.username}>
       //     <MDTypography>

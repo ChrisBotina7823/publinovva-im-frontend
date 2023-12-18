@@ -39,15 +39,19 @@ function Billing() {
   const [controller, dispatch] = useMaterialUIController();
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, true);
   const [customContent, setCustomContent] = useState(null);
+  const [customTitle, setCustomTitle] = useState(null);
+  const [customDescription, setCustomDescription] = useState(null);
 
   const handleAddTransactionClick = () => {
     handleConfiguratorOpen();
     setCustomContent(<AddTransaction />);
+    setCustomTitle("Solicitar ingreso/retiro")
+    setCustomDescription("Ingresa la información de transacción")
   };
 
   return (
     <DashboardLayout>
-      <DashboardNavbar absolute isMini />
+      <DashboardNavbar />
       <MDBox mt={8}>
         <MDBox mb={3}>
           <Grid container spacing={3}>
@@ -98,7 +102,7 @@ function Billing() {
           </Grid>
         </MDBox>
       </MDBox>
-      <Configurator customContent={customContent} />
+      <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
       <ConfiguratorButton icon="add" f={handleAddTransactionClick} pos={1} />
       <Footer />
     </DashboardLayout>
