@@ -78,8 +78,7 @@ export default function DataTable(handleEditClick) {
           ),
         }));
 
-        const columns = tableData.columns.filter((column) => column.accessor !== 'action' && !(user.__t === 'Admin' || user.__t === 'Client' && column.accessor === 'admin'));
-
+        const columns = tableData.columns.filter((column) => column.accessor !== 'action');
         setTableData({
           columns: user.__t !== 'Client' ? [...columns, { Header: 'action', accessor: 'action', align: 'center' }] : columns,
           rows: dataRows,
