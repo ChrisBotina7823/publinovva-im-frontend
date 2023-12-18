@@ -121,12 +121,12 @@ ProgressLineChart.defaultProps = {
 // Typechecking props for the ProgressLineChart
 ProgressLineChart.propTypes = {
   color: PropTypes.oneOf(["primary", "secondary", "info", "success", "warning", "error", "dark"]),
-  icon: PropTypes.node.isRequired,
-  title: PropTypes.string.isRequired,
+  icon: PropTypes.node,
+  title: PropTypes.string,
   count: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  progress: PropTypes.number.isRequired,
+  progress: PropTypes.number,
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  chart: PropTypes.objectOf(PropTypes.array).isRequired,
+  chart: PropTypes.objectOf(PropTypes.array),
 };
 
 export default ProgressLineChart;

@@ -109,10 +109,10 @@ ReportsLineChart.defaultProps = {
 // Typechecking props for the ReportsLineChart
 ReportsLineChart.propTypes = {
   color: PropTypes.oneOf(["primary", "secondary", "info", "success", "warning", "error", "dark"]),
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   description: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  date: PropTypes.string.isRequired,
-  chart: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.array, PropTypes.object])).isRequired,
+  date: PropTypes.string,
+  chart: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.array, PropTypes.object])),
 };
 
 export default ReportsLineChart;

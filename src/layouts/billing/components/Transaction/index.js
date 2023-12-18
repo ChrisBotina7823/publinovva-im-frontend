@@ -62,11 +62,11 @@ Transaction.propTypes = {
     "error",
     "light",
     "dark",
-  ]).isRequired,
-  icon: PropTypes.node.isRequired,
-  name: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  ]),
+  icon: PropTypes.node,
+  name: PropTypes.string,
+  description: PropTypes.string,
+  value: PropTypes.string,
 };
 
 export default Transaction;

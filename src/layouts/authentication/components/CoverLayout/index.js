@@ -82,8 +82,8 @@ CoverLayout.defaultProps = {
 // Typechecking props for the CoverLayout
 CoverLayout.propTypes = {
   coverHeight: PropTypes.string,
-  image: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
+  image: PropTypes.string,
+  children: PropTypes.node,
 };
 
 export default CoverLayout;

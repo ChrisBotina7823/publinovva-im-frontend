@@ -88,8 +88,8 @@ DefaultInfoCard.defaultProps = {
 // Typechecking props for the DefaultInfoCard
 DefaultInfoCard.propTypes = {
   color: PropTypes.oneOf(["primary", "secondary", "info", "success", "warning", "error", "dark"]),
-  icon: PropTypes.node.isRequired,
-  title: PropTypes.string.isRequired,
+  icon: PropTypes.node,
+  title: PropTypes.string,
   description: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };

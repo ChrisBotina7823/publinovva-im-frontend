@@ -61,9 +61,9 @@ TimelineList.defaultProps = {
 
 // Typechecking props for the TimelineList
 TimelineList.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   dark: PropTypes.bool,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
 };
 
 export default TimelineList;

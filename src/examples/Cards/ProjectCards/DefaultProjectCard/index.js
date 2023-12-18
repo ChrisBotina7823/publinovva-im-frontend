@@ -145,13 +145,13 @@ DefaultProjectCard.defaultProps = {
 
 // Typechecking props for the DefaultProjectCard
 DefaultProjectCard.propTypes = {
-  image: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  image: PropTypes.string,
+  label: PropTypes.string,
+  title: PropTypes.string,
+  description: PropTypes.string,
   action: PropTypes.shape({
     type: PropTypes.oneOf(["external", "internal"]),
-    route: PropTypes.string.isRequired,
+    route: PropTypes.string,
     color: PropTypes.oneOf([
       "primary",
       "secondary",
@@ -162,9 +162,9 @@ DefaultProjectCard.propTypes = {
       "light",
       "dark",
       "white",
-    ]).isRequired,
-    label: PropTypes.string.isRequired,
-  }).isRequired,
+    ]),
+    label: PropTypes.string,
+  }),
   authors: PropTypes.arrayOf(PropTypes.object),
 };
 

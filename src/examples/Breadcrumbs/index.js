@@ -95,9 +95,9 @@ Breadcrumbs.defaultProps = {
 
 // Typechecking props for the Breadcrumbs
 Breadcrumbs.propTypes = {
-  icon: PropTypes.node.isRequired,
-  title: PropTypes.string.isRequired,
-  route: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
+  icon: PropTypes.node,
+  title: PropTypes.string,
+  route: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   light: PropTypes.bool,
 };
 
