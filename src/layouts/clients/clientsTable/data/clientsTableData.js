@@ -17,8 +17,8 @@ import MDBadge from 'components/MDBadge';
     const [tableData, setTableData] = useState({
       columns: [
         // { Header: 'Cliente', accessor: 'client', width: '30%', align: 'center' },
-        { Header: 'id', accessor: 'id', width: '30%', align: 'left' },
-        { Header: 'Perfil', accessor: 'profile', width: '30%', align: 'left' },
+        { Header: 'id', accessor: 'id', width: '15%', align: 'center' },
+        { Header: 'Perfil', accessor: 'profile', width: '30%', align: 'center' },
         { Header: 'Datos Personales', accessor: 'personal_data', width: '30%', align: 'center' },
         { Header: 'Saldo USD', accessor: 'usd_balance', width: '30%', align: 'center' },
         { Header: 'Estado', accessor: 'state', width: '30%', align: 'center' },
@@ -35,7 +35,7 @@ import MDBadge from 'components/MDBadge';
         //   </MDTypography>
         // ),
         id: (
-          <MDCopyable variant="thin" vl={dataItem._id}/>
+          <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id}/>
           ),
         profile: (
           <MDBox display="flex" alignItems="center" lineHeight={1}>

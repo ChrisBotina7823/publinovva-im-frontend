@@ -15,8 +15,8 @@ export default function DataTable(handleEditClick, handleDeleteClick) {
   
   const [tableData, setTableData] = useState({
     columns: [
-      { Header: 'id', accessor: 'id', width: '30%', align: 'left' },
-      { Header: 'Perfil', accessor: 'profile', width: '30%', align: 'left' },
+      { Header: 'id', accessor: 'id', width: '15%', align: 'center' },
+      { Header: 'Perfil', accessor: 'profile', width: '30%', align: 'center' },
       { Header: 'Depósito', accessor: 'deposit_info', width: '30%', align: 'center' },
       { Header: 'Estado', accessor: 'state', width: '30%', align: 'center' },
       // { Header: 'Administrador', accessor: 'admin', width: '30%', align: 'left' },
@@ -35,7 +35,7 @@ export default function DataTable(handleEditClick, handleDeleteClick) {
       //   </MDBox>
       // ),
       id: (
-        <MDCopyable variant="thin" vl={dataItem._id}/>
+        <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id}/>
         ),
       profile: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
@@ -51,13 +51,13 @@ export default function DataTable(handleEditClick, handleDeleteClick) {
       ),
       deposit_info:(
         <MDBox>
-          <MDBox sx={{height:"3vh"}} onError={(e) => e.target.src = "https://thumbs.dreamstime.com/b/seamless-circle-diagonal-stripe-pattern-vector-soft-background-regular-white-texture-90383470.jpg"} component="img" src={dataItem.deposit_qr} alt="deposit_qr"/>
+          <MDBox sx={{height:"10vh"}} onError={(e) => e.target.src = "https://thumbs.dreamstime.com/b/seamless-circle-diagonal-stripe-pattern-vector-soft-background-regular-white-texture-90383470.jpg"} component="img" src={dataItem.deposit_qr} alt="deposit_qr"/>
           <MDCopyable variant="thin" vl={dataItem.deposit_address}/>
         </MDBox>
       ),
       state: (
         <MDBox ml={-1}>
-          <MDBadge badgeContent={dataItem.account_state} color={colorsDict[dataItem.account_state]} variant="gradient" size="md" />
+          <MDBadge badgeContent={dataItem.account_state} color={colorsDict[dataItem.account_state]} variant="gradient" size="lg" />
         </MDBox>
       ),
       action: (
@@ -70,7 +70,7 @@ export default function DataTable(handleEditClick, handleDeleteClick) {
             fontWeight="medium"
             onClick={() => handleEditClick(dataItem.username)}
           >
-            Edit
+            Editar
           </MDTypography>
           <MDTypography
             component="a"
@@ -79,8 +79,9 @@ export default function DataTable(handleEditClick, handleDeleteClick) {
             color="error"
             fontWeight="medium"
             onClick={() => handleDeleteClick(dataItem.username)}
+            ml={1}
           >
-            Delete
+            Eliminar
           </MDTypography>
         </MDBox>
       ),

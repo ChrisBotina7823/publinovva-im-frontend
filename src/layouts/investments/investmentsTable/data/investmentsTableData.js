@@ -20,10 +20,10 @@ export default function DataTable(handleEditClick) {
 
   const [tableData, setTableData] = useState({
     columns: [
-      { Header: 'ID', accessor: 'id', width: '30%', align: 'left' },
-      { Header: 'Paquete', accessor: 'package', width: '30%', align: 'center' },
-      { Header: 'Cliente', accessor: 'client', width: '30%', align: 'center' },
-      { Header: 'Fecha de Solicitud', accessor: 'start_date', width: '30%', align: 'left' },
+      { Header: 'ID', accessor: 'id', width: '10%', align: 'center' },
+      { Header: 'Paquete', accessor: 'package', width: '15%', align: 'center' },
+      { Header: 'Cliente', accessor: 'client', width: '15%', align: 'center' },
+      { Header: 'Fecha de Solicitud', accessor: 'start_date', width: '30%', align: 'center' },
       { Header: 'Fecha de Inicio', accessor: 'actual_start_date', width: '30%', align: 'center' },
       { Header: 'Fecha de Fin', accessor: 'end_date', width: '30%', align: 'center' },
       { Header: 'Estado', accessor: 'state', width: '30%', align: 'center' },
@@ -36,7 +36,7 @@ export default function DataTable(handleEditClick) {
 
   const mapDataToJSX = (data) => {
     return data.reverse().map((dataItem) => ({
-      id: <MDCopyable variant="thin" vl={dataItem._id} />,
+      id: <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id} />,
       start_date: <span>{(new Date(dataItem.start_date)).toLocaleDateString()}</span>,
       actual_start_date: (
         <MDBox>

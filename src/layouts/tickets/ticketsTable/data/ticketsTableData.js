@@ -25,14 +25,14 @@ export default function DataTable(handleEditClick) {
 
   const [tableData, setTableData] = useState({
     columns: [
-      { Header: 'ID', accessor: 'id', width: '20%', align: 'left' },
-      { Header: 'Fecha', accessor: 'date', width: '15%', align: 'left' },
+      { Header: 'ID', accessor: 'id', width: '10%', align: 'center' },
+      { Header: 'Fecha', accessor: 'date', width: '15%', align: 'center' },
       { Header: 'Estado', accessor: 'movement_state', width: '15%', align: 'center' },
       { Header: 'Administrador', accessor: 'admin', width: '15%', align: 'center' },
       { Header: 'Cliente', accessor: 'client', width: '15%', align: 'center' },
       { Header: 'Descripción', accessor: 'description', width: '20%', align: 'center' },
       { Header: 'Categoría de Ticket', accessor: 'category', width: '15%', align: 'center' },
-      { Header: "Estado", accessor: "action", width: "30%", align: "left" },
+      { Header: "Estado", accessor: "action", width: "30%", align: "center" },
     ],
     rows: [],
   });
@@ -42,15 +42,25 @@ export default function DataTable(handleEditClick) {
       console.log("fetching data...");
       const response = await axiosInstance().get(`/movements/support-tickets/${user._id}`);
       const dataRows = response.data.reverse().map((dataItem) => ({
-        id: <MDCopyable variant="thin" vl={dataItem._id} />,
+        id: <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id} />,
         date: <span>{(new Date(dataItem.date)).toLocaleDateString()}</span>,
         movement_state: (
           <MDBox ml={-1}>
             <MDBadge badgeContent={dataItem.movement_state} color={colorsDict[dataItem.movement_state]} variant="gradient" size="md" />
           </MDBox>
         ),
-        admin: <MDCopyable variant="thin" vl={dataItem.admin} />,
-        client: <MDCopyable variant="thin" vl={dataItem.client} />,
+        admin: (
+          <MDBox>
+            <MDTypography>{dataItem.admin?.entity_name}</MDTypography>
+            <MDCopyable variant="caption" vl={dataItem.admin?.shortId || dataItem.admin?._id} />
+          </MDBox>
+        ),
+        client: (
+          <MDBox>
+            <MDTypography>{dataItem.client?.fullname}</MDTypography>
+            <MDCopyable variant="caption" vl={dataItem.admin?.shortId || dataItem.client?._id} />
+          </MDBox>
+        ),
         description: <span>{dataItem.description}</span>,
         // Add category for tickets
         category: dataItem.category || '', // Assuming 'category' is available in ticket data

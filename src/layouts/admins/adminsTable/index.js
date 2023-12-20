@@ -29,6 +29,8 @@ function Tables() {
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, true);
 
   const [customContent, setCustomContent] = useState(null);
+  const [customTitle, setCustomTitle] = useState(null);
+  const [customDescription, setCustomDescription] = useState(null);
 
   const { showNotification } = useNotification();
 
@@ -37,6 +39,8 @@ function Tables() {
     setCustomContent(
       <AddAdmin /> // Reemplaza con el componente adecuado
     );
+    setCustomTitle("Añadir administrador")
+    setCustomDescription("Ingresa la información del administrador")
   };
 
   const handleEditClick = (id) => {
@@ -44,6 +48,8 @@ function Tables() {
     setCustomContent(
       <EditAdmin id={id} /> // Reemplaza con el componente adecuado
     );
+    setCustomTitle("Editar administrador")
+    setCustomDescription("Cambia los datos del administrador")
   };
 
   const handleDeleteClick = (username) => {
@@ -102,8 +108,8 @@ function Tables() {
         </Grid>
       </MDBox>
 
-      <Configurator customContent={customContent} />
-      <ConfiguratorButton icon="add" f={handleAddClick} pos={1} />
+      <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
+      <ConfiguratorButton icon="add" pos={1} f={handleAddClick} vl="Añadir administrador" />
 
       <Footer />
     </DashboardLayout>

@@ -123,7 +123,7 @@ function Tables() {
 
       <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
       {user?.__t == "Admin" &&
-        <ConfiguratorButton icon="add" f={handleAddClick} pos={1} />
+        <ConfiguratorButton icon="add" pos={1} f={handleAddClick} vl="Añadir paquete" />
       }
 
       <Footer />

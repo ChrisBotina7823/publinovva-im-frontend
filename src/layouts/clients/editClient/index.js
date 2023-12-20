@@ -106,7 +106,7 @@ const EditClientForm = ({ id, f }) => {
             <MDBox mb={2}>
                 <MDInput
                     type="text"
-                    label="Username"
+                    label="Nombre de Usuario"
                     fullWidth
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -115,7 +115,7 @@ const EditClientForm = ({ id, f }) => {
             <MDBox mb={2}>
                 <MDInput
                     type="text"
-                    label="Email"
+                    label="Correo Electrónico"
                     fullWidth
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -125,7 +125,7 @@ const EditClientForm = ({ id, f }) => {
             <MDBox mb={2}>
                 <MDInput
                     type="text"
-                    label="Full Name"
+                    label="Nombre completo"
                     fullWidth
                     value={fullname}
                     onChange={(e) => setFullname(e.target.value)}
@@ -134,7 +134,7 @@ const EditClientForm = ({ id, f }) => {
             <MDBox mb={2}>
                 <MDInput
                     type="text"
-                    label="Country"
+                    label="País"
                     fullWidth
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
@@ -143,7 +143,7 @@ const EditClientForm = ({ id, f }) => {
             <MDBox mb={2}>
                 <MDInput
                     type="text"
-                    label="Phone"
+                    label="Teléfono"
                     fullWidth
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
@@ -155,7 +155,7 @@ const EditClientForm = ({ id, f }) => {
                     <Select
                         value={accountState}
                         onChange={(e) => setAccountState(e.target.value)}
-                        label="Account State"
+                        label="Estado de cuenta"
                         labelId="account_state"
                         sx={{ paddingY: '8px' }}
                         fullWidth
@@ -276,7 +276,7 @@ const EditClientForm = ({ id, f }) => {
 
             <MDBox mt={4} mb={1}>
                 <MDButton variant="gradient" color="info" fullWidth onClick={handleEditClient}>
-                    Edit Client
+                    Editar Cliente
                 </MDButton>
             </MDBox>
         </MDBox>

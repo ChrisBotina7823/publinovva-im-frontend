@@ -34,7 +34,6 @@ import ConfiguratorButton from "components/ConfiguratorButton";
 import TicketTableData from "layouts/tickets/ticketsTable/data/ticketsTableData";
 import { setOpenConfigurator, useMaterialUIController } from "context";
 import AddTicket from 'layouts/tickets/addTicket'
-import EditTicket from 'layouts/tickets/editTicket'
 import axiosInstance from "axiosInstance";
 
 import { useNotification } from "components/NotificationContext";
@@ -115,7 +114,7 @@ function Tables() {
       <Configurator customDescription={customDescription} customTitle={customTitle}  customContent={customContent} />
 
       {user.__t == "Client" &&
-        <ConfiguratorButton icon="add" f={handleAddClick} pos={1} />
+        <ConfiguratorButton icon="add" pos={1} f={handleAddClick} vl="Redactar tiquete de soporte" />
       }
 
       <Footer />

@@ -69,7 +69,7 @@ const routes = [
   {
     type: "collapse",
     name: "Inicio",
-    key: "dashboard",
+    key: "inicio",
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
     component: <PrivateRoute element={<Billing />} />,
@@ -78,7 +78,7 @@ const routes = [
   {
     type: "collapse",
     name: "Paquetes de Inversión",
-    key: "packages",
+    key: "paquetes",
     icon: <Inventory2OutlinedIcon fontSize="small"></Inventory2OutlinedIcon>,
     route: "/packages",
     component: <PrivateRoute element={<Packages />} />,
@@ -87,7 +87,7 @@ const routes = [
   {
     type: "collapse",
     name: "Clientes",
-    key: "clients",
+    key: "clientes",
     icon: <GroupsIcon fontSize="small"></GroupsIcon>,
     route: "/clients",
     component: <PrivateRoute element={<Clients />} />,
@@ -96,7 +96,7 @@ const routes = [
   {
     type: "collapse",
     name: "Administradores",
-    key: "admins",
+    key: "administradores",
     icon: <SupervisorAccountIcon fontSize="small"></SupervisorAccountIcon>,
     route: "/admins",
     component: <PrivateRoute element={<Admins />} />,
@@ -105,7 +105,7 @@ const routes = [
   {
     type: "collapse",
     name: "Inversiones",
-    key: "investments",
+    key: "inversiones",
     icon: <SsidChartIcon fontSize="small"></SsidChartIcon>,
     route: "/investments",
     component: <PrivateRoute element={<Investments />} />,
@@ -114,7 +114,7 @@ const routes = [
   {
     type: "collapse",
     name: "Ingresos",
-    key: "revenues",
+    key: "ingresos",
     icon: <MonetizationOnOutlinedIcon fontSize="small"></MonetizationOnOutlinedIcon>,
     route: "/revenues",
     component: <PrivateRoute element={<Revenues />} />,
@@ -123,15 +123,15 @@ const routes = [
   {
     type: "collapse",
     name: "Transacciones",
-    key: "transactions",
+    key: "transacciones",
     icon: <ContactlessOutlinedIcon fontSize="small"></ContactlessOutlinedIcon>,
     route: "/transactions",
     component: <PrivateRoute element={<Transactions />} />,
   },
   {
     type: "collapse",
-    name: "Tickets de Soporte",
-    key: "tickets",
+    name: "Tiquetes de Soporte",
+    key: "tiquetes de soporte",
     icon: <QuestionAnswerRoundedIcon fontSize="small"></QuestionAnswerRoundedIcon>,
     route: "/tickets",
     component: <PrivateRoute element={<Tickets />} />,
@@ -139,7 +139,7 @@ const routes = [
   {
     type: "collapse",
     name: "Notificaciones",
-    key: "notifications",
+    key: "notificaciones",
     icon: <Icon fontSize="small">notifications</Icon>,
     route: "/notifications",
     component: <PrivateRoute element={<Notifications />} />,
@@ -148,7 +148,7 @@ const routes = [
   {
     type: "collapse",
     name: "Perfil",
-    key: "profile",
+    key: "perfil",
     icon: <Icon fontSize="small">person</Icon>,
     route: "/profile",
     component: <PrivateRoute element={<Profile />} />,
@@ -157,7 +157,7 @@ const routes = [
   {
     type: "collapse",
     name: "Acerca de",
-    key: "billing",
+    key: "acerca de",
     icon: <HelpOutlineIcon fontSize="small"></HelpOutlineIcon>,
     route: "/billing",
     component: <PrivateRoute element={<Dashboard />} />,
@@ -166,7 +166,7 @@ const routes = [
   {
     type: "collapse",
     name: "Iniciar Sesión",
-    key: "sign-in",
+    key: "iniciar sesión",
     icon: <Icon fontSize="small">login</Icon>,
     route: "/authentication/sign-in",
     component: <SignIn />,
@@ -175,7 +175,7 @@ const routes = [
   {
     type: "collapse",
     name: "Registrarse",
-    key: "sign-up",
+    key: "registrarse",
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-up",
     component: <SignUp />,
@@ -184,7 +184,7 @@ const routes = [
   {
     type: "collapse",
     name: "Cerrar Sesión",
-    key: "logout",
+    key: "cerrar sesión",
     icon: <Icon fontSize="small">logout</Icon>,
     route: "/logout",
     component: <PrivateRoute element={<Logout />} />,

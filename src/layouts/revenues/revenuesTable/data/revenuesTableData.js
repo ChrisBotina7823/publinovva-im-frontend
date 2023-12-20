@@ -18,7 +18,7 @@ export default function DataTable() {
 
   const [tableData, setTableData] = useState({
     columns: [
-      { Header: 'Inversión', accessor: 'investment', width: '30%', align: 'left' },
+      { Header: 'Inversión', accessor: 'investment', width: '30%', align: 'center' },
       { Header: 'Fecha', accessor: 'date', width: '10%', align: 'center' },
       { Header: 'Días de Inversión', accessor: 'daysDiff', width: '30%', align: 'center' },
       { Header: 'Ingreso', accessor: 'revenue_amount', width: '30%', align: 'center' },

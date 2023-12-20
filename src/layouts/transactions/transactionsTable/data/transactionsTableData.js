@@ -24,10 +24,10 @@ export default function DataTable(handleEditClick) {
   const { user } = useUser()
   const [tableData, setTableData] = useState({
     columns: [
-      { Header: 'ID', accessor: 'id', width: '20%', align: 'left' },
+      { Header: 'ID', accessor: 'id', width: '20%', align: 'center' },
       { Header: 'Cliente', accessor: 'client', width: '15%', align: 'center' },
       { Header: 'Administrador', accessor: 'admin', width: '15%', align: 'center' },
-      { Header: 'Fecha', accessor: 'date', width: '15%', align: 'left' },
+      { Header: 'Fecha', accessor: 'date', width: '15%', align: 'center' },
       { Header: 'Estado', accessor: 'movement_state', width: '15%', align: 'center' },
       { Header: 'Monto de Transacción', accessor: 'transaction_amount', width: '20%', align: 'center' },
       { Header: 'Tipo de Transacción', accessor: 'transaction_type', width: '20%', align: 'center' },
@@ -41,7 +41,7 @@ export default function DataTable(handleEditClick) {
       try {
         const response = await axiosInstance().get(`/movements/wallet-transactions/${user._id}`);
         const dataRows = response.data.reverse().map((dataItem) => ({
-          id: <MDCopyable variant="thin" vl={dataItem._id} />,
+          id: <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id} />,
           date: <span>{(new Date(dataItem.date)).toLocaleDateString()}</span>,
           movement_state: (
             <MDBox ml={-1}>
@@ -51,13 +51,13 @@ export default function DataTable(handleEditClick) {
           admin: (
             <MDBox>
               <MDTypography>{dataItem.admin?.entity_name}</MDTypography>
-              <MDCopyable variant="caption" vl={dataItem.admin?._id} />
+              <MDCopyable variant="caption" vl={dataItem.admin?.shortId || dataItem.admin?._id} />
           </MDBox>
           ),
           client: (
             <MDBox>
               <MDTypography>{dataItem.client?.fullname}</MDTypography>
-              <MDCopyable variant="caption" vl={dataItem.client?._id} />
+              <MDCopyable variant="caption" vl={dataItem.admin?.shortId || dataItem.client?._id} />
             </MDBox>
           ),
           transaction_amount: (

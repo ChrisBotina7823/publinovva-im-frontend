@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
 import MDBox from "components/MDBox";
 import MDInput from "components/MDInput";
@@ -6,36 +6,50 @@ import MDButton from "components/MDButton";
 import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
 import { useMaterialUIController } from "context";
-
-import dayjs from "dayjs";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useUser } from "context/userContext";
-
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import dayjs from "dayjs";
+import MDTypography from "components/MDTypography";
+import { Divider } from "@mui/material";
 
 const InvestmentRequestForm = () => {
-    const [packageId, setPackageId] = useState('');
+    const [packages, setPackages] = useState([]);
+    const [selectedPackage, setSelectedPackage] = useState('');
     const [endDate, setEndDate] = useState(dayjs());
     const [invAmount, setInvAmount] = useState('');
-    const { user } = useUser()
+    const { user } = useUser();
     const { showNotification } = useNotification();
     const [controller, dispatch] = useMaterialUIController();
 
+    useEffect(() => {
+        const fetchPackages = async () => {
+            try {
+                const response = await axiosInstance().get('/packages');
+                setPackages(response.data);
+            } catch (error) {
+                console.error('Error fetching packages:', error.response.data.error);
+            }
+        };
+
+        fetchPackages();
+    }, []);
+
     const handleInvestmentRequest = async () => {
         try {
-
             const response = await axiosInstance().post(`/investments/${user.username}`, {
-                package_id: packageId,
+                package_id: selectedPackage,
                 end_date: endDate.format("YYYY-MM-DD"),
                 inv_amount: invAmount,
             });
 
-            // Puedes manejar la respuesta según tus necesidades
-
             showNotification("success", "Solicitud de inversión realizada correctamente", `El ID de la inversión es ${response.data._id}`);
         } catch (error) {
-            console.log(error)
             console.error('Error requesting investment:', error.response.data.error);
             showNotification("error", "Error al solicitar la inversión", error.response.data.error);
         }
@@ -44,16 +58,40 @@ const InvestmentRequestForm = () => {
     return (
         <MDBox component="form" role="form">
             <MDBox mb={2}>
-                <MDInput
-                    type="text"
-                    label="Package ID"
-                    fullWidth
-                    value={packageId}
-                    onChange={(e) => setPackageId(e.target.value)}
-                />
+                <FormControl fullWidth>
+                    <InputLabel id="package-selector-label">Seleccionar Paquete</InputLabel>
+                    <Select
+                        labelId="package-selector-label"
+                        id="package-selector"
+                        value={selectedPackage}
+                        onChange={(e) => setSelectedPackage(e.target.value)}
+                        sx={{ paddingY: '8px' }}
+                    >
+                        {packages.map((inv_package) => (
+                            <MenuItem key={inv_package._id} value={inv_package._id}>
+                                <MDBox spacing={0} >
+                                    <MDTypography fontSize={14} fontWeight="bold">
+                                        {inv_package.name}
+                                        <MDTypography variant="caption">
+                                            {` (${inv_package._id})`}
+                                        </MDTypography>
+                                    </MDTypography>
+                                    <MDTypography variant="caption">
+                                    <MDTypography variant="caption" fontWeight="regular"> - Beneficios: </MDTypography>
+                                        {`${inv_package.revenue_percentage * 100}% del monto invertido cada ${inv_package.revenue_freq} días`}
+                                    </MDTypography>
+                                    <br/>
+                                    <MDTypography variant="caption">
+                                        <MDTypography variant="caption" fontWeight="regular"> - Requisitos: </MDTypography>
+                                        {`$${inv_package.min_opening_amount * 100}, ${inv_package.min_inv_days} días mínimo`}
+                                    </MDTypography>
+                                </MDBox>
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
             </MDBox>
             <MDBox mb={2}>
-
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                         label="Fecha de Fin"
@@ -61,7 +99,6 @@ const InvestmentRequestForm = () => {
                         onChange={(date) => setEndDate(date)}
                     />
                 </LocalizationProvider>
-
             </MDBox>
             <MDBox mb={2}>
                 <MDInput

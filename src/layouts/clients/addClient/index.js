@@ -60,7 +60,7 @@ const AddClientForm = () => {
             <MDBox mb={2}>
                 <MDInput
                     type="text"
-                    label="Username"
+                    label="Usuario"
                     fullWidth
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -69,7 +69,7 @@ const AddClientForm = () => {
             <MDBox mb={2}>
                 <MDInput
                     type="password"
-                    label="Password"
+                    label="Contraseña"
                     fullWidth
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -78,7 +78,7 @@ const AddClientForm = () => {
             <MDBox mb={2}>
                 <MDInput
                     type="email"
-                    label="Email"
+                    label="Correo Electrónico"
                     fullWidth
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -89,7 +89,7 @@ const AddClientForm = () => {
             <MDBox mb={2}>
                 <MDInput
                     type="text"
-                    label="Fullname"
+                    label="Nombre completo"
                     fullWidth
                     value={fullname}
                     onChange={(e) => setFullname(e.target.value)}
@@ -98,7 +98,7 @@ const AddClientForm = () => {
             <MDBox mb={2}>
                 <MDInput
                     type="text"
-                    label="Country"
+                    label="País"
                     fullWidth
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
@@ -107,7 +107,7 @@ const AddClientForm = () => {
             <MDBox mb={2}>
                 <MDInput
                     type="text"
-                    label="Phone"
+                    label="Teléfono"
                     fullWidth
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
@@ -137,7 +137,7 @@ const AddClientForm = () => {
             <MDBox mb={2}>
                 <MDInput
                     type="text"
-                    label="Admin Username"
+                    label="Username del Administrador"
                     fullWidth
                     value={adminUsername}
                     onChange={(e) => setAdminUsername(e.target.value)}
@@ -148,7 +148,7 @@ const AddClientForm = () => {
             {/* Button to add the client */}
             <MDBox mt={4} mb={1}>
                 <MDButton variant="gradient" color="info" fullWidth onClick={handleAddClient}>
-                    Add Client
+                    Añadir Cliente
                 </MDButton>
             </MDBox>
         </MDBox>

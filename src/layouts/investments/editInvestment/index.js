@@ -74,7 +74,7 @@ const EditInvestmentForm = ({ investmentId }) => {
             <MDBox mb={2}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
-                        label="Fecha de Inicio Actual"
+                        label="Fecha de Inicio Real"
                         value={actualStartDate}
                         onChange={(date) => setActualStartDate(date)}
                     />

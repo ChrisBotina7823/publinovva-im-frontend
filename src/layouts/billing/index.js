@@ -103,7 +103,7 @@ function Billing() {
         </MDBox>
       </MDBox>
       <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
-      <ConfiguratorButton icon="add" f={handleAddTransactionClick} pos={1} />
+      <ConfiguratorButton icon="add" pos={1} f={handleAddTransactionClick} vl="Solicitar depósito/retiro"/>
       <Footer />
     </DashboardLayout>
   );

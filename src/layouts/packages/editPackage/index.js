@@ -78,7 +78,7 @@ const EditPackageForm = ({id}) => {
             <MDBox mb={2}>
                 <MDInput
                     type="text"
-                    label="Package Name"
+                    label="Nombre del Paquete"
                     fullWidth
                     value={packageName}
                     onChange={(e) => setPackageName(e.target.value)}
@@ -87,7 +87,7 @@ const EditPackageForm = ({id}) => {
             <MDBox mb={2}>
                 <MDInput
                     type="number"
-                    label="Minimum Opening Amount"
+                    label="Monto mínimo de apertura"
                     fullWidth
                     value={minOpeningAmount}
                     onChange={(e) => setMinOpeningAmount(e.target.value)}
@@ -96,7 +96,7 @@ const EditPackageForm = ({id}) => {
             <MDBox mb={2}>
                 <MDInput
                     type="number"
-                    label="Minimum Investment Days"
+                    label="Días mínimos de inversión"
                     fullWidth
                     value={minInvDays}
                     onChange={(e) => setMinInvDays(e.target.value)}
@@ -105,7 +105,7 @@ const EditPackageForm = ({id}) => {
             <MDBox mb={2}>
                 <MDInput
                     type="number"
-                    label="Revenue Frequency"
+                    label="Frecuencia de Ingreso"
                     fullWidth
                     value={revenueFreq}
                     onChange={(e) => setRevenueFreq(e.target.value)}
@@ -114,7 +114,7 @@ const EditPackageForm = ({id}) => {
             <MDBox mb={2}>
                 <MDInput
                     type="number"
-                    label="Revenue Percentage"
+                    label="Porcentaje de beneficio"
                     fullWidth
                     value={revenuePercentage}
                     onChange={(e) => setRevenuePercentage(e.target.value)}
@@ -123,7 +123,7 @@ const EditPackageForm = ({id}) => {
             <MDBox mb={2}>
                 <MDInput
                     type="number"
-                    label="Global Amount"
+                    label="Monto global"
                     fullWidth
                     value={globalAmount}
                     onChange={(e) => setGlobalAmount(e.target.value)}
@@ -131,7 +131,7 @@ const EditPackageForm = ({id}) => {
             </MDBox>
             <MDBox mt={4} mb={1}>
                 <MDButton variant="gradient" color="info" fullWidth onClick={handleEditPackage}>
-                    Edit Package
+                    Editar Paquete
                 </MDButton>
             </MDBox>
         </MDBox>

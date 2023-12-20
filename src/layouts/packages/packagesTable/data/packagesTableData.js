@@ -27,7 +27,7 @@ export default function DataTable(handleEditClick, handleDeleteClick) {
 
         const response = await axiosInstance().get('/packages');
         const dataRows = response.data.reverse().map((dataItem) => ({
-          id: <MDCopyable variant="thin" vl={dataItem._id} />,
+          id: <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id} />,
           name: <MDTypography>{dataItem.name}</MDTypography>,
           requirements: (
             <MDBox lineHeight={1}>
