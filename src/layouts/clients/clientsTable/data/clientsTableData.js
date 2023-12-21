@@ -75,7 +75,7 @@ import MDBadge from 'components/MDBadge';
               fontWeight="medium"
               onClick={() => handleEditClick(dataItem.username)}
             >
-              Edit
+              Editar
             </MDTypography>
             <MDTypography
               component="a"
@@ -86,7 +86,7 @@ import MDBadge from 'components/MDBadge';
               ml={1}
               onClick={() => handleDeleteClick(dataItem.username)}
             >
-              Delete
+              Eliminar
             </MDTypography>
           </MDBox>
         ),

@@ -8,6 +8,7 @@ import axiosInstance from 'axiosInstance';
 import socket from 'socketInstance'; // Importa el objeto socket que creamos
 import MDCopyable from 'components/MDCopyable';
 import MDBadge from 'components/MDBadge';
+import { useUser } from 'context/userContext';
 
 export default function DataTable(handleEditClick) {
 
@@ -17,6 +18,7 @@ export default function DataTable(handleEditClick) {
     "rechazado": "error",
     "finalizado": "info",
   };
+  const { user } = useUser()
 
   const [tableData, setTableData] = useState({
     columns: [
@@ -94,7 +96,7 @@ export default function DataTable(handleEditClick) {
     const fetchData = async () => {
       try {
         console.log("fetching data...")
-        const response = await axiosInstance().get('/investments');
+        const response = await axiosInstance().get(`/investments/user/${user.username}`);
         const dataRows = mapDataToJSX(response.data);
 
         setTableData({

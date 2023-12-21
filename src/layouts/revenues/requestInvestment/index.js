@@ -5,7 +5,6 @@ import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
-import { useMaterialUIController } from "context";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -17,6 +16,7 @@ import InputLabel from "@mui/material/InputLabel";
 import dayjs from "dayjs";
 import MDTypography from "components/MDTypography";
 import { Divider } from "@mui/material";
+import { setOpenConfigurator, useMaterialUIController } from "context";
 
 const InvestmentRequestForm = () => {
     const [packages, setPackages] = useState([]);
@@ -42,6 +42,8 @@ const InvestmentRequestForm = () => {
 
     const handleInvestmentRequest = async () => {
         try {
+
+            setOpenConfigurator(dispatch, false);
             const response = await axiosInstance().post(`/investments/${user.username}`, {
                 package_id: selectedPackage,
                 end_date: endDate.format("YYYY-MM-DD"),
@@ -49,6 +51,7 @@ const InvestmentRequestForm = () => {
             });
 
             showNotification("success", "Solicitud de inversión realizada correctamente", `El ID de la inversión es ${response.data._id}`);
+            
         } catch (error) {
             console.error('Error requesting investment:', error.response.data.error);
             showNotification("error", "Error al solicitar la inversión", error.response.data.error);
@@ -100,6 +103,9 @@ const InvestmentRequestForm = () => {
                     />
                 </LocalizationProvider>
             </MDBox>
+            <MDTypography variant="caption">
+                {`Disponible billetera de comercio: $${user.i_wallet.available_amount}`}
+            </MDTypography>
             <MDBox mb={2}>
                 <MDInput
                     type="number"

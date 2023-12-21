@@ -13,6 +13,7 @@ import { FormControlLabel } from "@mui/material";
 import { Switch } from "@mui/material";
 
 import { setOpenConfigurator, useMaterialUIController } from "context";
+import { useUser } from "context/userContext";
 
 const EditClientForm = ({ id, f }) => {
     const [fullname, setFullname] = useState('');
@@ -40,6 +41,7 @@ const EditClientForm = ({ id, f }) => {
 
     const { showNotification } = useNotification();
     const [controller, dispatch] = useMaterialUIController();
+    const { user } = useUser()
 
 
     useEffect(() => {
@@ -149,32 +151,36 @@ const EditClientForm = ({ id, f }) => {
                     onChange={(e) => setPhone(e.target.value)}
                 />
             </MDBox>
-            <MDBox mb={2}>
-                <FormControl fullWidth>
-                    <InputLabel id="account_state">Estado</InputLabel>
-                    <Select
-                        value={accountState}
-                        onChange={(e) => setAccountState(e.target.value)}
-                        label="Estado de cuenta"
-                        labelId="account_state"
-                        sx={{ paddingY: '8px' }}
+            { (!user.__t || user.__t == "Admin") &&
+                <MDBox mb={2}>
+                    <FormControl fullWidth>
+                        <InputLabel id="account_state">Estado</InputLabel>
+                        <Select
+                            value={accountState}
+                            onChange={(e) => setAccountState(e.target.value)}
+                            label="Estado de cuenta"
+                            labelId="account_state"
+                            sx={{ paddingY: '8px' }}
+                            fullWidth
+                        >
+                            <MenuItem value="en revision">En Revisión</MenuItem>
+                            <MenuItem value="activo">Activo</MenuItem>
+                            <MenuItem value="suspendido">Suspendido</MenuItem>
+                        </Select>
+                    </FormControl>
+                </MDBox>
+            }
+            { (!user.__t || user.__t == "Admin") &&
+                <MDBox mb={2}>
+                    <MDInput
+                        type="number"
+                        label="Saldo Billetera USD"
                         fullWidth
-                    >
-                        <MenuItem value="en revision">En Revisión</MenuItem>
-                        <MenuItem value="activo">Activo</MenuItem>
-                        <MenuItem value="suspendido">Suspendido</MenuItem>
-                    </Select>
-                </FormControl>
-            </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="number"
-                    label="Saldo Billetera USD"
-                    fullWidth
-                    value={usdBalance}
-                    onChange={(e) => setUsdBalance(e.target.value)}
-                />
-            </MDBox>
+                        value={usdBalance}
+                        onChange={(e) => setUsdBalance(e.target.value)}
+                    />
+                </MDBox>
+            }
 
             <MDBox mb={1}>
                 <FormControlLabel
@@ -209,7 +215,7 @@ const EditClientForm = ({ id, f }) => {
                             inputProps={{ 'aria-label': 'toggle-i-password' }}
                         />
                     }
-                    label="Contraseña Billetera de Inversiones"
+                    label="Contraseña Billetera de Comercio"
                 />
             </MDBox>
             {showIPassword && (

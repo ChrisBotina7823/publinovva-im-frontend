@@ -46,7 +46,7 @@ const WalletTransactionForm = () => {
                         {`Disponible Billetera USD: $${user.usd_wallet.available_amount}`}
                     </MDTypography>
                     <MDTypography variant="caption" display="block">
-                        {`Disponible Billetera de Inversiones: $${user.i_wallet.available_amount}`}
+                        {`Disponible Billetera de Comercio: $${user.i_wallet.available_amount}`}
                     </MDTypography>
                 </MDBox>
                 <MDInput
@@ -69,7 +69,7 @@ const WalletTransactionForm = () => {
                         sx={{ paddingY: '8px' }}
                         fullWidth
                     >
-                        <MenuItem value="inv">Billetera de Inversiones</MenuItem>
+                        <MenuItem value="inv">Billetera de Comercio</MenuItem>
                         <MenuItem value="usd">Billetera USD</MenuItem>
                     </Select>
                 </FormControl>

@@ -40,7 +40,7 @@ export default function DataTable(handleEditClick) {
   const fetchData = async () => {
     try {
       console.log("fetching data...");
-      const response = await axiosInstance().get(`/movements/support-tickets/${user._id}`);
+      const response = await axiosInstance().get(`/movements/support-tickets/${user.username}`);
       const dataRows = response.data.reverse().map((dataItem) => ({
         id: <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id} />,
         date: <span>{(new Date(dataItem.date)).toLocaleDateString()}</span>,

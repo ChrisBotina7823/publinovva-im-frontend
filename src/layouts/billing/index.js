@@ -74,7 +74,7 @@ function Billing() {
                   { user.i_wallet &&
                     <DefaultInfoCard
                       icon="wallet"
-                      title="Billetera de Inversiones"
+                      title="Billetera de Comercio"
                       description={user.i_wallet._id}
                       value={`$${user.i_wallet.available_amount}`}
                       value_additional={`($${user.i_wallet.investment_amount} en inversión)`}
@@ -103,7 +103,9 @@ function Billing() {
         </MDBox>
       </MDBox>
       <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
-      <ConfiguratorButton icon="add" pos={1} f={handleAddTransactionClick} vl="Solicitar depósito/retiro"/>
+      {user.__t == "Client" &&
+        <ConfiguratorButton icon="add" pos={1} f={handleAddTransactionClick} vl="Solicitar depósito/retiro"/>
+      }
       <Footer />
     </DashboardLayout>
   );
