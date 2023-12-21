@@ -10,6 +10,8 @@ import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
 import { useParams } from "react-router-dom";
 import { useUser } from "context/userContext";
+import MDTypography from "components/MDTypography";
+import { setOpenConfigurator, useMaterialUIController } from "context";
 
 const WalletTransactionForm = () => {
     const {user, setUser} = useUser()
@@ -18,6 +20,7 @@ const WalletTransactionForm = () => {
     const [walletPassword, setWalletPassword] = useState("");
     const [transactionType, setTransactionType] = useState("usd"); // Default to "usd"
 
+    const [controller, dispatch] = useMaterialUIController();
     const { showNotification } = useNotification();
 
     const handleWalletTransaction = async () => {
@@ -27,7 +30,7 @@ const WalletTransactionForm = () => {
                 transaction_amount: transactionAmount,
                 wallet_password: walletPassword,
             });
-
+            setOpenConfigurator(dispatch, false)
             showNotification("success", "Transacción realizada correctamente", `ID de la transacción: ${response.data._id}`);
         } catch (error) {
             console.error('Error in wallet transaction:', error.response.data.error);
@@ -38,6 +41,14 @@ const WalletTransactionForm = () => {
     return (
         <MDBox component="form" role="form">
             <MDBox mb={2}>
+                <MDBox margin={2}>
+                    <MDTypography variant="caption" display="block">
+                        {`Disponible Billetera USD: $${user.usd_wallet.available_amount}`}
+                    </MDTypography>
+                    <MDTypography variant="caption" display="block">
+                        {`Disponible Billetera de Inversiones: $${user.i_wallet.available_amount}`}
+                    </MDTypography>
+                </MDBox>
                 <MDInput
                     type="number"
                     label="Monto de transacción"
@@ -58,8 +69,8 @@ const WalletTransactionForm = () => {
                         sx={{ paddingY: '8px' }}
                         fullWidth
                     >
-                        <MenuItem value="usd">Billetera USD</MenuItem>
                         <MenuItem value="inv">Billetera de Inversiones</MenuItem>
+                        <MenuItem value="usd">Billetera USD</MenuItem>
                     </Select>
                 </FormControl>
             </MDBox>

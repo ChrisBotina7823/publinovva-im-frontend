@@ -39,7 +39,7 @@ export default function DataTable(handleEditClick) {
     const fetchData = async () => {
       console.log("Fetching data...");
       try {
-        const response = await axiosInstance().get(`/movements/wallet-transactions/${user._id}`);
+        const response = await axiosInstance().get(`/movements/wallet-transactions/${user.username}`);
         const dataRows = response.data.reverse().map((dataItem) => ({
           id: <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id} />,
           date: <span>{(new Date(dataItem.date)).toLocaleDateString()}</span>,
