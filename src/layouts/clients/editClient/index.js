@@ -34,7 +34,9 @@ const EditClientForm = ({ id, f }) => {
 
     const [uploadPicture, setUploadPicture] = useState(false);
     const [profilePicture, setProfilePicture] = useState(null);
-    
+
+    const [usdAddress, setUsdAddress] = useState('');
+    const [showUsdAddress, setShowUsdAddress] = useState(false);
 
     const [initialClientData, setInitialClientData] = useState(null);
 
@@ -59,6 +61,7 @@ const EditClientForm = ({ id, f }) => {
                 setUsdBalance(clientData.usd_wallet.available_amount || 0)
                 setUsername(clientData.username || '');
                 setEmail(clientData.email || '');
+                setUsdAddress(clientData.usd_wallet.address || clientData.usd_wallet._id || ''); // assuming usd_address is a string field
             } catch (error) {
                 console.error('Error fetching client data:', error.response.data.error);
             }
@@ -70,7 +73,7 @@ const EditClientForm = ({ id, f }) => {
     const handleEditClient = async () => {
         try {
             setOpenConfigurator(dispatch, false);
-            if(f) f()
+            if (f) f()
 
             const requestData = {
                 username,
@@ -85,16 +88,17 @@ const EditClientForm = ({ id, f }) => {
             if (showPassword && password) requestData.password = password;
             if (showIPassword && iPassword) requestData.i_password = iPassword;
             if (showUsdPassword && usdPassword) requestData.usd_password = usdPassword;
+            if (showUsdAddress && usdAddress) requestData.usd_address = usdAddress;
 
             const response = await axiosInstance().put(`/clients/${id}`, requestData);
 
             if (uploadPicture && profilePicture) {
                 const pictureFormData = new FormData();
                 pictureFormData.append("profile_picture", profilePicture);
-                
+
                 axiosInstance().post(`/users/profile-picture/${id}`, pictureFormData);
             }
-            
+
             showNotification("success", "Cliente editado correctamente", `El ID del cliente es ${response.data._id}`);
         } catch (error) {
             console.error('Error editing client:', error.response.data.error);
@@ -151,7 +155,7 @@ const EditClientForm = ({ id, f }) => {
                     onChange={(e) => setPhone(e.target.value)}
                 />
             </MDBox>
-            { (!user.__t || user.__t == "Admin") &&
+            {(!user.__t || user.__t == "Admin") &&
                 <MDBox mb={2}>
                     <FormControl fullWidth>
                         <InputLabel id="account_state">Estado</InputLabel>
@@ -170,7 +174,7 @@ const EditClientForm = ({ id, f }) => {
                     </FormControl>
                 </MDBox>
             }
-            { (!user.__t || user.__t == "Admin") &&
+            {(!user.__t || user.__t == "Admin") &&
                 <MDBox mb={2}>
                     <MDInput
                         type="number"
@@ -181,6 +185,31 @@ const EditClientForm = ({ id, f }) => {
                     />
                 </MDBox>
             }
+
+            <MDBox mb={1}>
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={showUsdAddress}
+                            onChange={() => setShowUsdAddress(!showUsdAddress)}
+                            inputProps={{ 'aria-label': 'toggle-usd-address' }}
+                        />
+                    }
+                    label="Cambiar dirección Billetera USD"
+                />
+            </MDBox>
+
+            {showUsdAddress && (
+                <MDBox mb={2}>
+                    <MDInput
+                        type="text"
+                        label="Dirección Billetera USD"
+                        fullWidth
+                        value={usdAddress}
+                        onChange={(e) => setUsdAddress(e.target.value)}
+                    />
+                </MDBox>
+            )}
 
             <MDBox mb={1}>
                 <FormControlLabel

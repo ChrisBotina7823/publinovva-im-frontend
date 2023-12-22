@@ -49,6 +49,8 @@ function Billing() {
     setCustomDescription("Ingresa la información de transacción")
   };
 
+  console.log(user)
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -65,7 +67,7 @@ function Billing() {
                     <DefaultInfoCard
                       icon="wallet"
                       title="Billetera USD"
-                      description={user.usd_wallet._id}
+                      description={user.usd_wallet.address || user.usd_wallet._id }
                       value={`$${user.usd_wallet.available_amount}`}
                     />
                    }
@@ -77,7 +79,6 @@ function Billing() {
                       title="Billetera de Comercio"
                       description={user.i_wallet._id}
                       value={`$${user.i_wallet.available_amount}`}
-                      value_additional={`($${user.i_wallet.investment_amount} en inversión)`}
                     />
                    }
                 </Grid>

@@ -60,6 +60,7 @@ function Overview() {
   } else if (user.__t === "Client") {
     userInfo["Nombre completo"] = user.fullname;
     userInfo["Teléfono"] = user.phone;
+    userInfo["Dirección Billetera USD"] = user.usd_wallet.address || user.usd_wallet._id
   }
 
   return (
@@ -70,7 +71,7 @@ function Overview() {
         <MDBox mt={5} mb={3}>
           { !isEditing && 
             <ProfileInfoCard
-              title="profile information"
+              title="Información del Perfil"
               info={userInfo}
               shadow={false}
             />

@@ -134,7 +134,7 @@ function Header({ children, fn }) {
               <MDTypography variant="h5" fontWeight="medium">
                 { user.username }
               </MDTypography>
-              <MDCopyable variant="caption" vl={user._id}></MDCopyable>
+              <MDCopyable variant="caption" vl={`ID: ${user.shortId || user._id}`}></MDCopyable>
             </MDBox>
           </Grid>
           <Grid item xs={12} md={6} lg={2} sx={{ ml: "auto" }}>
