@@ -10,7 +10,7 @@ import MDCopyable from 'components/MDCopyable';
 import MDBadge from 'components/MDBadge';
 import { useUser } from 'context/userContext';
 
-export default function DataTable(handleEditClick) {
+export default function DataTable(handleEditClick, updateLoading) {
 
   const colorsDict = {
     "pendiente": "warning",
@@ -105,6 +105,8 @@ export default function DataTable(handleEditClick) {
         });
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally { 
+        updateLoading()
       }
     };
 

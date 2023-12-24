@@ -10,7 +10,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { FormControlLabel } from "@mui/material";
+import { CircularProgress, FormControlLabel } from "@mui/material";
 import { Switch } from "@mui/material";
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -31,9 +31,12 @@ const EditInvestmentForm = ({ investmentId }) => {
     const { showNotification } = useNotification();
     const [controller, dispatch] = useMaterialUIController();
 
+    const [loading, setLoading] = useState()
+
     useEffect(() => {
         const fetchInvestmentData = async (investmentId) => {
             try {
+                setLoading(true)
                 const response = await axiosInstance().get(`/investments/${investmentId}`);
                 const investmentData = response.data;
 
@@ -44,6 +47,8 @@ const EditInvestmentForm = ({ investmentId }) => {
                 setState(investmentData.state || '');
             } catch (error) {
                 console.error('Error fetching investment data:', error.response.data.error);
+            } finally {
+                setLoading(false)
             }
         };
 
@@ -52,7 +57,7 @@ const EditInvestmentForm = ({ investmentId }) => {
 
     const handleEditInvestment = async () => {
         try {
-            setOpenConfigurator(dispatch, false);
+            setLoading(true)
             const requestData = {
                 actual_start_date: actualStartDate.toISOString(),
                 end_date: endDate.toISOString(),
@@ -61,76 +66,90 @@ const EditInvestmentForm = ({ investmentId }) => {
 
             const response = await axiosInstance().put(`/investments/${investmentId}`, requestData);
 
+            setOpenConfigurator(dispatch, false);
             showNotification("success", "Inversión editada correctamente", `La inversión con ID ${response.data._id} se ha editado correctamente`);
         } catch (error) {
             console.error('Error editing investment:', error.response.data.error);
             showNotification("error", "Error al editar la inversión", error.response.data.error);
+        } finally {
+            setLoading(false)
         }
     };
 
     return (
-        <MDBox component="form" role="form">
+        <MDBox
+            component="form"
+            role="form"
+            textAlign={loading ? "center" : "left"}
+        >
+            {loading ? (
+                <CircularProgress color="secondary" size={60} />
+            ) : (
+                <>
+                    <MDBox mb={2}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                                label="Fecha de Inicio Real"
+                                value={actualStartDate}
+                                onChange={(date) => setActualStartDate(date)}
+                            />
+                        </LocalizationProvider>
+                    </MDBox>
 
-            <MDBox mb={2}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                        label="Fecha de Inicio Real"
-                        value={actualStartDate}
-                        onChange={(date) => setActualStartDate(date)}
-                    />
-                </LocalizationProvider>
-            </MDBox>
+                    <MDBox mb={2}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                                label="Fecha de Fin"
+                                value={endDate}
+                                onChange={(date) => setEndDate(date)}
+                            />
+                        </LocalizationProvider>
+                    </MDBox>
 
-            <MDBox mb={2}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                        label="Fecha de Fin"
-                        value={endDate}
-                        onChange={(date) => setEndDate(date)}
-                    />
-                </LocalizationProvider>
-            </MDBox>
-
-            {/* Toggle para mostrar/ocultar el campo de estado */}
-            <MDBox mb={1}>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={showState}
-                            onChange={() => setShowState(!showState)}
-                            inputProps={{ 'aria-label': 'toggle-state' }}
+                    {/* Toggle para mostrar/ocultar el campo de estado */}
+                    <MDBox mb={1}>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={showState}
+                                    onChange={() => setShowState(!showState)}
+                                    inputProps={{ 'aria-label': 'toggle-state' }}
+                                />
+                            }
+                            label="Cambiar Estado"
                         />
-                    }
-                    label="Cambiar Estado"
-                />
-            </MDBox>
-            {showState && (
-                <MDBox mb={2}>
-                    <FormControl fullWidth>
-                        <InputLabel id="state">Estado</InputLabel>
-                        <Select
-                            labelId="state"
-                            id="state"
-                            value={state}
-                            onChange={(e) => setState(e.target.value)}
-                            sx={{ paddingY: '8px' }}
-                            fullWidth
-                        >
-                            <MenuItem value="pendiente">Pendiente</MenuItem>
-                            <MenuItem value="en curso">En Curso</MenuItem>
-                            <MenuItem value="rechazado">Rechazado</MenuItem>
-                            <MenuItem value="finalizado">Finalizado</MenuItem>
-                        </Select>
-                    </FormControl>
-                </MDBox>
-            )}
+                    </MDBox>
+                    {showState && (
+                        <MDBox mb={2}>
+                            <FormControl fullWidth>
+                                <InputLabel id="state">Estado</InputLabel>
+                                <Select
+                                    labelId="state"
+                                    id="state"
+                                    value={state}
+                                    onChange={(e) => setState(e.target.value)}
+                                    sx={{ paddingY: '8px' }}
+                                    fullWidth
+                                >
+                                    <MenuItem value="pendiente">Pendiente</MenuItem>
+                                    <MenuItem value="en curso">En Curso</MenuItem>
+                                    <MenuItem value="rechazado">Rechazado</MenuItem>
+                                    <MenuItem value="finalizado">Finalizado</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </MDBox>
+                    )}
 
-            <MDBox mt={4} mb={1}>
-                <MDButton variant="gradient" color="info" fullWidth onClick={handleEditInvestment}>
-                    Editar Inversión
-                </MDButton>
-            </MDBox>
+                    <MDBox mt={4} mb={1}>
+                        <MDButton variant="gradient" color="info" fullWidth onClick={handleEditInvestment}>
+                            Editar Inversión
+                        </MDButton>
+                    </MDBox>
+                </>
+            )}
         </MDBox>
+
+
     );
 };
 

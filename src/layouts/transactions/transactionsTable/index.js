@@ -39,58 +39,64 @@ import axiosInstance from "axiosInstance";
 
 import { useNotification } from "components/NotificationContext";
 import { useUser } from "context/userContext";
+import { CircularProgress } from "@mui/material";
 
 function Tables() {
 
   const [controller, dispatch] = useMaterialUIController();
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, true);
 
-  const {user} = useUser()
-  
+  const { user } = useUser()
+
   const [customContent, setCustomContent] = useState(null);
   const [customTitle, setCustomTitle] = useState(null);
   const [customDescription, setCustomDescription] = useState(null);
 
   const { showNotification } = useNotification();
-  
+
   const handleAddClick = () => {
     handleConfiguratorOpen()
     setCustomContent(
       <AddWalletTransaction />
-      )
-      setCustomTitle("Realizar transacción")
-      setCustomDescription("Ingresa la información del transacción")
+    )
+    setCustomTitle("Realizar transacción")
+    setCustomDescription("Ingresa la información del transacción")
+  }
+
+  const handleStateChange = async (id, movement_state) => {
+    try {
+      const response = await axiosInstance().put(`movements/change-state/${id}`, { movement_state })
+      showNotification("success", "Tiquete actualizado correctamente", `El estado del tiquete identificado con ID ${response.data._id} se ha cambiado a ${response.data.movement_state}`);
+      return true;
+    } catch (error) {
+      console.error('Error fetching investment data:', error.response.data.error);
+      showNotification("error", "Error al editar la inversión", error.response.data.error);
+      return false;
     }
-    
-    const handleStateChange = async (id, movement_state) => {
+
+  }
+
+  const handleDeleteClick = (id) => {
+    const deleteWalletTransaction = async () => {
       try {
-        const response = await axiosInstance().put(`movements/change-state/${id}`, {movement_state})
-        showNotification("success", "Tiquete actualizado correctamente", `El estado del tiquete identificado con ID ${response.data._id} se ha cambiado a ${response.data.movement_state}`);
-        return true;
-      } catch(error) {
-        console.error('Error fetching investment data:', error.response.data.error);
-        showNotification("error", "Error al editar la inversión", error.response.data.error);
-        return false;
+        const response = await axiosInstance().delete(`/packages/${id}`)
+        showNotification("success", "Transacción eliminada correctamente", `El ID de la transacción es ${response.data._id} `);
+      } catch (error) {
+        console.error('Error adding walletTransaction:', error.response.data.error);
+        showNotification("error", "Error al editar la transacción", error.response.data.error);
       }
 
     }
+    deleteWalletTransaction()
+  }
 
-    const handleDeleteClick = (id) => {
-      const deleteWalletTransaction = async () => {
-        try {
-          const response = await axiosInstance().delete(`/packages/${id}`)
-          showNotification("success", "Transacción eliminada correctamente", `El ID de la transacción es ${response.data._id} `);
-        } catch (error) {
-            console.error('Error adding walletTransaction:', error.response.data.error);
-            showNotification("error", "Error al editar la transacción", error.response.data.error);
-        }
+  const [loading, setLoading] = useState(true)
 
-      }  
-      deleteWalletTransaction()
-    }
+  const updateLoading = () => {
+    setLoading(false)
+  }
+  const { columns, rows } = walletTransactionTableData(handleStateChange, updateLoading);
 
-    const { columns, rows } = walletTransactionTableData(handleStateChange);
-    
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -112,14 +118,20 @@ function Tables() {
                   Transacciones
                 </MDTypography>
               </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={true}
-                  showTotalEntries={true}
-                  noEndBorder
-                />
+              <MDBox pt={3} textAlign="center">
+                {loading ? (
+                  <CircularProgress color="secondary" size={60} />
+                ) : (
+                  <>
+                    <DataTable
+                      table={{ columns, rows }}
+                      isSorted={false}
+                      entriesPerPage={true}
+                      showTotalEntries={true}
+                      noEndBorder
+                    />
+                  </>
+                )}
               </MDBox>
             </Card>
           </Grid>
@@ -127,7 +139,7 @@ function Tables() {
       </MDBox>
 
       <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
-      { user.__t == "Client" &&
+      {user.__t == "Client" &&
         <ConfiguratorButton icon="add" pos={1} f={handleAddClick} vl="Transferir entre billeteras" />
       }
 

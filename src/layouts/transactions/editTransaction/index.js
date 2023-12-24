@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import MDBox from "components/MDBox";
 import MDButton from "components/MDButton";
-import { FormControlLabel, Switch, TextField } from "@mui/material";
+import { CircularProgress, FormControlLabel, Switch, TextField } from "@mui/material";
 import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
 
 const TransactionActionForm = ({ dataItem }) => {
   const [approveToggle, setApproveToggle] = useState(false);
   const [receivedAmount, setReceivedAmount] = useState('');
-    const { showNotification } = useNotification()
+  const { showNotification } = useNotification()
+
+  const [loading, setLoading] = useState()
 
   const handleTransactionAction = async () => {
     try {
+      setLoading(true)
       if (approveToggle) {
         // Enviar solicitud para aprobar la transacción
         const response = await axiosInstance().post(`/movements/approve-transaction/${dataItem._id}`, {
@@ -28,45 +31,55 @@ const TransactionActionForm = ({ dataItem }) => {
     } catch (error) {
       console.error('Error al procesar la transacción:', error.response.data.error);
       showNotification("error", "Error al Procesar la Transacción", error.response.data.error);
+    } finally {
+      setLoading(false)
     }
   };
 
   return (
-    <MDBox component="form" role="form">
-      {/* Toggle para aprobar o rechazar */}
-      <MDBox mb={1}>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={approveToggle}
-              onChange={() => setApproveToggle(!approveToggle)}
-              inputProps={{ 'aria-label': 'toggle-approve-reject' }}
+    <MDBox
+      component="form"
+      role="form"
+      textAlign="center"
+    >
+      {loading ? (
+        <CircularProgress color="secondary" />
+      ) : (
+        <>
+          <MDBox mb={1}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={approveToggle}
+                  onChange={() => setApproveToggle(!approveToggle)}
+                  inputProps={{ 'aria-label': 'toggle-approve-reject' }}
+                />
+              }
+              label="Aprobar Transacción"
             />
-          }
-          label="Aprobar Transacción"
-        />
-      </MDBox>
+          </MDBox>
 
-      {/* Campo de monto de transacción si el toggle está activo */}
-      {approveToggle && (
-        <MDBox mb={2}>
-          <TextField
-            label="Monto recibido"
-            type="number"
-            fullWidth
-            value={receivedAmount}
-            onChange={(e) => setReceivedAmount(e.target.value)}
-          />
-        </MDBox>
+          {approveToggle && (
+            <MDBox mb={2}>
+              <TextField
+                label="Monto recibido"
+                type="number"
+                fullWidth
+                value={receivedAmount}
+                onChange={(e) => setReceivedAmount(e.target.value)}
+              />
+            </MDBox>
+          )}
+
+          <MDBox mb={1}>
+            <MDButton variant="gradient" color="info" onClick={handleTransactionAction}>
+              Realizar Acción
+            </MDButton>
+          </MDBox>
+        </>
       )}
-
-      {/* Botón para realizar la acción */}
-      <MDBox mb={1}>
-        <MDButton variant="gradient" color="info" fullWidth onClick={handleTransactionAction}>
-          Realizar Acción
-        </MDButton>
-      </MDBox>
     </MDBox>
+
   );
 };
 

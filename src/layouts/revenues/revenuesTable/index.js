@@ -36,6 +36,7 @@ import ConfiguratorButton from "components/ConfiguratorButton";
 // Data
 import revenuesTableData from "layouts/revenues/revenuesTable/data/revenuesTableData";
 import { useUser } from "context/userContext";
+import { CircularProgress } from "@mui/material";
 
 function Tables() {
 
@@ -57,8 +58,15 @@ function Tables() {
     setCustomTitle("Solicitar inversión")
     setCustomDescription("Ingresa la información del inversión")
   };
+  
+  const [loading, setLoading] = useState(true)
 
-  const { columns, rows } = revenuesTableData();
+  const updateLoading = () => {
+    setLoading(false)
+  }
+
+  const { columns, rows } = revenuesTableData(updateLoading);
+
 
   return (
     <DashboardLayout>
@@ -81,7 +89,11 @@ function Tables() {
                   Ingresos
                 </MDTypography>
               </MDBox>
-              <MDBox pt={3}>
+              <MDBox pt={3} textAlign="center">
+              {loading ? (
+                    <CircularProgress color="secondary" size={60} />
+                ) : (
+                    <>
                 <DataTable
                   table={{ columns, rows }}
                   isSorted={false}
@@ -89,6 +101,8 @@ function Tables() {
                   showTotalEntries={true}
                   noEndBorder
                 />
+                    </>
+                )}
               </MDBox>
             </Card>
           </Grid>

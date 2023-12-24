@@ -10,8 +10,9 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from "@mui/material/Select";
-import { FormControlLabel, Switch } from "@mui/material";
+import { CircularProgress, FormControlLabel, Switch } from "@mui/material";
 import { useUser } from "context/userContext";
+import { CoPresent } from "@mui/icons-material";
 
 const AddAdminForm = () => {
   const [entityName, setEntityName] = useState('');
@@ -34,8 +35,11 @@ const AddAdminForm = () => {
 
   const {user, setUser} = useUser()
 
+  const [loading, setLoading] = useState(false)
+
   const handleAddAdmin = async () => {
     try {
+      setLoading(true)
       if (user.__t === "Admin") {
         setUsername(user.username);
       }
@@ -51,17 +55,26 @@ const AddAdminForm = () => {
       });
 
       setOpenConfigurator(dispatch, false);
-      showNotification("success", "Administrador añadido correctamente", `El ID del administrador es ${response.data._id}`);
+      showNotification("success", "Administrador añadido correctamente.", `El ID del administrador es ${response.data._id}. Puedes cambiar la foto de perfil o el QR de depósito con el botón de la tabla`);
     } catch (error) {
       console.error('Error adding admin:', error.response.data.error);
       showNotification("error", "Error al añadir el administrador", error.response.data.error);
+    } finally {
+      setLoading(false )
     }
   };
 
   return (
-    <MDBox component="form" role="form">
-
-      {/* User fields */}
+    <MDBox
+    component="form"
+    role="form"
+    textAlign={loading ? "center" : "left"}
+>
+    {loading ? (
+        <CircularProgress color="secondary" size={60} />
+    ) : (
+        <>
+        
       <MDBox mb={2}>
         <MDInput
           type="text"
@@ -89,7 +102,7 @@ const AddAdminForm = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
       </MDBox>
-      <MDBox mb={2}>
+      {/* <MDBox mb={2}>
         <MDInput
           type="text"
           label="Foto de perfil"
@@ -97,9 +110,8 @@ const AddAdminForm = () => {
           value={profilePicture}
           onChange={(e) => setProfilePicture(e.target.value)}
         />
-      </MDBox>
+      </MDBox> */}
 
-      {/* Admin-specific fields */}
       <MDBox mb={2}>
         <MDInput
           type="text"
@@ -118,7 +130,7 @@ const AddAdminForm = () => {
           onChange={(e) => setDepositAddress(e.target.value)}
         />
       </MDBox>
-      <MDBox mb={2}>
+      {/* <MDBox mb={2}>
         <MDInput
           type="text"
           label="Código QR de depósito"
@@ -126,15 +138,17 @@ const AddAdminForm = () => {
           value={depositQR}
           onChange={(e) => setDepositQR(e.target.value)}
         />
-      </MDBox>
+      </MDBox> */}
 
-      {/* Button to add the admin */}
       <MDBox mt={4} mb={1}>
         <MDButton variant="gradient" color="info" fullWidth onClick={handleAddAdmin}>
           Añadir Administrador
         </MDButton>
       </MDBox>
-    </MDBox>
+        </>
+    )}
+</MDBox>
+
   );
 };
 

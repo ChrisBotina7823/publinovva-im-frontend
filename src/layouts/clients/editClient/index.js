@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from "@mui/material/Select"
-import { FormControlLabel } from "@mui/material";
+import { CircularProgress, FormControlLabel } from "@mui/material";
 import { Switch } from "@mui/material";
 
 import { setOpenConfigurator, useMaterialUIController } from "context";
@@ -45,10 +45,13 @@ const EditClientForm = ({ id, f }) => {
     const [controller, dispatch] = useMaterialUIController();
     const { user } = useUser()
 
+    const [loading, setLoading] = useState(false)
+
 
     useEffect(() => {
         const fetchClientData = async (id) => {
             try {
+                setLoading(true)
                 const response = await axiosInstance().get(`/clients/${id}`);
                 const clientData = response.data;
 
@@ -64,6 +67,8 @@ const EditClientForm = ({ id, f }) => {
                 setUsdAddress(clientData.usd_wallet.address || clientData.usd_wallet._id || ''); // assuming usd_address is a string field
             } catch (error) {
                 console.error('Error fetching client data:', error.response.data.error);
+            } finally {
+                setLoading(false)
             }
         };
 
@@ -72,7 +77,7 @@ const EditClientForm = ({ id, f }) => {
 
     const handleEditClient = async () => {
         try {
-            setOpenConfigurator(dispatch, false);
+            setLoading(true)
             if (f) f()
 
             const requestData = {
@@ -99,221 +104,236 @@ const EditClientForm = ({ id, f }) => {
                 axiosInstance().post(`/users/profile-picture/${id}`, pictureFormData);
             }
 
+            setOpenConfigurator(dispatch, false);
             showNotification("success", "Cliente editado correctamente", `El ID del cliente es ${response.data._id}`);
         } catch (error) {
             console.error('Error editing client:', error.response.data.error);
             showNotification("error", "Error al editar el cliente", error.response.data.error);
+        } finally {
+            setLoading(false)
         }
     };
 
     return (
-        <MDBox component="form" role="form">
 
-            <MDBox mb={2}>
-                <MDInput
-                    type="text"
-                    label="Nombre de Usuario"
-                    fullWidth
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="text"
-                    label="Correo Electrónico"
-                    fullWidth
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-            </MDBox>
 
-            <MDBox mb={2}>
-                <MDInput
-                    type="text"
-                    label="Nombre completo"
-                    fullWidth
-                    value={fullname}
-                    onChange={(e) => setFullname(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="text"
-                    label="País"
-                    fullWidth
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="text"
-                    label="Teléfono"
-                    fullWidth
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                />
-            </MDBox>
-            {(!user.__t || user.__t == "Admin") &&
-                <MDBox mb={2}>
-                    <FormControl fullWidth>
-                        <InputLabel id="account_state">Estado</InputLabel>
-                        <Select
-                            value={accountState}
-                            onChange={(e) => setAccountState(e.target.value)}
-                            label="Estado de cuenta"
-                            labelId="account_state"
-                            sx={{ paddingY: '8px' }}
+        <MDBox
+            component="form"
+            role="form"
+            textAlign={loading ? "center": "left"}
+        >
+            {loading ? (
+                <CircularProgress color="secondary" size={60} />
+            ) : (
+                <>
+                    <MDBox mb={2}>
+                        <MDInput
+                            type="text"
+                            label="Nombre de Usuario"
                             fullWidth
-                        >
-                            <MenuItem value="en revision">En Revisión</MenuItem>
-                            <MenuItem value="activo">Activo</MenuItem>
-                            <MenuItem value="suspendido">Suspendido</MenuItem>
-                        </Select>
-                    </FormControl>
-                </MDBox>
-            }
-            {(!user.__t || user.__t == "Admin") &&
-                <MDBox mb={2}>
-                    <MDInput
-                        type="number"
-                        label="Saldo Billetera USD"
-                        fullWidth
-                        value={usdBalance}
-                        onChange={(e) => setUsdBalance(e.target.value)}
-                    />
-                </MDBox>
-            }
-
-            <MDBox mb={1}>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={showUsdAddress}
-                            onChange={() => setShowUsdAddress(!showUsdAddress)}
-                            inputProps={{ 'aria-label': 'toggle-usd-address' }}
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                         />
-                    }
-                    label="Cambiar dirección Billetera USD"
-                />
-            </MDBox>
-
-            {showUsdAddress && (
-                <MDBox mb={2}>
-                    <MDInput
-                        type="text"
-                        label="Dirección Billetera USD"
-                        fullWidth
-                        value={usdAddress}
-                        onChange={(e) => setUsdAddress(e.target.value)}
-                    />
-                </MDBox>
-            )}
-
-            <MDBox mb={1}>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={showPassword}
-                            onChange={() => setShowPassword(!showPassword)}
-                            inputProps={{ 'aria-label': 'toggle-password' }}
+                    </MDBox>
+                    <MDBox mb={2}>
+                        <MDInput
+                            type="text"
+                            label="Correo Electrónico"
+                            fullWidth
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
-                    }
-                    label="Cambiar Contraseña"
-                />
-            </MDBox>
-            {showPassword && (
-                <MDBox mb={2}>
-                    <MDInput
-                        type="password"
-                        label="Contraseña perfil"
-                        fullWidth
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </MDBox>
-            )}
+                    </MDBox>
 
-            <MDBox mb={1}>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={showIPassword}
-                            onChange={() => setShowIPassword(!showIPassword)}
-                            inputProps={{ 'aria-label': 'toggle-i-password' }}
+                    <MDBox mb={2}>
+                        <MDInput
+                            type="text"
+                            label="Nombre completo"
+                            fullWidth
+                            value={fullname}
+                            onChange={(e) => setFullname(e.target.value)}
                         />
-                    }
-                    label="Contraseña Billetera de Comercio"
-                />
-            </MDBox>
-            {showIPassword && (
-                <MDBox mb={2}>
-                    <MDInput
-                        type="password"
-                        label="Contraseña Inversiones"
-                        fullWidth
-                        value={iPassword}
-                        onChange={(e) => setIPassword(e.target.value)}
-                    />
-                </MDBox>
-            )}
-
-            <MDBox mb={1}>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={showUsdPassword}
-                            onChange={() => setShowUsdPassword(!showUsdPassword)}
-                            inputProps={{ 'aria-label': 'toggle-usd-password' }}
+                    </MDBox>
+                    <MDBox mb={2}>
+                        <MDInput
+                            type="text"
+                            label="País"
+                            fullWidth
+                            value={country}
+                            onChange={(e) => setCountry(e.target.value)}
                         />
-                    }
-                    label="Contraseña Billetera USD"
-                />
-            </MDBox>
-
-            {showUsdPassword && (
-                <MDBox mb={2}>
-                    <MDInput
-                        type="password"
-                        label="Contraseña USD"
-                        fullWidth
-                        value={showUsdPassword}
-                        onChange={(e) => setShowUsdPassword(e.target.value)}
-                    />
-                </MDBox>
-            )}
-
-            <MDBox mb={1}>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={uploadPicture}
-                            onChange={() => setUploadPicture(!uploadPicture)}
-                            inputProps={{ 'aria-label': 'toggle-upload-picture' }}
+                    </MDBox>
+                    <MDBox mb={2}>
+                        <MDInput
+                            type="text"
+                            label="Teléfono"
+                            fullWidth
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
                         />
+                    </MDBox>
+                    {(!user.__t || user.__t == "Admin") &&
+                        <MDBox mb={2}>
+                            <FormControl fullWidth>
+                                <InputLabel id="account_state">Estado</InputLabel>
+                                <Select
+                                    value={accountState}
+                                    onChange={(e) => setAccountState(e.target.value)}
+                                    label="Estado de cuenta"
+                                    labelId="account_state"
+                                    sx={{ paddingY: '8px' }}
+                                    fullWidth
+                                >
+                                    <MenuItem value="en revision">En Revisión</MenuItem>
+                                    <MenuItem value="activo">Activo</MenuItem>
+                                    <MenuItem value="suspendido">Suspendido</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </MDBox>
                     }
-                    label="Subir Foto de Perfil"
-                />
-            </MDBox>
+                    {(!user.__t || user.__t == "Admin") &&
+                        <MDBox mb={2}>
+                            <MDInput
+                                type="number"
+                                label="Saldo Billetera USD"
+                                fullWidth
+                                value={usdBalance}
+                                onChange={(e) => setUsdBalance(e.target.value)}
+                            />
+                        </MDBox>
+                    }
 
-            {uploadPicture && (
-                <MDBox mb={2}>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setProfilePicture(e.target.files[0])}
-                    />
-                </MDBox>
+                    <MDBox mb={1}>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={showUsdAddress}
+                                    onChange={() => setShowUsdAddress(!showUsdAddress)}
+                                    inputProps={{ 'aria-label': 'toggle-usd-address' }}
+                                />
+                            }
+                            label="Cambiar dirección Billetera USD"
+                        />
+                    </MDBox>
+
+                    {showUsdAddress && (
+                        <MDBox mb={2}>
+                            <MDInput
+                                type="text"
+                                label="Dirección Billetera USD"
+                                fullWidth
+                                value={usdAddress}
+                                onChange={(e) => setUsdAddress(e.target.value)}
+                            />
+                        </MDBox>
+                    )}
+
+                    <MDBox mb={1}>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={showPassword}
+                                    onChange={() => setShowPassword(!showPassword)}
+                                    inputProps={{ 'aria-label': 'toggle-password' }}
+                                />
+                            }
+                            label="Cambiar Contraseña"
+                        />
+                    </MDBox>
+                    {showPassword && (
+                        <MDBox mb={2}>
+                            <MDInput
+                                type="password"
+                                label="Contraseña perfil"
+                                fullWidth
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </MDBox>
+                    )}
+
+                    <MDBox mb={1}>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={showIPassword}
+                                    onChange={() => setShowIPassword(!showIPassword)}
+                                    inputProps={{ 'aria-label': 'toggle-i-password' }}
+                                />
+                            }
+                            label="Contraseña Billetera de Comercio"
+                        />
+                    </MDBox>
+                    {showIPassword && (
+                        <MDBox mb={2}>
+                            <MDInput
+                                type="password"
+                                label="Contraseña Inversiones"
+                                fullWidth
+                                value={iPassword}
+                                onChange={(e) => setIPassword(e.target.value)}
+                            />
+                        </MDBox>
+                    )}
+
+                    <MDBox mb={1}>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={showUsdPassword}
+                                    onChange={() => setShowUsdPassword(!showUsdPassword)}
+                                    inputProps={{ 'aria-label': 'toggle-usd-password' }}
+                                />
+                            }
+                            label="Contraseña Billetera USD"
+                        />
+                    </MDBox>
+
+                    {showUsdPassword && (
+                        <MDBox mb={2}>
+                            <MDInput
+                                type="password"
+                                label="Contraseña USD"
+                                fullWidth
+                                value={showUsdPassword}
+                                onChange={(e) => setShowUsdPassword(e.target.value)}
+                            />
+                        </MDBox>
+                    )}
+
+                    <MDBox mb={1}>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={uploadPicture}
+                                    onChange={() => setUploadPicture(!uploadPicture)}
+                                    inputProps={{ 'aria-label': 'toggle-upload-picture' }}
+                                />
+                            }
+                            label="Subir Foto de Perfil"
+                        />
+                    </MDBox>
+
+                    {uploadPicture && (
+                        <MDBox mb={2}>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setProfilePicture(e.target.files[0])}
+                            />
+                        </MDBox>
+                    )}
+
+
+
+                    <MDBox mt={4} mb={1}>
+                        <MDButton variant="gradient" color="info" fullWidth onClick={handleEditClient}>
+                            Editar Cliente
+                        </MDButton>
+                    </MDBox>
+
+                </>
             )}
-
-
-
-            <MDBox mt={4} mb={1}>
-                <MDButton variant="gradient" color="info" fullWidth onClick={handleEditClient}>
-                    Editar Cliente
-                </MDButton>
-            </MDBox>
         </MDBox>
     );
 };

@@ -5,7 +5,7 @@ import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
-import { FormControlLabel, Switch } from "@mui/material";
+import { CircularProgress, FormControlLabel, Switch } from "@mui/material";
 import { MenuItem, Select, FormControl, InputLabel } from "@mui/material";
 
 import { setOpenConfigurator, useMaterialUIController } from "context";
@@ -36,9 +36,12 @@ const EditAdminForm = ({ id, f }) => {
 
     const { user, updateUser } = useUser()
 
+    const [loading, setLoading] = useState(false)
+
     useEffect(() => {
         const fetchAdminData = async (id) => {
             try {
+                setLoading(true)
                 const response = await axiosInstance().get(`/admins/${id}`);
                 const adminData = response.data;
 
@@ -52,6 +55,8 @@ const EditAdminForm = ({ id, f }) => {
                 setEmail(adminData.email || '');
             } catch (error) {
                 console.error('Error fetching admin data:', error.response.data.error);
+            } finally {
+                setLoading(false)
             }
         };
 
@@ -60,8 +65,8 @@ const EditAdminForm = ({ id, f }) => {
 
     const handleEditAdmin = async () => {
         try {
-            setOpenConfigurator(dispatch, false);
-            if(f) f()
+            setLoading(true)
+            if (f) f()
             await updateUser()
 
             const requestData = {
@@ -79,8 +84,9 @@ const EditAdminForm = ({ id, f }) => {
 
             let response = await axiosInstance().put(`/admins/${id}`, requestData);
 
+            setOpenConfigurator(dispatch, false);
             showNotification("success", "Administrador editado correctamente", `El ID del administrador es ${response.data._id}`);
-        
+
             if (uploadProfilePicture && profilePicture) {
                 const profilePictureFormData = new FormData();
                 profilePictureFormData.append("profile_picture", profilePicture);
@@ -98,154 +104,159 @@ const EditAdminForm = ({ id, f }) => {
         } catch (error) {
             console.error('Error editing admin:', error.response.data.error);
             showNotification("error", "Error al editar el administrador", error.response.data.error);
+        } finally {
+            setLoading(false)
         }
     };
 
     return (
-        <MDBox component="form" role="form">
-
-            {/* User fields */}
-            <MDBox mb={2}>
-                <MDInput
-                    type="text"
-                    label="Nombre de usuario"
-                    fullWidth
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="text"
-                    label="Correo electrónico"
-                    fullWidth
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-            </MDBox>
-
-            {/* Admin-specific fields */}
-            <MDBox mb={2}>
-                <MDInput
-                    type="text"
-                    label="Nombre de la entidad"
-                    fullWidth
-                    value={entityName}
-                    onChange={(e) => setEntityName(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="text"
-                    label="Dirección de depósito"
-                    fullWidth
-                    value={depositAddress}
-                    onChange={(e) => setDepositAddress(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mb={2}>
-                <MDInput
-                    type="number"
-                    label="Días disponibles"
-                    fullWidth
-                    value={availableDays}
-                    onChange={(e) => setAvailableDays(e.target.value)}
-                />
-            </MDBox>
-            <MDBox mb={2}>
-                <FormControl fullWidth>
-                    <InputLabel id="account_state">Estado de la cuenta</InputLabel>
-                    <Select
-                        value={accountState}
-                        onChange={(e) => setAccountState(e.target.value)}
-                        label="Estado de la cuenta"
-                        labelId="account_state"
-                        sx={{ paddingY: '8px' }}
-                        fullWidth
-                    >
-                        <MenuItem value="activo">Activo</MenuItem>
-                        <MenuItem value="suspendido">Suspendido</MenuItem>
-                    </Select>
-                </FormControl>
-            </MDBox>
-
-            {/* Password toggle */}
-            <MDBox mb={1}>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={showPassword}
-                            onChange={() => setShowPassword(!showPassword)}
-                            inputProps={{ 'aria-label': 'toggle-password' }}
+        <MDBox
+            component="form"
+            role="form"
+            textAlign={loading ? "center" : "left"}
+        >
+            {loading ? (
+                <CircularProgress color="secondary" size={60} />
+            ) : (
+                <>
+                    <MDBox mb={2}>
+                        <MDInput
+                            type="text"
+                            label="Nombre de usuario"
+                            fullWidth
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                         />
-                    }
-                    label="Cambiar Contraseña"
-                />
-            </MDBox>
-            {showPassword && (
-                <MDBox mb={2}>
-                    <MDInput
-                        type="password"
-                        label="Nueva Contraseña"
-                        fullWidth
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </MDBox>
-            )}
-
-                        {/* Upload Profile Picture */}
-                        <MDBox mb={1}>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={uploadProfilePicture}
-                            onChange={() => setUploadProfilePicture(!uploadProfilePicture)}
-                            inputProps={{ 'aria-label': 'toggle-upload-profile-picture' }}
+                    </MDBox>
+                    <MDBox mb={2}>
+                        <MDInput
+                            type="text"
+                            label="Correo electrónico"
+                            fullWidth
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
-                    }
-                    label="Subir Foto de Perfil"
-                />
-            </MDBox>
-            {uploadProfilePicture && (
-                <MDBox mb={2}>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setProfilePicture(e.target.files[0])}
-                    />
-                </MDBox>
-            )}
+                    </MDBox>
 
-            {/* Upload Deposit QR */}
-            <MDBox mb={1}>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={uploadDepositQR}
-                            onChange={() => setUploadDepositQR(!uploadDepositQR)}
-                            inputProps={{ 'aria-label': 'toggle-upload-deposit-qr' }}
+                    <MDBox mb={2}>
+                        <MDInput
+                            type="text"
+                            label="Nombre de la entidad"
+                            fullWidth
+                            value={entityName}
+                            onChange={(e) => setEntityName(e.target.value)}
                         />
-                    }
-                    label="Subir Código QR de Depósito"
-                />
-            </MDBox>
-            {uploadDepositQR && (
-                <MDBox mb={2}>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setDepositQR(e.target.files[0])}
-                    />
-                </MDBox>
-            )}
+                    </MDBox>
+                    <MDBox mb={2}>
+                        <MDInput
+                            type="text"
+                            label="Dirección de depósito"
+                            fullWidth
+                            value={depositAddress}
+                            onChange={(e) => setDepositAddress(e.target.value)}
+                        />
+                    </MDBox>
+                    <MDBox mb={2}>
+                        <MDInput
+                            type="number"
+                            label="Días disponibles"
+                            fullWidth
+                            value={availableDays}
+                            onChange={(e) => setAvailableDays(e.target.value)}
+                        />
+                    </MDBox>
+                    <MDBox mb={2}>
+                        <FormControl fullWidth>
+                            <InputLabel id="account_state">Estado de la cuenta</InputLabel>
+                            <Select
+                                value={accountState}
+                                onChange={(e) => setAccountState(e.target.value)}
+                                label="Estado de la cuenta"
+                                labelId="account_state"
+                                sx={{ paddingY: '8px' }}
+                                fullWidth
+                            >
+                                <MenuItem value="activo">Activo</MenuItem>
+                                <MenuItem value="suspendido">Suspendido</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </MDBox>
 
-            {/* Edit button */}
-            <MDBox mt={4} mb={1}>
-                <MDButton variant="gradient" color="info" fullWidth onClick={handleEditAdmin}>
-                    Editar Administrador
-                </MDButton>
-            </MDBox>
+                    <MDBox mb={1}>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={showPassword}
+                                    onChange={() => setShowPassword(!showPassword)}
+                                    inputProps={{ 'aria-label': 'toggle-password' }}
+                                />
+                            }
+                            label="Cambiar Contraseña"
+                        />
+                    </MDBox>
+                    {showPassword && (
+                        <MDBox mb={2}>
+                            <MDInput
+                                type="password"
+                                label="Nueva Contraseña"
+                                fullWidth
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </MDBox>
+                    )}
+
+                    <MDBox mb={1}>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={uploadProfilePicture}
+                                    onChange={() => setUploadProfilePicture(!uploadProfilePicture)}
+                                    inputProps={{ 'aria-label': 'toggle-upload-profile-picture' }}
+                                />
+                            }
+                            label="Subir Foto de Perfil"
+                        />
+                    </MDBox>
+                    {uploadProfilePicture && (
+                        <MDBox mb={2}>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setProfilePicture(e.target.files[0])}
+                            />
+                        </MDBox>
+                    )}
+
+                    <MDBox mb={1}>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={uploadDepositQR}
+                                    onChange={() => setUploadDepositQR(!uploadDepositQR)}
+                                    inputProps={{ 'aria-label': 'toggle-upload-deposit-qr' }}
+                                />
+                            }
+                            label="Subir Código QR de Depósito"
+                        />
+                    </MDBox>
+                    {uploadDepositQR && (
+                        <MDBox mb={2}>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setDepositQR(e.target.files[0])}
+                            />
+                        </MDBox>
+                    )}
+
+                    <MDBox mt={4} mb={1}>
+                        <MDButton variant="gradient" color="info" fullWidth onClick={handleEditAdmin}>
+                            Editar Administrador
+                        </MDButton>
+                    </MDBox>
+                </>
+            )}
         </MDBox>
     );
 };

@@ -38,6 +38,7 @@ import axiosInstance from "axiosInstance";
 
 import { useNotification } from "components/NotificationContext";
 import { useUser } from "context/userContext";
+import { CircularProgress } from "@mui/material";
 
 function Tables() {
 
@@ -74,7 +75,12 @@ function Tables() {
 
   }
 
-  const { columns, rows } = TicketTableData(handleStateChange);
+  const [loading, setLoading] = useState(true)
+
+  const updateLoading = () => {
+    setLoading(false)
+  }
+  const { columns, rows } = TicketTableData(handleStateChange, updateLoading);
 
   return (
     <DashboardLayout>
@@ -97,14 +103,20 @@ function Tables() {
                   Tickets de Soporte
                 </MDTypography>
               </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={true}
-                  showTotalEntries={true}
-                  noEndBorder
-                />
+              <MDBox pt={3} textAlign="center">
+              {loading ? (
+                    <CircularProgress color="secondary" size={60} />
+                ) : (
+                    <>
+                    <DataTable
+                      table={{ columns, rows }}
+                      isSorted={false}
+                      entriesPerPage={true}
+                      showTotalEntries={true}
+                      noEndBorder
+                    />
+                    </>
+                )}
               </MDBox>
             </Card>
           </Grid>

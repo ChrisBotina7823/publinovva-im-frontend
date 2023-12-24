@@ -14,7 +14,7 @@ import MDTypography from "components/MDTypography";
 import { setOpenConfigurator, useMaterialUIController } from "context";
 
 const WalletTransactionForm = () => {
-    const {user, setUser} = useUser()
+    const { user, setUser } = useUser()
 
     const [transactionAmount, setTransactionAmount] = useState("");
     const [walletPassword, setWalletPassword] = useState("");
@@ -23,8 +23,11 @@ const WalletTransactionForm = () => {
     const [controller, dispatch] = useMaterialUIController();
     const { showNotification } = useNotification();
 
+    const [loading, setLoading] = useState()
+
     const handleWalletTransaction = async () => {
         try {
+            setLoading(true)
             const dest = transactionType;
             const response = await axiosInstance().post(`/movements/wallet-transactions/${user.username}/${dest}`, {
                 transaction_amount: transactionAmount,
@@ -35,62 +38,75 @@ const WalletTransactionForm = () => {
         } catch (error) {
             console.error('Error in wallet transaction:', error.response.data.error);
             showNotification("error", "Error en la transacción de la billetera", error.response.data.error);
+        } finally {
+            setLoading(false)
         }
     };
 
     return (
-        <MDBox component="form" role="form">
-            <MDBox mb={2}>
-                <MDBox margin={2}>
-                    <MDTypography variant="caption" display="block">
-                        {`Disponible Billetera USD: $${user.usd_wallet.available_amount}`}
-                    </MDTypography>
-                    <MDTypography variant="caption" display="block">
-                        {`Disponible Billetera de Comercio: $${user.i_wallet.available_amount}`}
-                    </MDTypography>
-                </MDBox>
-                <MDInput
-                    type="number"
-                    label="Monto de transacción"
-                    fullWidth
-                    value={transactionAmount}
-                    onChange={(e) => setTransactionAmount(e.target.value)}
-                />
-            </MDBox>
+        <MDBox
+            component="form"
+            role="form"
+            textAlign={loading ? "center" : "left"}
+        >
+            {loading ? (
+                <CircularProgress color="secondary" size={60} />
+            ) : (
+                <>
+                    <MDBox mb={2}>
+                        <MDBox margin={2}>
+                            <MDTypography variant="caption" display="block">
+                                {`Disponible Billetera USD: $${user.usd_wallet.available_amount}`}
+                            </MDTypography>
+                            <MDTypography variant="caption" display="block">
+                                {`Disponible Billetera de Comercio: $${user.i_wallet.available_amount}`}
+                            </MDTypography>
+                        </MDBox>
+                        <MDInput
+                            type="number"
+                            label="Monto de transacción"
+                            fullWidth
+                            value={transactionAmount}
+                            onChange={(e) => setTransactionAmount(e.target.value)}
+                        />
+                    </MDBox>
 
-            <MDBox mb={2}>
-                <FormControl fullWidth>
-                    <InputLabel id="transaction-type">Destino</InputLabel>
-                    <Select
-                        value={transactionType}
-                        onChange={(e) => setTransactionType(e.target.value)}
-                        label="Tipo de Transacción"
-                        labelId="transaction-type"
-                        sx={{ paddingY: '8px' }}
-                        fullWidth
-                    >
-                        <MenuItem value="inv">Billetera de Comercio</MenuItem>
-                        <MenuItem value="usd">Billetera USD</MenuItem>
-                    </Select>
-                </FormControl>
-            </MDBox>
+                    <MDBox mb={2}>
+                        <FormControl fullWidth>
+                            <InputLabel id="transaction-type">Destino</InputLabel>
+                            <Select
+                                value={transactionType}
+                                onChange={(e) => setTransactionType(e.target.value)}
+                                label="Tipo de Transacción"
+                                labelId="transaction-type"
+                                sx={{ paddingY: '8px' }}
+                                fullWidth
+                            >
+                                <MenuItem value="inv">Billetera de Comercio</MenuItem>
+                                <MenuItem value="usd">Billetera USD</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </MDBox>
 
-            <MDBox mb={2}>
-                <MDInput
-                    type="password"
-                    label="Wallet Password"
-                    fullWidth
-                    value={walletPassword}
-                    onChange={(e) => setWalletPassword(e.target.value)}
-                />
-            </MDBox>
+                    <MDBox mb={2}>
+                        <MDInput
+                            type="password"
+                            label="Wallet Password"
+                            fullWidth
+                            value={walletPassword}
+                            onChange={(e) => setWalletPassword(e.target.value)}
+                        />
+                    </MDBox>
 
-            <MDBox mt={4} mb={1}>
-                <MDButton variant="gradient" color="info" fullWidth onClick={handleWalletTransaction}>
-                    Realizar Transacción
-                </MDButton>
-            </MDBox>
+                    <MDBox mt={4} mb={1}>
+                        <MDButton variant="gradient" color="info" fullWidth onClick={handleWalletTransaction}>
+                            Realizar Transacción
+                        </MDButton>
+                    </MDBox>
+                </>
+            )}
         </MDBox>
+
     );
 };
 

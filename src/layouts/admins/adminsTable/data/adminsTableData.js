@@ -6,8 +6,9 @@ import socket from 'socketInstance'; // Asegúrate de importar el objeto socket 
 import MDAvatar from 'components/MDAvatar';
 import MDCopyable from 'components/MDCopyable';
 import MDBadge from 'components/MDBadge';
+import { useConfirm } from 'material-ui-confirm';
 
-export default function DataTable(handleEditClick, handleDeleteClick) {
+export default function DataTable(handleEditClick, handleDeleteClick, updateLoading) {
   const colorsDict = {
     "suspendido": "error",
     "activo": "success"
@@ -24,6 +25,17 @@ export default function DataTable(handleEditClick, handleDeleteClick) {
     ],
     rows: [],
   });
+
+  const confirm = useConfirm()
+  const confirmDelete = (element) => {
+    confirm({ title: "Eliminar Administrador", description: `¿Estás seguro de que quieres eliminar el administrador ${element}?\n(Esta acción no se puede revertir)` })
+    .then(() => {
+      console.log("a")
+      handleDeleteClick(element)
+    })
+    .catch(() => {
+    });
+  }
 
   const mapDataToJSX = (data) => {
     return data.reverse().map((dataItem) => ({
@@ -78,7 +90,7 @@ export default function DataTable(handleEditClick, handleDeleteClick) {
             variant="caption"
             color="error"
             fontWeight="medium"
-            onClick={() => handleDeleteClick(dataItem.username)}
+            onClick={() => confirmDelete(dataItem.username)}
             ml={1}
           >
             Eliminar
@@ -101,6 +113,8 @@ export default function DataTable(handleEditClick, handleDeleteClick) {
         });
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        updateLoading()
       }
     };
 

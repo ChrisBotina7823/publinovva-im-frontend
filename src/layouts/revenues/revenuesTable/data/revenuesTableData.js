@@ -12,7 +12,7 @@ import data from 'layouts/dashboard/components/Projects/data';
 import { useUser } from 'context/userContext';
 import MDCopyable from 'components/MDCopyable';
 
-export default function DataTable() {
+export default function DataTable(updateLoading) {
 
   const { user } = useUser()
 
@@ -53,6 +53,8 @@ export default function DataTable() {
         });
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        updateLoading()
       }
     };
   

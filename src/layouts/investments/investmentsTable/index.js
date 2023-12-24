@@ -37,6 +37,7 @@ import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
 
 import EditInvestment from 'layouts/investments/editInvestment';
+import { CircularProgress } from "@mui/material";
 
 function Tables() {
   const [customContent, setCustomContent] = useState(null);
@@ -59,8 +60,12 @@ function Tables() {
 
   };
 
+  const [loading, setLoading] = useState(true)
 
-  const { columns, rows } = investmentsTableData(handleEditClick);
+  const updateLoading = () => {
+    setLoading(false)
+  }
+  const { columns, rows } = investmentsTableData(handleEditClick, updateLoading);
 
   return (
     <DashboardLayout>
@@ -83,14 +88,20 @@ function Tables() {
                   Inversiones
                 </MDTypography>
               </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={true}
-                  showTotalEntries={true}
-                  noEndBorder
-                />
+              <MDBox pt={3} textAlign="center">
+              {loading ? (
+                    <CircularProgress color="secondary" size={60} />
+                ) : (
+                    <>
+                      <DataTable
+                        table={{ columns, rows }}
+                        isSorted={false}
+                        entriesPerPage={true}
+                        showTotalEntries={true}
+                        noEndBorder
+                      />
+                    </>
+                )}
               </MDBox>
             </Card>
           </Grid>

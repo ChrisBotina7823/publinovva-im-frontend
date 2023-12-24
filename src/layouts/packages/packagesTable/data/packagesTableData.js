@@ -5,8 +5,9 @@ import axiosInstance from 'axiosInstance';
 import socket from 'socketInstance';
 import MDCopyable from 'components/MDCopyable';
 import { useUser } from 'context/userContext';
+import { useConfirm } from 'material-ui-confirm';
 
-export default function DataTable(handleEditClick, handleDeleteClick) {
+export default function DataTable(handleEditClick, handleDeleteClick, updateLoading) {
   const { user } = useUser();
   const [tableData, setTableData] = useState({
     columns: [
@@ -19,6 +20,17 @@ export default function DataTable(handleEditClick, handleDeleteClick) {
     ],
     rows: [],
   });
+
+  const confirm = useConfirm()
+  const confirmDelete = (element) => {
+    confirm({ title: "Eliminar Paquete", description: `¿Estás seguro de que quieres eliminar el paquete ${element}?\n(Esta acción no se puede revertir)` })
+    .then(() => {
+      console.log("a")
+      handleDeleteClick(element)
+    })
+    .catch(() => {
+    });
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,7 +73,7 @@ export default function DataTable(handleEditClick, handleDeleteClick) {
                 color="error"
                 fontWeight="medium"
                 ml={1}
-                onClick={() => handleDeleteClick(dataItem._id)}
+                onClick={() => confirmDelete(dataItem._id)}
               >
                 Eliminar
               </MDTypography>
@@ -76,6 +88,8 @@ export default function DataTable(handleEditClick, handleDeleteClick) {
         });
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        updateLoading()
       }
     };
 

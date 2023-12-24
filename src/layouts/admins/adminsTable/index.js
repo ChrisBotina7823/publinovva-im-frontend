@@ -23,6 +23,7 @@ import EditAdmin from 'layouts/admins/editAdmin'; // Reemplaza con el componente
 import axiosInstance from "axiosInstance";
 
 import { useNotification } from "components/NotificationContext";
+import { CircularProgress } from "@mui/material";
 
 function Tables() {
   const [controller, dispatch] = useMaterialUIController();
@@ -71,7 +72,12 @@ function Tables() {
     deleteAdmin();
   };
 
-  const { columns, rows } = adminsTableData(handleEditClick, handleDeleteClick); // Reemplaza con la función adecuada
+  const [loading, setLoading] = useState(true)
+
+  const updateLoading = () => {
+    setLoading(false)
+  }
+  const { columns, rows } = adminsTableData(handleEditClick, handleDeleteClick, updateLoading); // Reemplaza con la función adecuada
 
   return (
     <DashboardLayout>
@@ -94,14 +100,20 @@ function Tables() {
                   Administradores
                 </MDTypography>
               </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={true}
-                  showTotalEntries={true}
-                  noEndBorder
-                />
+              <MDBox pt={3} textAlign="center">
+              {loading ? (
+                    <CircularProgress color="secondary" size={60} />
+                ) : (
+                    <>
+                    <DataTable
+                      table={{ columns, rows }}
+                      isSorted={false}
+                      entriesPerPage={true}
+                      showTotalEntries={true}
+                      noEndBorder
+                    />
+                    </>
+                )}
               </MDBox>
             </Card>
           </Grid>

@@ -6,8 +6,9 @@
 import MDCopyable from 'components/MDCopyable';
 import MDAvatar from 'components/MDAvatar';
 import MDBadge from 'components/MDBadge';
+import { useConfirm } from 'material-ui-confirm';
 
-  export default function DataTable(handleEditClick, handleDeleteClick) {
+  export default function DataTable(handleEditClick, handleDeleteClick, setLoading) {
     const colorsDict = {
       "en revision": "secondary",
       "suspendido": "error",
@@ -26,6 +27,17 @@ import MDBadge from 'components/MDBadge';
       ],
       rows: [],
     });
+
+    const confirm = useConfirm()
+    const confirmDelete = (element) => {
+      confirm({ title: "Eliminar Cliente", description: `¿Estás seguro de que quieres eliminar el cliente ${element}?\n(Esta acción no se puede revertir)` })
+      .then(() => {
+        console.log("a")
+        handleDeleteClick(element)
+      })
+      .catch(() => {
+      });
+    }
 
     const mapDataToJSX = (data) => {
       return data.reverse().map((dataItem) => ({
@@ -84,7 +96,7 @@ import MDBadge from 'components/MDBadge';
               color="error"
               fontWeight="medium"
               ml={1}
-              onClick={() => handleDeleteClick(dataItem.username)}
+              onClick={() => confirmDelete(dataItem.username)}
             >
               Eliminar
             </MDTypography>
@@ -105,6 +117,8 @@ import MDBadge from 'components/MDBadge';
           }));
         } catch (error) {
           console.error('Error fetching data:', error);
+        } finally {
+          setLoading()
         }
       };
 

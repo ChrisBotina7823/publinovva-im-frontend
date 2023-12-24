@@ -47,21 +47,24 @@ import { LocalSeeOutlined } from "@mui/icons-material";
 import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
 import { useUser } from "context/userContext";
+import { CircularProgress } from "@mui/material";
 
 function Basic() {
   const { user, updateUser } = useUser()
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState("");
   const navigate = useNavigate();
   const { showNotification } = useNotification()
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
+  const [loading, setLoading] = useState(false)
+
   const handleSignIn = async () => {
     try {
 
+      setLoading(true)
       const response = await axiosInstance().post("/auth", {
         username,
         password
@@ -74,6 +77,8 @@ function Basic() {
     } catch (error) {
       console.error(error.response.data.error);
       showNotification("error", "Error al iniciar sesión", error.response.data.error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -116,7 +121,7 @@ function Basic() {
           </Grid>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
+          <MDBox component="form" role="form" textAlign="center">
             <MDBox mb={2}>
               <MDInput
                 type="text"
@@ -147,16 +152,18 @@ function Basic() {
                 &nbsp;&nbsp;Remember me
               </MDTypography>
             </MDBox> */}
-            <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth onClick={handleSignIn}>
-                Iniciar Sesión
-              </MDButton>
-            </MDBox>
-            {error && (
-              <MDBox mt={2} mb={1} textAlign="center">
-                <MDBadge color="error">{error}</MDBadge>
-              </MDBox>
+            {loading ? (
+              <CircularProgress color="secondary" />
+            ) : (
+              <>
+                <MDBox mt={4} mb={1}>
+                  <MDButton variant="gradient" color="info" fullWidth onClick={handleSignIn}>
+                    Iniciar Sesión
+                  </MDButton>
+                </MDBox>
+              </>
             )}
+
             {/* <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
                 Don&apos;t have an account?{" "}

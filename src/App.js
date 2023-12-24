@@ -20,6 +20,7 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
+import { ConfirmProvider } from "material-ui-confirm";
 import CssBaseline from "@mui/material/CssBaseline";
 import Icon from "@mui/material/Icon";
 
@@ -132,27 +133,30 @@ export default function App() {
   return (
     <UserProvider>
       <ThemeProvider theme={darkMode ? themeDark : theme}>
-        <NotificationProvider>
-          <CssBaseline />
-          {layout === "dashboard" && (
-            <>
-              <Sidenav
-                color={sidenavColor}
-                brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-                brandName="Investment Manager"
-                routes={routes}
-                onMouseEnter={handleOnMouseEnter}
-                onMouseLeave={handleOnMouseLeave}
-              />
-            </>
-          )}
-          <Routes>
-            {getRoutes(routes)}
-            <Route path="*" element={<Navigate to="/dashboard" />} />
-          </Routes>
-          <Notification />
+        <ConfirmProvider defaultOptions={ {confirmationButtonProps: { autoFocus: true }, confirmationText:"Aceptar", cancellationText:"Cancelar"}}>
+          <NotificationProvider>
+            <CssBaseline />
+            {layout === "dashboard" && (
+              <>
+                <Sidenav
+                  color={sidenavColor}
+                  brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
+                  brandName="Investment Manager"
+                  routes={routes}
+                  onMouseEnter={handleOnMouseEnter}
+                  onMouseLeave={handleOnMouseLeave}
+                />
+              </>
+            )}
+            <Routes>
+              {getRoutes(routes)}
+              <Route path="*" element={<Navigate to="/dashboard" />} />
+            </Routes>
+            <Notification />
 
-        </NotificationProvider>
+          </NotificationProvider>
+
+        </ConfirmProvider>
       </ThemeProvider>
     </UserProvider>
   );

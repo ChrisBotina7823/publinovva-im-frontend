@@ -42,14 +42,14 @@ const InvestmentRequestForm = () => {
 
     const handleInvestmentRequest = async () => {
         try {
-
-            setOpenConfigurator(dispatch, false);
+            
             const response = await axiosInstance().post(`/investments/${user.username}`, {
                 package_id: selectedPackage,
                 end_date: endDate.format("YYYY-MM-DD"),
                 inv_amount: invAmount,
             });
 
+            setOpenConfigurator(dispatch, false);
             showNotification("success", "Solicitud de inversión realizada correctamente", `El ID de la inversión es ${response.data._id}`);
             
         } catch (error) {

@@ -10,16 +10,19 @@ import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
 import { setOpenConfigurator, useMaterialUIController } from "context";
 import { useUser } from "context/userContext";
+import { CircularProgress } from "@mui/material";
 
 const DepositWithdrawForm = () => {
   const [transactionType, setTransactionType] = useState("deposit");
   const [transactionAmount, setTransactionAmount] = useState("");
   const [usdPassword, setUsdPassword] = useState("");
   const [showUsdPassword, setShowUsdPassword] = useState(false);
-  const {user} = useUser()
+  const { user } = useUser()
 
   const { showNotification } = useNotification();
   const [controller, dispatch] = useMaterialUIController();
+
+  const [loading, setLoading] = useState()
 
   const handleTransactionTypeChange = (event) => {
     setTransactionType(event.target.value);
@@ -28,6 +31,7 @@ const DepositWithdrawForm = () => {
 
   const handleTransaction = async () => {
     try {
+      setLoading(true)
 
       const endpoint =
         transactionType === "deposit"
@@ -53,55 +57,68 @@ const DepositWithdrawForm = () => {
     } catch (error) {
       console.error(`Error during ${transactionType} transaction:`, error.response.data.error);
       showNotification("error", `Error durante ${transactionType} transacción`, error.response.data.error);
+    } finally {
+      setLoading(false)
     }
   };
 
   return (
-    <MDBox component="form" role="form">
-      <MDBox mb={2}>
-        <FormControl fullWidth>
-          <InputLabel id="transaction-type">Tipo de Transacción</InputLabel>
-          <Select
-            value={transactionType}
-            onChange={handleTransactionTypeChange}
-            label="Tipo de Transacción"
-            labelId="transaction-type"
-            sx={{ paddingY: "8px" }}
-            fullWidth
-          >
-            <MenuItem value="deposit">Depósito</MenuItem>
-            <MenuItem value="withdrawal">Retiro</MenuItem>
-          </Select>
-        </FormControl>
-      </MDBox>
-      <MDBox mb={2}>
-        <MDInput
-          type="number"
-          label="Monto de Transacción"
-          fullWidth
-          value={transactionAmount}
-          onChange={(e) => setTransactionAmount(e.target.value)}
-        />
-      </MDBox>
-      {transactionType === "withdrawal"  && (
-        <MDBox mb={2}>
-          <MDInput
-            type="password"
-            label="Contraseña USD"
-            fullWidth
-            value={usdPassword}
-            onChange={(e) => setUsdPassword(e.target.value)}
-          />
-        </MDBox>
+    <MDBox
+      component="form"
+      role="form"
+      textAlign={loading ? "center" : "left"}
+    >
+      {loading ? (
+        <CircularProgress color="secondary" size={60} />
+      ) : (
+        <>
+          <MDBox mb={2}>
+            <FormControl fullWidth>
+              <InputLabel id="transaction-type">Tipo de Transacción</InputLabel>
+              <Select
+                value={transactionType}
+                onChange={handleTransactionTypeChange}
+                label="Tipo de Transacción"
+                labelId="transaction-type"
+                sx={{ paddingY: "8px" }}
+                fullWidth
+              >
+                <MenuItem value="deposit">Depósito</MenuItem>
+                <MenuItem value="withdrawal">Retiro</MenuItem>
+              </Select>
+            </FormControl>
+          </MDBox>
+          <MDBox mb={2}>
+            <MDInput
+              type="number"
+              label="Monto de Transacción"
+              fullWidth
+              value={transactionAmount}
+              onChange={(e) => setTransactionAmount(e.target.value)}
+            />
+          </MDBox>
+          {transactionType === "withdrawal" && (
+            <MDBox mb={2}>
+              <MDInput
+                type="password"
+                label="Contraseña USD"
+                fullWidth
+                value={usdPassword}
+                onChange={(e) => setUsdPassword(e.target.value)}
+              />
+            </MDBox>
+          )}
+          <MDBox mt={4} mb={1}>
+            {user?.__t == "Client" &&
+              <MDButton variant="gradient" color="info" fullWidth onClick={handleTransaction}>
+                {transactionType === "deposit" ? "Realizar Depósito" : "Realizar Retiro"}
+              </MDButton>
+            }
+          </MDBox>
+        </>
       )}
-      <MDBox mt={4} mb={1}>
-        { user?.__t == "Client" &&
-          <MDButton variant="gradient" color="info" fullWidth onClick={handleTransaction}>
-            {transactionType === "deposit" ? "Realizar Depósito" : "Realizar Retiro"}
-          </MDButton>        
-        }
-      </MDBox>
     </MDBox>
+
   );
 };
 

@@ -39,6 +39,7 @@ import axiosInstance from "axiosInstance";
 
 import { useNotification } from "components/NotificationContext";
 import { useUser } from "context/userContext";
+import { CircularProgress } from "@mui/material";
 
 function Tables() {
 
@@ -85,7 +86,13 @@ function Tables() {
       deletePackage()
     }
 
-    const { columns, rows } = packageTableData(handleEditClick, handleDeleteClick); // Updated function name
+    const [loading, setLoading] = useState(true)
+
+    const updateLoading = () => {
+      setLoading(false)
+    }
+
+    const { columns, rows } = packageTableData(handleEditClick, handleDeleteClick, updateLoading); // Updated function name
     
   return (
     <DashboardLayout>
@@ -108,7 +115,11 @@ function Tables() {
                   Clientes
                 </MDTypography>
               </MDBox>
-              <MDBox pt={3}>
+              <MDBox pt={3} textAlign="center">
+                {loading ? (
+                    <CircularProgress color="secondary" size={60} />
+                ) : (
+                    <>
                 <DataTable
                   table={{ columns, rows }}
                   isSorted={false}
@@ -116,6 +127,8 @@ function Tables() {
                   showTotalEntries={true}
                   noEndBorder
                 />
+                    </>
+                )}
               </MDBox>
             </Card>
           </Grid>
