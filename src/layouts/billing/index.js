@@ -49,7 +49,6 @@ function Billing() {
     setCustomDescription("Ingresa la información de transacción")
   };
 
-  console.log(user)
 
   return (
     <DashboardLayout>

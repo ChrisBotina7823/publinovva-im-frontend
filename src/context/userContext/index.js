@@ -22,6 +22,7 @@ export const UserProvider = ({ children }) => {
         localStorage.setItem("token", newToken)
         setUser(newUser)
         setToken(newToken)
+        console.log(newUser)
     } else {
         const prevUser = JSON.parse(localStorage.getItem("user"));
         const response = await axiosInstance().get(`users/id/${prevUser._id}`);
