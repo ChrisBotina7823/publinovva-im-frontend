@@ -113,6 +113,7 @@ export default function DataTable(handleEditClick, handleDeleteClick, updateLoad
         });
       } catch (error) {
         console.error('Error fetching data:', error);
+        localStorage.deleteItem("token")
       } finally {
         updateLoading()
       }

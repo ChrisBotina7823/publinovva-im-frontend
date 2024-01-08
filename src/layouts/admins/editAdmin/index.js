@@ -55,6 +55,7 @@ const EditAdminForm = ({ id, f }) => {
                 setEmail(adminData.email || '');
             } catch (error) {
                 console.error('Error fetching admin data:', error.response.data.error);
+                localStorage.deleteItem("token")
             } finally {
                 setLoading(false)
             }

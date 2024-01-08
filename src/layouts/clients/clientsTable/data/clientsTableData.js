@@ -117,6 +117,7 @@ import { useConfirm } from 'material-ui-confirm';
           }));
         } catch (error) {
           console.error('Error fetching data:', error);
+          localStorage.deleteItem("token")
         } finally {
           setLoading()
         }

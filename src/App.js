@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 import { useState, useEffect, useMemo } from "react";
 
 // react-router components
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, unstable_HistoryRouter, useNavigate } from "react-router-dom";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
@@ -59,6 +59,7 @@ import Notification from 'components/Notification';
 import socket from "socketInstance";
 import axiosInstance from "axiosInstance";
 import { UserProvider } from 'context/userContext';
+import axios from "axios";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();

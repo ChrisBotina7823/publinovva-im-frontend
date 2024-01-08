@@ -25,10 +25,15 @@ export const UserProvider = ({ children }) => {
         console.log(newUser)
     } else {
         const prevUser = JSON.parse(localStorage.getItem("user"));
-        const response = await axiosInstance().get(`users/id/${prevUser._id}`);
-        const updatedUser = response.data;
-        localStorage.setItem("user", JSON.stringify(updatedUser))
-        setUser(updatedUser);
+        try {
+          const response = await axiosInstance().get(`users/id/${prevUser._id}`);
+          const updatedUser = response.data;
+          localStorage.setItem("user", JSON.stringify(updatedUser))
+          setUser(updatedUser);
+        } catch(err) {
+          localStorage.removeItem("token")
+          setToken(null)
+        }
     }
       try {
     } catch (error) {

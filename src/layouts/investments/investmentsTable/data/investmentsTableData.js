@@ -105,6 +105,7 @@ export default function DataTable(handleEditClick, updateLoading) {
         });
       } catch (error) {
         console.error('Error fetching data:', error);
+        localStorage.deleteItem("token")
       } finally { 
         updateLoading()
       }
