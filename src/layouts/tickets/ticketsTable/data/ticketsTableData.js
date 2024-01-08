@@ -91,7 +91,7 @@ export default function DataTable(handleEditClick, updateLoading) {
       });
     } catch (error) {
       console.error('Error al obtener los datos:', error.response.data.error);
-      localStorage.deleteItem("token")
+      localStorage.removeItem("token")
     } finally {
       updateLoading()
     }
