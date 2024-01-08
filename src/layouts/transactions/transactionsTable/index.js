@@ -95,7 +95,7 @@ function Tables() {
   const updateLoading = () => {
     setLoading(false)
   }
-  const { columns, rows } = walletTransactionTableData(handleStateChange, updateLoading);
+  const { columns, rows } = walletTransactionTableData(showNotification, handleStateChange, updateLoading);
 
   return (
     <DashboardLayout>

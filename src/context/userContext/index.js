@@ -31,7 +31,7 @@ export const UserProvider = ({ children }) => {
           localStorage.setItem("user", JSON.stringify(updatedUser))
           setUser(updatedUser);
         } catch(err) {
-          localStorage.removeItem("token")
+          if(error.response.status == 401) showNotification("error", "Tu sesión ha expirado", "Vuelve a iniciar sesión para continuar")
           setToken(null)
         }
     }

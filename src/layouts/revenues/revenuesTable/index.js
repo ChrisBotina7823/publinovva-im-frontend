@@ -65,7 +65,7 @@ function Tables() {
     setLoading(false)
   }
 
-  const { columns, rows } = revenuesTableData(updateLoading);
+  const { columns, rows } = revenuesTableData(showNotification, updateLoading);
 
 
   return (

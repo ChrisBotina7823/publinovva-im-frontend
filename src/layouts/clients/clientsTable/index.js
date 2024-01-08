@@ -92,7 +92,7 @@ function Tables() {
       setLoading(false)
     }
 
-    const { columns, rows } = packageTableData(handleEditClick, handleDeleteClick, updateLoading); // Updated function name
+    const { columns, rows } = packageTableData(showNotification, handleEditClick, handleDeleteClick, updateLoading); // Updated function name
     
   return (
     <DashboardLayout>

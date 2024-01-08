@@ -7,8 +7,9 @@ import MDAvatar from 'components/MDAvatar';
 import MDCopyable from 'components/MDCopyable';
 import MDBadge from 'components/MDBadge';
 import { useConfirm } from 'material-ui-confirm';
+import { useNotification } from 'components/NotificationContext';
 
-export default function DataTable(handleEditClick, handleDeleteClick, updateLoading) {
+export default function DataTable(showNotification, handleEditClick, handleDeleteClick, updateLoading) {
   const colorsDict = {
     "suspendido": "error",
     "activo": "success"
@@ -113,7 +114,7 @@ export default function DataTable(handleEditClick, handleDeleteClick, updateLoad
         });
       } catch (error) {
         console.error('Error fetching data:', error);
-        localStorage.removeItem("token")
+        if(error.response.status == 401) showNotification("error", "Tu sesión ha expirado", "Vuelve a iniciar sesión para continuar")
       } finally {
         updateLoading()
       }

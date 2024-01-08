@@ -77,7 +77,7 @@ function Tables() {
   const updateLoading = () => {
     setLoading(false)
   }
-  const { columns, rows } = adminsTableData(handleEditClick, handleDeleteClick, updateLoading); // Reemplaza con la función adecuada
+  const { columns, rows } = adminsTableData(showNotification, handleEditClick, handleDeleteClick, updateLoading); // Reemplaza con la función adecuada
 
   return (
     <DashboardLayout>

@@ -16,6 +16,7 @@ import { setOpenConfigurator, useMaterialUIController } from "context";
 import { useUser } from "context/userContext";
 
 const EditClientForm = ({ id, f }) => {
+
     const [fullname, setFullname] = useState('');
     const [country, setCountry] = useState('');
     const [phone, setPhone] = useState('');
@@ -67,6 +68,7 @@ const EditClientForm = ({ id, f }) => {
                 setUsdAddress(clientData.usd_wallet.address || clientData.usd_wallet._id || ''); // assuming usd_address is a string field
             } catch (error) {
                 console.error('Error fetching client data:', error.response.data.error);
+                if(error.response.status == 401) showNotification("error", "Tu sesión ha expirado", "Vuelve a iniciar sesión para continuar")
             } finally {
                 setLoading(false)
             }

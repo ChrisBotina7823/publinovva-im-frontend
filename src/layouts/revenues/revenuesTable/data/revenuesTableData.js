@@ -11,8 +11,9 @@ import socket from 'socketInstance';
 import data from 'layouts/dashboard/components/Projects/data';
 import { useUser } from 'context/userContext';
 import MDCopyable from 'components/MDCopyable';
+import { useNotification } from 'components/NotificationContext';
 
-export default function DataTable(updateLoading) {
+export default function DataTable(showNotification, updateLoading) {
 
   const { user } = useUser()
 
@@ -53,7 +54,7 @@ export default function DataTable(updateLoading) {
         });
       } catch (error) {
         console.error('Error fetching data:', error);
-        localStorage.removeItem("token")
+        if(error.response.status == 401) showNotification("error", "Tu sesión ha expirado", "Vuelve a iniciar sesión para continuar")
       } finally {
         updateLoading()
       }

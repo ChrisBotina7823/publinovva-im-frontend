@@ -7,8 +7,10 @@ import MDCopyable from 'components/MDCopyable';
 import MDAvatar from 'components/MDAvatar';
 import MDBadge from 'components/MDBadge';
 import { useConfirm } from 'material-ui-confirm';
+import { useNotification } from 'components/NotificationContext';
 
-  export default function DataTable(handleEditClick, handleDeleteClick, setLoading) {
+  export default function DataTable(showNotification, handleEditClick, handleDeleteClick, setLoading) {
+
     const colorsDict = {
       "en revision": "secondary",
       "suspendido": "error",
@@ -117,7 +119,7 @@ import { useConfirm } from 'material-ui-confirm';
           }));
         } catch (error) {
           console.error('Error fetching data:', error);
-          localStorage.removeItem("token")
+          if(error.response.status == 401) showNotification("error", "Tu sesión ha expirado", "Vuelve a iniciar sesión para continuar")
         } finally {
           setLoading()
         }

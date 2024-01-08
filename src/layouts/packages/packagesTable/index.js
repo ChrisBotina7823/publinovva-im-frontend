@@ -90,7 +90,7 @@ function Tables() {
   const updateLoading = () => {
     setLoading(false)
   }
-  const { columns, rows } = packageTableData(handleEditClick, handleDeleteClick, updateLoading);
+  const { columns, rows } = packageTableData(showNotification, handleEditClick, handleDeleteClick, updateLoading);
 
   return (
     <DashboardLayout>

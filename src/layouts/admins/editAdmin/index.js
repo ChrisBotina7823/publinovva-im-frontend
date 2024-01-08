@@ -55,7 +55,7 @@ const EditAdminForm = ({ id, f }) => {
                 setEmail(adminData.email || '');
             } catch (error) {
                 console.error('Error fetching admin data:', error.response.data.error);
-                localStorage.removeItem("token")
+                if(error.response.status == 401) showNotification("error", "Tu sesión ha expirado", "Vuelve a iniciar sesión para continuar")
             } finally {
                 setLoading(false)
             }

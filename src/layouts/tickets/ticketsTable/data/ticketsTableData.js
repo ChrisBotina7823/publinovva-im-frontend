@@ -11,8 +11,10 @@ import socket from 'socketInstance'; // Importa tu instancia de socket
 import { useUser } from 'context/userContext';
 import MDCopyable from 'components/MDCopyable';
 import MDBadge from 'components/MDBadge';
+import { useNotification } from 'components/NotificationContext';
 
-export default function DataTable(handleEditClick, updateLoading) {
+export default function DataTable(showNotification, handleEditClick, updateLoading) {
+
   const { user } = useUser()
   const colorsDict = {
     "pendiente": "warning",
@@ -91,7 +93,7 @@ export default function DataTable(handleEditClick, updateLoading) {
       });
     } catch (error) {
       console.error('Error al obtener los datos:', error.response.data.error);
-      localStorage.removeItem("token")
+      if(error.response.status == 401) showNotification("error", "Tu sesión ha expirado", "Vuelve a iniciar sesión para continuar")
     } finally {
       updateLoading()
     }

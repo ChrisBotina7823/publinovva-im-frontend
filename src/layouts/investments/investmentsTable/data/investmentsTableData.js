@@ -9,8 +9,9 @@ import socket from 'socketInstance'; // Importa el objeto socket que creamos
 import MDCopyable from 'components/MDCopyable';
 import MDBadge from 'components/MDBadge';
 import { useUser } from 'context/userContext';
+import { useNotification } from 'components/NotificationContext';
 
-export default function DataTable(handleEditClick, updateLoading) {
+export default function DataTable(showNotification, handleEditClick, updateLoading) {
 
   const colorsDict = {
     "pendiente": "warning",
@@ -105,7 +106,7 @@ export default function DataTable(handleEditClick, updateLoading) {
         });
       } catch (error) {
         console.error('Error fetching data:', error);
-        localStorage.removeItem("token")
+        if(error.response.status == 401) showNotification("error", "Tu sesión ha expirado", "Vuelve a iniciar sesión para continuar")
       } finally { 
         updateLoading()
       }

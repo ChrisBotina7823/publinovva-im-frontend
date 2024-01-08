@@ -80,7 +80,7 @@ function Tables() {
   const updateLoading = () => {
     setLoading(false)
   }
-  const { columns, rows } = TicketTableData(handleStateChange, updateLoading);
+  const { columns, rows } = TicketTableData(showNotification, handleStateChange, updateLoading);
 
   return (
     <DashboardLayout>

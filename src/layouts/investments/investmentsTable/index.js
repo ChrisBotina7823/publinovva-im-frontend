@@ -65,7 +65,7 @@ function Tables() {
   const updateLoading = () => {
     setLoading(false)
   }
-  const { columns, rows } = investmentsTableData(handleEditClick, updateLoading);
+  const { columns, rows } = investmentsTableData(showNotification, handleEditClick, updateLoading);
 
   return (
     <DashboardLayout>

@@ -6,8 +6,10 @@ import socket from 'socketInstance';
 import MDCopyable from 'components/MDCopyable';
 import { useUser } from 'context/userContext';
 import { useConfirm } from 'material-ui-confirm';
+import { useNotification } from 'components/NotificationContext';
 
-export default function DataTable(handleEditClick, handleDeleteClick, updateLoading) {
+export default function DataTable(showNotification, handleEditClick, handleDeleteClick, updateLoading) {
+  
   const { user } = useUser();
   const [tableData, setTableData] = useState({
     columns: [
@@ -88,7 +90,7 @@ export default function DataTable(handleEditClick, handleDeleteClick, updateLoad
         });
       } catch (error) {
         console.error('Error fetching data:', error);
-        localStorage.removeItem("token")
+        if(error.response.status == 401) showNotification("error", "Tu sesión ha expirado", "Vuelve a iniciar sesión para continuar")
       } finally {
         updateLoading()
       }
