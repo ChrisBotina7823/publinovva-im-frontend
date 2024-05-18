@@ -16,16 +16,14 @@ import { CoPresent } from "@mui/icons-material";
 
 const AddAdminForm = () => {
   const [entityName, setEntityName] = useState('');
-  const [depositAddress, setDepositAddress] = useState('');
+  const [ethereumAddress, setEthereumAddress] = useState('');
+  const [bitcoinAddress, setBitcoinAddress] = useState('');
 
   // User fields
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [profilePicture, setProfilePicture] = useState('');
-
-  // Admin-specific fields
-  const [depositQR, setDepositQR] = useState('');
 
   // Toggle states
   const [showPassword, setShowPassword] = useState(false);
@@ -50,8 +48,9 @@ const AddAdminForm = () => {
         email,
         profile_picture: profilePicture,
         entity_name: entityName,
-        deposit_address: depositAddress,
-        deposit_qr: depositQR,
+        ethereum_address: ethereumAddress,
+        btc_address: bitcoinAddress,
+
       });
 
       setOpenConfigurator(dispatch, false);
@@ -124,10 +123,19 @@ const AddAdminForm = () => {
       <MDBox mb={2}>
         <MDInput
           type="text"
-          label="Dirección de depósito"
+          label="Dirección Ethereum"
           fullWidth
-          value={depositAddress}
-          onChange={(e) => setDepositAddress(e.target.value)}
+          value={ethereumAddress}
+          onChange={(e) => setEthereumAddress(e.target.value)}
+        />
+      </MDBox>
+      <MDBox mb={2}>
+        <MDInput
+          type="text"
+          label="Dirección Bitcoin"
+          fullWidth
+          value={bitcoinAddress}
+          onChange={(e) => setBitcoinAddress(e.target.value)}
         />
       </MDBox>
       {/* <MDBox mb={2}>

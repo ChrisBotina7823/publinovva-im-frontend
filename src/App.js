@@ -48,7 +48,7 @@ import routes from "routes";
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
 import ConfigsButton from 'components/ConfiguratorButton'
-
+import { IconContext } from "react-icons";
 // Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
@@ -125,28 +125,30 @@ export default function App() {
 
   return (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
-      <ConfirmProvider defaultOptions={{ confirmationButtonProps: { autoFocus: true }, confirmationText: "Aceptar", cancellationText: "Cancelar" }}>
-          <CssBaseline />
-          {layout === "dashboard" && (
-            <>
-              <Sidenav
-                color={sidenavColor}
-                brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-                brandName="Investment Manager"
-                routes={routes}
-                onMouseEnter={handleOnMouseEnter}
-                onMouseLeave={handleOnMouseLeave}
-              />
-            </>
-          )}
-          <Routes>
-            {getRoutes(routes)}
-            <Route path="*" element={<PrivateRoute element={<Navigate to="/dashboard" />} ></PrivateRoute> } />
-          </Routes>
-          <Notification />
+      <IconContext.Provider value={{ color: "blue", className: "global-class-name" }}>
+        <ConfirmProvider defaultOptions={{ confirmationButtonProps: { autoFocus: true }, confirmationText: "Aceptar", cancellationText: "Cancelar" }}>
+            <CssBaseline />
+            {layout === "dashboard" && (
+              <>
+                <Sidenav
+                  color={sidenavColor}
+                  brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
+                  brandName="Investment Manager"
+                  routes={routes}
+                  onMouseEnter={handleOnMouseEnter}
+                  onMouseLeave={handleOnMouseLeave}
+                />
+              </>
+            )}
+            <Routes>
+              {getRoutes(routes)}
+              <Route path="*" element={<PrivateRoute element={<Navigate to="/dashboard" />} ></PrivateRoute> } />
+            </Routes>
+            <Notification />
 
 
-      </ConfirmProvider>
+        </ConfirmProvider>
+      </IconContext.Provider>;
     </ThemeProvider>
   );
 }

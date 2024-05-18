@@ -64,12 +64,19 @@ export default function DataTable(showNotification, handleEditClick, updateLoadi
           transaction_amount: (
             <MDBox>
               {dataItem.received_amount > 0 &&
-                <MDTypography variant="h6">{`${formatCurrency(dataItem.received_amount)}`}</MDTypography>
+                <MDTypography variant="h6">{`${formatCurrency((dataItem.transaction_type == "withdrawal" ? 0.95 : 1)*dataItem.received_amount)} ${dataItem.transaction_type == "deposit" ? "depositados" : "entregados"}`}</MDTypography>
+              }
+              {dataItem.received_amount > 0 && dataItem.transaction_type == "withdrawal" &&
+                <MDTypography variant="body2">{`${formatCurrency(0.05*dataItem.received_amount)} comisión`}</MDTypography>
               }
               <MDTypography variant="caption" fontWeight="bold">{`(${formatCurrency(dataItem.transaction_amount)} solicitados)`}</MDTypography>
             </MDBox>
           ),
-          transaction_type: <span>{dataItem.transaction_type}</span>,
+          transaction_type: (
+            <MDTypography variant="h6" fontWeight="bold">
+              {dataItem.transaction_type == "deposit" ? "Depósito" : "Retiro"}
+            </MDTypography>
+          ),
           action: (
             <MDBox>
               {dataItem.movement_state == "pendiente" &&

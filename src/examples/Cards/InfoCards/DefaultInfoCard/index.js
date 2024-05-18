@@ -26,8 +26,9 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import { useNotification } from "components/NotificationContext";
 import copy from 'clipboard-copy'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function DefaultInfoCard({ color, icon, title, description, value, value_additional }) {
+function DefaultInfoCard({ color, icon, title, description, value, value_additional, isFontAwesome = false, picture}) {
   const { showNotification } = useNotification()
 
   const handleCopy = async () => {
@@ -50,7 +51,11 @@ function DefaultInfoCard({ color, icon, title, description, value, value_additio
           borderRadius="lg"
           variant="gradient"
         >
-          <Icon fontSize="default">{icon}</Icon>
+          <MDBox>
+            {isFontAwesome && <FontAwesomeIcon color="white" icon={icon} />}
+            {!isFontAwesome && <Icon style={{"color":"white"}} fontSize="default">{icon}</Icon>}
+          </MDBox>
+
         </MDBox>
       </MDBox>
       <MDBox pb={2} px={2} textAlign="center" lineHeight={1.25}>
@@ -73,6 +78,18 @@ function DefaultInfoCard({ color, icon, title, description, value, value_additio
             {value_additional}
           </MDTypography>
         )}
+        {picture && (
+          <MDBox
+            component="img"
+            src={picture}
+            alt="master card"
+            width="auto"
+            maxHeight="200px"
+            mt={1}
+            borderRadius={"5px"}
+            crossOrigin="anonymous"
+          />
+        )}
       </MDBox>
     </Card>
   );
@@ -88,7 +105,6 @@ DefaultInfoCard.defaultProps = {
 // Typechecking props for the DefaultInfoCard
 DefaultInfoCard.propTypes = {
   color: PropTypes.oneOf(["primary", "secondary", "info", "success", "warning", "error", "dark"]),
-  icon: PropTypes.node,
   title: PropTypes.string,
   description: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

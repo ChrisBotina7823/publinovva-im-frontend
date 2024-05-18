@@ -13,15 +13,18 @@ import { useUser } from "context/userContext";
 
 const EditAdminForm = ({ id, f }) => {
     const [entityName, setEntityName] = useState('');
-    const [depositAddress, setDepositAddress] = useState('');
+    const [ethereumAddress, setEthereumAddress] = useState('');
+    const [bitcoinAddress, setBitcoinAddress] = useState('');
     const [availableDays, setAvailableDays] = useState(0);
     const [accountState, setAccountState] = useState('activo');
 
     const [uploadProfilePicture, setUploadProfilePicture] = useState(false);
     const [profilePicture, setProfilePicture] = useState(null);
 
-    const [uploadDepositQR, setUploadDepositQR] = useState(false);
-    const [depositQR, setDepositQR] = useState(null);
+    const [uploadEthereumQR, setUploadEthereumQR] = useState(false);
+    const [uploadBitcoinQR, setUploadBitcoinQR] = useState(false);
+    const [ethereumQR, setEthereumQR] = useState(null);
+    const [bitcoinQR, setBitcoinQR] = useState(null);
 
     // User fields
     const [username, setUsername] = useState('');
@@ -46,7 +49,8 @@ const EditAdminForm = ({ id, f }) => {
                 const adminData = response.data;
 
                 setEntityName(adminData.entity_name || '');
-                setDepositAddress(adminData.deposit_address || '');
+                setEthereumAddress(adminData.ethereum_address || '');
+                setBitcoinAddress(adminData.btc_address || '');
                 setAvailableDays(adminData.available_days || 0);
                 setAccountState(adminData.account_state || 'activo');
 
@@ -72,12 +76,15 @@ const EditAdminForm = ({ id, f }) => {
 
             const requestData = {
                 entity_name: entityName,
-                deposit_address: depositAddress,
+                ethereum_address: ethereumAddress,
+                btc_address:bitcoinAddress,
                 available_days: availableDays,
                 account_state: accountState,
                 username: username,
                 email: email,
             };
+
+            console.log(requestData)
 
             if (showPassword && password) {
                 requestData.password = password;
@@ -95,11 +102,20 @@ const EditAdminForm = ({ id, f }) => {
                 response = await axiosInstance().post(`/users/profile-picture/${id}`, profilePictureFormData);
             }
 
-            if (uploadDepositQR && depositQR) {
-                const depositQRFormData = new FormData();
-                depositQRFormData.append("deposit_qr", depositQR);
+            if (uploadEthereumQR && ethereumQR) {
+                console.log("e")
+                const ethereumQRFormData = new FormData();
+                ethereumQRFormData.append("ethereum_qr", ethereumQR);
+                console.log(ethereumQRFormData)
 
-                response = await axiosInstance().post(`/admins/deposit-qr/${id}`, depositQRFormData);
+                response = await axiosInstance().post(`/admins/ethereum-qr/${id}`, ethereumQRFormData);
+            }
+            if (uploadBitcoinQR && bitcoinQR) {
+                console.log("b")
+                const bitcoinQRFormData = new FormData();
+                bitcoinQRFormData.append("btc_qr", bitcoinQR);
+                console.log(bitcoinQRFormData)
+                response = await axiosInstance().post(`/admins/btc-qr/${id}`, bitcoinQRFormData);
             }
 
         } catch (error) {
@@ -151,10 +167,19 @@ const EditAdminForm = ({ id, f }) => {
                     <MDBox mb={2}>
                         <MDInput
                             type="text"
-                            label="Dirección de depósito"
+                            label="Dirección Ethereum"
                             fullWidth
-                            value={depositAddress}
-                            onChange={(e) => setDepositAddress(e.target.value)}
+                            value={ethereumAddress}
+                            onChange={(e) => setEthereumAddress(e.target.value)}
+                        />
+                    </MDBox>
+                    <MDBox mb={2}>
+                        <MDInput
+                            type="text"
+                            label="Dirección Bitcoin"
+                            fullWidth
+                            value={bitcoinAddress}
+                            onChange={(e) => setBitcoinAddress(e.target.value)}
                         />
                     </MDBox>
                     <MDBox mb={2}>
@@ -233,20 +258,41 @@ const EditAdminForm = ({ id, f }) => {
                         <FormControlLabel
                             control={
                                 <Switch
-                                    checked={uploadDepositQR}
-                                    onChange={() => setUploadDepositQR(!uploadDepositQR)}
-                                    inputProps={{ 'aria-label': 'toggle-upload-deposit-qr' }}
+                                    checked={uploadEthereumQR}
+                                    onChange={() => setUploadEthereumQR(!uploadEthereumQR)}
+                                    inputProps={{ 'aria-label': 'toggle-upload-ethereum-qr' }}
                                 />
                             }
-                            label="Subir Código QR de Depósito"
+                            label="Subir Código QR Ethereum"
                         />
                     </MDBox>
-                    {uploadDepositQR && (
+                    {uploadEthereumQR && (
                         <MDBox mb={2}>
                             <input
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => setDepositQR(e.target.files[0])}
+                                onChange={(e) => setEthereumQR(e.target.files[0])}
+                            />
+                        </MDBox>
+                    )}
+                    <MDBox mb={1}>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={uploadBitcoinQR}
+                                    onChange={() => setUploadBitcoinQR(!uploadBitcoinQR)}
+                                    inputProps={{ 'aria-label': 'toggle-upload-bitcoin-qr' }}
+                                />
+                            }
+                            label="Subir Código QR Bitcoin"
+                        />
+                    </MDBox>
+                    {uploadBitcoinQR && (
+                        <MDBox mb={2}>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setBitcoinQR(e.target.files[0])}
                             />
                         </MDBox>
                     )}

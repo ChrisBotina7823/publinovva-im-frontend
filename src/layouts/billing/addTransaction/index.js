@@ -11,6 +11,8 @@ import { useNotification } from "components/NotificationContext";
 import { setOpenConfigurator, useMaterialUIController } from "context";
 import { useUser } from "context/userContext";
 import { CircularProgress } from "@mui/material";
+import MDTypography from "components/MDTypography";
+import { formatCurrency } from "utils";
 
 const DepositWithdrawForm = () => {
   const [transactionType, setTransactionType] = useState("deposit");
@@ -96,6 +98,12 @@ const DepositWithdrawForm = () => {
               value={transactionAmount}
               onChange={(e) => setTransactionAmount(e.target.value)}
             />
+            {transactionType === "withdrawal" && 
+              <MDBox>
+              <MDTypography variant="caption" display="block" size={12}>Se te cobrará una comisión de 5% del monto de retiro</MDTypography>
+              <MDTypography variant="body2" id="receivedAmount">Se te entregará: {formatCurrency(transactionAmount * 0.95)}</MDTypography>
+              </MDBox>
+            }
           </MDBox>
           {transactionType === "withdrawal" && (
             <MDBox mb={2}>

@@ -19,7 +19,8 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
     columns: [
       { Header: 'id', accessor: 'id', width: '15%', align: 'center' },
       { Header: 'Perfil', accessor: 'profile', width: '30%', align: 'center' },
-      { Header: 'Depósito', accessor: 'deposit_info', width: '30%', align: 'center' },
+      { Header: 'Depósito Ethereum', accessor: 'ethereum_info', width: '30%', align: 'center' },
+      { Header: 'Depósito Bitcoin', accessor: 'btc_info', width: '30%', align: 'center' },
       { Header: 'Estado', accessor: 'state', width: '30%', align: 'center' },
       // { Header: 'Administrador', accessor: 'admin', width: '30%', align: 'left' },
       { Header: 'action', accessor: 'action', align: 'center' },
@@ -63,10 +64,26 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
         </MDBox>
       </MDBox>
       ),
-      deposit_info:(
+      ethereum_info:(
         <MDBox>
-          <MDBox sx={{height:"10vh"}} onError={(e) => e.target.src = "https://thumbs.dreamstime.com/b/seamless-circle-diagonal-stripe-pattern-vector-soft-background-regular-white-texture-90383470.jpg"} component="img" src={dataItem.deposit_qr} alt="deposit_qr"/>
-          <MDCopyable variant="thin" vl={dataItem.deposit_address}/>
+          <MDBox sx={{height:"10vh"}} 
+            crossOrigin="anonymous"
+            onError={(e) => e.target.src = "https://thumbs.dreamstime.com/b/seamless-circle-diagonal-stripe-pattern-vector-soft-background-regular-white-texture-90383470.jpg"} 
+            component="img" 
+            src={dataItem.ethereum_qr} 
+            alt="ethereum_qr"/>
+          <MDCopyable variant="thin" vl={dataItem.ethereum_address}/>
+        </MDBox>
+      ),
+      btc_info:(
+        <MDBox>
+          <MDBox sx={{height:"10vh"}} 
+            crossOrigin="anonymous"
+            onError={(e) => e.target.src = "https://thumbs.dreamstime.com/b/seamless-circle-diagonal-stripe-pattern-vector-soft-background-regular-white-texture-90383470.jpg"}
+            component="img" 
+            src={dataItem.btc_qr} 
+            alt="btc_qr"/>
+          <MDCopyable variant="thin" vl={dataItem.btc_address}/>
         </MDBox>
       ),
       state: (

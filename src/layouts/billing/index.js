@@ -31,11 +31,14 @@ import { useMaterialUIController, setOpenConfigurator } from "context";
 import AddTransaction from "layouts/billing/addTransaction";
 import { useUser } from "context/userContext";
 import { formatCurrency } from "utils";
+import MDTypography from "components/MDTypography";
+import { Card, Chip, Divider } from "@mui/material";
+import { faBitcoin, faEthereum } from "@fortawesome/free-brands-svg-icons";
 
 function Billing() {
 
   const {user, setUser} = useUser()
-  const admin = user ? (user.__t === "Client" ? user.admin : user) : null;
+  const admin = user ? (user.__t === "Client" ? user.admin : null) : null;
 
   const [controller, dispatch] = useMaterialUIController();
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, true);
@@ -49,61 +52,71 @@ function Billing() {
     setCustomTitle("Solicitar ingreso/retiro")
     setCustomDescription("Ingresa la información de transacción")
   };
-
-
+  
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox mt={8}>
-        <MDBox mb={3}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} lg={12}>
-              <Grid container spacing={3}>
+      <MDBox mt={4} mx={4}>
+        <Grid container spacing={3} item xs={12} lg={12} alignItems="flex-start">
+            { admin &&
+              <Grid container  spacing={3} item xs={12} xl={6}>
+                <Grid item xs={12} xl={12}>
+                  <Card>
+                    <MDBox p={2} mx={3}>
+                      <MDTypography my={0} variant="h4" fontWeight="medium" textTransform="capitalize">Información de Depósito</MDTypography>
+                      <MDTypography variant="body2" color="text" fontWeight="regular">{admin.entity_name}</MDTypography>
+                    </MDBox>
+                  </Card>
+                </Grid>
                 <Grid item xs={12} xl={6}>
-                  { admin &&
-                    <MasterCard number={admin.deposit_address} holder={admin.entity_name} logo={admin.deposit_qr} expires="11/22" />
-                   }
+                  <DefaultInfoCard
+                    icon={faBitcoin}
+                    title="Dirección Bitcoin"
+                    picture={admin.btc_qr}
+                    value={admin.btc_address || "---"}
+                    isFontAwesome
+                  />
                 </Grid>
-                <Grid item xs={12} md={8} xl={3}>
-                  { user?.usd_wallet &&
-                    <DefaultInfoCard
-                      icon="wallet"
-                      title="Billetera USDT (trc20)"
-                      description={user.usd_wallet.address || user.usd_wallet._id }
-                      value={`${formatCurrency(user.usd_wallet.available_amount)}`}
-                    />
-                   }
+                <Grid item xs={12} xl={6}>
+                  <DefaultInfoCard
+                    icon={faEthereum}
+                    title="Dirección Ethereum"
+                    picture={admin.ethereum_qr}
+                    value={admin.ethereum_address || "---"}
+                    isFontAwesome
+                  />
                 </Grid>
-                <Grid item xs={12} md={8} xl={3}>
-                  { user?.i_wallet &&
-                    <DefaultInfoCard
-                      icon="wallet"
-                      title="Billetera de Comercio"
-                      description={user.i_wallet._id}
-                      value={`${formatCurrency(user.i_wallet.available_amount)}`}
-                    />
-                   }
-                </Grid>
-                {/* <Grid item xs={12}>
-                  <PaymentMethod />
-                </Grid> */}
               </Grid>
-            </Grid>
-            {/* <Grid item xs={12} lg={4}>
-              <Invoices />
-            </Grid> */}
-          </Grid>
-        </MDBox>
-        <MDBox mb={3}>
-          <Grid container spacing={3}>
-            {/* <Grid item xs={12} md={7}>
-              <BillingInformation />
-            </Grid>
-            <Grid item xs={12} md={5}>
-              <Transactions />
-            </Grid> */}
-          </Grid>
-        </MDBox>
+            }
+            {user.usd_wallet && user.i_wallet &&
+              <Grid container spacing={3} item xs={12} xl={6} alignItems="flex-start">
+                <Grid item xs={12} xl={12}>
+                  <Card >
+                    <MDBox p={2} mx={3}>
+                      <MDTypography my={0} variant="h4" fontWeight="medium" textTransform="capitalize">Billeteras Activas</MDTypography>
+                      <MDTypography variant="body2" color="text" fontWeight="regular">{user.username}</MDTypography>
+                    </MDBox>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} xl={6}>
+                  <DefaultInfoCard
+                    icon="wallet"
+                    title="Billetera USDT (trc20)"
+                    description={user.usd_wallet.address || user.usd_wallet._id }
+                    value={`${formatCurrency(user.usd_wallet.available_amount)}`}
+                  />
+                </Grid>
+                <Grid item xs={12} xl={6}>
+                  <DefaultInfoCard
+                    icon="wallet"
+                    title="Billetera de Comercio"
+                    description={user.i_wallet._id}
+                    value={`${formatCurrency(user.i_wallet.available_amount)}`}
+                  />
+                </Grid>
+              </Grid>
+            }
+        </Grid>
       </MDBox>
       <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
       {user?.__t == "Client" &&

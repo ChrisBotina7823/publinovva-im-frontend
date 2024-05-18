@@ -55,8 +55,10 @@ function Overview() {
 
   // Agregar información específica para el tipo de usuario
   if (user.__t === "Admin") {
-    userInfo["Código de Depósito"] = <MDBox component="img" crossOrigin="anonymous" src={user.deposit_qr} alt="deposit_qr" height="5rem"/>;
-    userInfo["Dirección de Depósito"] = user.deposit_address;
+    userInfo["Código QR Ethereum"] = <MDBox component="img" crossOrigin="anonymous" src={user.ethereum_qr} alt="ethereum_qr" height="5rem"/>;
+    userInfo["Dirección Ethereum"] = user.ethereum_address;
+    userInfo["Código QR Bitcoin"] = <MDBox component="img" crossOrigin="anonymous" src={user.btc_qr} alt="ethereum_qr" height="5rem"/>;
+    userInfo["Dirección Bitcoin"] = user.btc_address;
   } else if (user.__t === "Client") {
     userInfo["Nombre completo"] = user.fullname;
     userInfo["Teléfono"] = user.phone;
