@@ -8,6 +8,7 @@ import MDAvatar from 'components/MDAvatar';
 import MDBadge from 'components/MDBadge';
 import { useConfirm } from 'material-ui-confirm';
 import { useNotification } from 'components/NotificationContext';
+import { formatCurrency } from 'utils';
 
   export default function DataTable(showNotification, handleEditClick, handleDeleteClick, setLoading) {
 
@@ -42,6 +43,7 @@ import { useNotification } from 'components/NotificationContext';
     }
 
     const mapDataToJSX = (data) => {
+      console.log(data)
       return data.reverse().map((dataItem) => ({
         // client: (
         //   <MDTypography key={dataItem.username}>
@@ -50,18 +52,18 @@ import { useNotification } from 'components/NotificationContext';
         // ),
         id: (
           <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id}/>
-          ),
+        ),
         profile: (
           <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDAvatar src={dataItem.profile_picture} name={dataItem.fullname} size="sm" />
-          <MDBox ml={2} lineHeight={1}>
-            <MDTypography my={0} display="block"fontWeight="medium">
-              {dataItem.username}
-            </MDTypography>
-            <MDTypography variant="h6" display="block">{dataItem.fullname}</MDTypography>
-            <MDCopyable vl={dataItem.email} variant="caption"></MDCopyable>
+            <MDAvatar src={dataItem.profile_picture} name={dataItem.fullname} size="sm" />
+            <MDBox ml={2} lineHeight={1}>
+              <MDTypography my={0} display="block"fontWeight="medium">
+                {dataItem.username}
+              </MDTypography>
+              <MDTypography variant="h6" display="block">{dataItem.fullname}</MDTypography>
+              <MDCopyable vl={dataItem.email} variant="caption"></MDCopyable>
+            </MDBox>
           </MDBox>
-        </MDBox>
         ),
         personal_data: (
           <MDBox lineHeight={1}>
@@ -71,7 +73,7 @@ import { useNotification } from 'components/NotificationContext';
         ),
         usd_balance: (
           <MDTypography variant="h5">
-            {`$${dataItem.usd_wallet.available_amount}`}
+            {`${formatCurrency(dataItem.usd_wallet.available_amount)}`}
           </MDTypography>
         ),
         state: (

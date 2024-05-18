@@ -108,7 +108,17 @@ function MasterCard({ color, number, holder, expires, logo }) {
             </MDBox>
           </MDBox>
           <MDBox display="flex" justifyContent="flex-end" width="20%">
-            { logo && <MDBox component="img" src={logo} alt="master card" width="100%" mt={1} borderRadius={"5px"}  />}
+            {logo && (
+              <MDBox
+                component="img"
+                src={logo}
+                alt="master card"
+                width="100%"
+                mt={1}
+                borderRadius={"5px"}
+                crossOrigin="anonymous"
+              />
+            )}
           </MDBox>
         </MDBox>
       </MDBox>

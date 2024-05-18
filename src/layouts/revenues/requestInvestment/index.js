@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import MDTypography from "components/MDTypography";
 import { Divider } from "@mui/material";
 import { setOpenConfigurator, useMaterialUIController } from "context";
+import { formatCurrency } from "utils";
 
 const InvestmentRequestForm = () => {
     const [packages, setPackages] = useState([]);
@@ -81,12 +82,12 @@ const InvestmentRequestForm = () => {
                                     </MDTypography>
                                     <MDTypography variant="caption">
                                     <MDTypography variant="caption" fontWeight="regular"> - Beneficios: </MDTypography>
-                                        {`${inv_package.revenue_percentage * 100}% del monto invertido cada ${inv_package.revenue_freq} días`}
+                                        {`${inv_package.revenue_percentage}% del monto invertido cada ${inv_package.revenue_freq} días`}
                                     </MDTypography>
                                     <br/>
                                     <MDTypography variant="caption">
                                         <MDTypography variant="caption" fontWeight="regular"> - Requisitos: </MDTypography>
-                                        {`$${inv_package.min_opening_amount * 100}, ${inv_package.min_inv_days} días mínimo`}
+                                        {`${formatCurrency(inv_package.min_opening_amount)}, ${inv_package.min_inv_days} días mínimo`}
                                     </MDTypography>
                                 </MDBox>
                             </MenuItem>
@@ -104,7 +105,7 @@ const InvestmentRequestForm = () => {
                 </LocalizationProvider>
             </MDBox>
             <MDTypography variant="caption">
-                {`Disponible billetera de comercio: $${user.i_wallet.available_amount}`}
+                {`Disponible billetera de comercio: ${formatCurrency(user.i_wallet.available_amount)}`}
             </MDTypography>
             <MDBox mb={2}>
                 <MDInput

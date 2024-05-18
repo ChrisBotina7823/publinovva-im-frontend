@@ -39,6 +39,7 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
   }
 
   const mapDataToJSX = (data) => {
+    console.log(data)
     return data.reverse().map((dataItem) => ({
       // admin: (
       //   <MDBox key={dataItem.username}>

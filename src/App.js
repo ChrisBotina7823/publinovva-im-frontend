@@ -39,7 +39,6 @@ import themeDark from "assets/theme-dark";
 import themeDarkRTL from "assets/theme-dark/theme-rtl";
 
 // RTL plugins
-import rtlPlugin from "stylis-plugin-rtl";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
@@ -54,12 +53,15 @@ import ConfigsButton from 'components/ConfiguratorButton'
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
 
-import { NotificationProvider } from 'components/NotificationContext';
+
 import Notification from 'components/Notification';
 import socket from "socketInstance";
 import axiosInstance from "axiosInstance";
-import { UserProvider } from 'context/userContext';
+
 import axios from "axios";
+import { useUser } from "context/userContext";
+import { useNotification } from "components/NotificationContext";
+import PrivateRoute from "components/PrivateRoute";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -74,18 +76,8 @@ export default function App() {
     darkMode,
   } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
-  const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
 
-  // Cache for the rtl
-  useMemo(() => {
-    const cacheRtl = createCache({
-      key: "rtl",
-      stylisPlugins: [rtlPlugin],
-    });
-
-    setRtlCache(cacheRtl);
-  }, []);
 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -132,33 +124,29 @@ export default function App() {
     });
 
   return (
-    <UserProvider>
-      <ThemeProvider theme={darkMode ? themeDark : theme}>
-        <ConfirmProvider defaultOptions={ {confirmationButtonProps: { autoFocus: true }, confirmationText:"Aceptar", cancellationText:"Cancelar"}}>
-          <NotificationProvider>
-            <CssBaseline />
-            {layout === "dashboard" && (
-              <>
-                <Sidenav
-                  color={sidenavColor}
-                  brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-                  brandName="Investment Manager"
-                  routes={routes}
-                  onMouseEnter={handleOnMouseEnter}
-                  onMouseLeave={handleOnMouseLeave}
-                />
-              </>
-            )}
-            <Routes>
-              {getRoutes(routes)}
-              <Route path="*" element={<Navigate to="/dashboard" />} />
-            </Routes>
-            <Notification />
+    <ThemeProvider theme={darkMode ? themeDark : theme}>
+      <ConfirmProvider defaultOptions={{ confirmationButtonProps: { autoFocus: true }, confirmationText: "Aceptar", cancellationText: "Cancelar" }}>
+          <CssBaseline />
+          {layout === "dashboard" && (
+            <>
+              <Sidenav
+                color={sidenavColor}
+                brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
+                brandName="Investment Manager"
+                routes={routes}
+                onMouseEnter={handleOnMouseEnter}
+                onMouseLeave={handleOnMouseLeave}
+              />
+            </>
+          )}
+          <Routes>
+            {getRoutes(routes)}
+            <Route path="*" element={<PrivateRoute element={<Navigate to="/dashboard" />} ></PrivateRoute> } />
+          </Routes>
+          <Notification />
 
-          </NotificationProvider>
 
-        </ConfirmProvider>
-      </ThemeProvider>
-    </UserProvider>
+      </ConfirmProvider>
+    </ThemeProvider>
   );
 }

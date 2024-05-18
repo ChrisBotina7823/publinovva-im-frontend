@@ -24,15 +24,17 @@ import axiosInstance from "axiosInstance";
 
 import { useNotification } from "components/NotificationContext";
 import { CircularProgress } from "@mui/material";
+import { useUser } from "context/userContext";
+
 
 function Tables() {
   const [controller, dispatch] = useMaterialUIController();
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, true);
-
+  
   const [customContent, setCustomContent] = useState(null);
   const [customTitle, setCustomTitle] = useState(null);
   const [customDescription, setCustomDescription] = useState(null);
-
+  
   const { showNotification } = useNotification();
 
   const handleAddClick = () => {
@@ -78,7 +80,7 @@ function Tables() {
     setLoading(false)
   }
   const { columns, rows } = adminsTableData(showNotification, handleEditClick, handleDeleteClick, updateLoading); // Reemplaza con la función adecuada
-
+  
   return (
     <DashboardLayout>
       <DashboardNavbar />

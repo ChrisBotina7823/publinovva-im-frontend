@@ -44,7 +44,7 @@ const EditClientForm = ({ id, f }) => {
 
     const { showNotification } = useNotification();
     const [controller, dispatch] = useMaterialUIController();
-    const { user } = useUser()
+    const { user, removeUser } = useUser()
 
     const [loading, setLoading] = useState(false)
 
@@ -67,8 +67,16 @@ const EditClientForm = ({ id, f }) => {
                 setEmail(clientData.email || '');
                 setUsdAddress(clientData.usd_wallet.address || clientData.usd_wallet._id || ''); // assuming usd_address is a string field
             } catch (error) {
-                console.error('Error fetching client data:', error.response.data.error);
-                if(error.response.status == 401) showNotification("error", "Tu sesión ha expirado", "Vuelve a iniciar sesión para continuar")
+                if(error.response) {
+                    console.error('Error fetching client data:', error.response.data);
+                    if(error.response.status == 401) {
+                        showNotification("error", "Tu sesión ha expirado", "Vuelve a iniciar sesión para continuar")
+                        removeUser()
+                    }
+                } else {
+                    console.error('Error fetching client data:', error);
+                    showNotification("error", "Error al obtener datos del cliente", "Inténtalo de nuevo más tarde")
+                }
             } finally {
                 setLoading(false)
             }
@@ -197,7 +205,7 @@ const EditClientForm = ({ id, f }) => {
                         <MDBox mb={2}>
                             <MDInput
                                 type="number"
-                                label="Saldo Billetera USD"
+                                label="Saldo Billetera USDT (trc20)"
                                 fullWidth
                                 value={usdBalance}
                                 onChange={(e) => setUsdBalance(e.target.value)}
@@ -214,7 +222,7 @@ const EditClientForm = ({ id, f }) => {
                                     inputProps={{ 'aria-label': 'toggle-usd-address' }}
                                 />
                             }
-                            label="Cambiar dirección Billetera USD"
+                            label="Cambiar dirección Billetera USDT (trc20)"
                         />
                     </MDBox>
 
@@ -222,7 +230,7 @@ const EditClientForm = ({ id, f }) => {
                         <MDBox mb={2}>
                             <MDInput
                                 type="text"
-                                label="Dirección Billetera USD"
+                                label="Dirección Billetera USDT (trc20)"
                                 fullWidth
                                 value={usdAddress}
                                 onChange={(e) => setUsdAddress(e.target.value)}
@@ -287,7 +295,7 @@ const EditClientForm = ({ id, f }) => {
                                     inputProps={{ 'aria-label': 'toggle-usd-password' }}
                                 />
                             }
-                            label="Contraseña Billetera USD"
+                            label="Contraseña Billetera USDT (trc20)"
                         />
                     </MDBox>
 

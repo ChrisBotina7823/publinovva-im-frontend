@@ -22,7 +22,9 @@ import PropTypes from "prop-types";
 import MDAvatarRoot from "components/MDAvatar/MDAvatarRoot";
 
 const MDAvatar = forwardRef(({ bgColor, size, shadow, ...rest }, ref) => (
-  <MDAvatarRoot ref={ref} ownerState={{ shadow, bgColor, size }} {...rest} />
+  <MDAvatarRoot  ref={ref} ownerState={{ shadow, bgColor, size }} {...rest}>
+    <img src={rest.src ? rest.src : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"} alt={rest.alt} crossOrigin="anonymous" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+  </MDAvatarRoot>
 ));
 
 // Setting default values for the props of MDAvatar

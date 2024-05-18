@@ -2,7 +2,6 @@
 import React, { useEffect } from 'react';
 import { useNotification } from 'components/NotificationContext';
 import MDSnackbar from 'components/MDSnackbar';
-import { format } from 'timeago.js'
 
 const Notification = () => {
   const { notifications, hideNotification } = useNotification();
@@ -31,7 +30,7 @@ const Notification = () => {
                 notification.icon = "notifications";
         }
         const timestamp = new Date();
-        const formattedDate = format(timestamp);
+        const formattedDate = timestamp.toDateString();
 
         return (
             <MDSnackbar

@@ -154,15 +154,15 @@ const routes = [
     component: <PrivateRoute element={<Profile />} />,
     hidden: []
   },
-  {
-    type: "collapse",
-    name: "Acerca de",
-    key: "acerca de",
-    icon: <HelpOutlineIcon fontSize="small"></HelpOutlineIcon>,
-    route: "/billing",
-    component: <PrivateRoute element={<Dashboard />} />,
-    hidden: []
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Acerca de",
+  //   key: "acerca de",
+  //   icon: <HelpOutlineIcon fontSize="small"></HelpOutlineIcon>,
+  //   route: "/billing",
+  //   component: <PrivateRoute element={<Dashboard />} />,
+  //   hidden: []
+  // },
   {
     type: "collapse",
     name: "Iniciar Sesión",

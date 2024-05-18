@@ -12,6 +12,7 @@ import data from 'layouts/dashboard/components/Projects/data';
 import { useUser } from 'context/userContext';
 import MDCopyable from 'components/MDCopyable';
 import { useNotification } from 'components/NotificationContext';
+import { formatCurrency } from 'utils';
 
 export default function DataTable(showNotification, updateLoading) {
 
@@ -34,7 +35,7 @@ export default function DataTable(showNotification, updateLoading) {
       daysDiff: <span>{dataItem.days_diff}</span>,
       revenue_amount: (
         <MDTypography variant="h5">
-          {`$${dataItem.revenue_amount}`}
+          {`${formatCurrency(dataItem.revenue_amount)}`}
         </MDTypography>
       ),
     }));

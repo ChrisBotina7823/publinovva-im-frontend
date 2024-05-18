@@ -13,6 +13,7 @@ import { useUser } from "context/userContext";
 import MDTypography from "components/MDTypography";
 import { setOpenConfigurator, useMaterialUIController } from "context";
 import { CircularProgress } from "@mui/material";
+import { formatCurrency } from "utils";
 
 const WalletTransactionForm = () => {
     const { user, setUser } = useUser()
@@ -57,10 +58,10 @@ const WalletTransactionForm = () => {
                     <MDBox mb={2}>
                         <MDBox margin={2}>
                             <MDTypography variant="caption" display="block">
-                                {`Disponible Billetera USD: $${user.usd_wallet.available_amount}`}
+                                {`Disponible Billetera USDT (trc20): ${formatCurrency(user.usd_wallet.available_amount)}`}
                             </MDTypography>
                             <MDTypography variant="caption" display="block">
-                                {`Disponible Billetera de Comercio: $${user.i_wallet.available_amount}`}
+                                {`Disponible Billetera de Comercio: ${formatCurrency(user.i_wallet.available_amount)}`}
                             </MDTypography>
                         </MDBox>
                         <MDInput
@@ -84,7 +85,7 @@ const WalletTransactionForm = () => {
                                 fullWidth
                             >
                                 <MenuItem value="inv">Billetera de Comercio</MenuItem>
-                                <MenuItem value="usd">Billetera USD</MenuItem>
+                                <MenuItem value="usd">Billetera USDT (trc20)</MenuItem>
                             </Select>
                         </FormControl>
                     </MDBox>

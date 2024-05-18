@@ -10,6 +10,7 @@ import EditTransactionForm from "layouts/transactions/editTransaction"
 import MDCopyable from 'components/MDCopyable';
 import MDBadge from 'components/MDBadge';
 import { useNotification } from 'components/NotificationContext';
+import { formatCurrency } from 'utils';
 
 export default function DataTable(showNotification, handleEditClick, updateLoading) {
   const colorsDict = {
@@ -63,9 +64,9 @@ export default function DataTable(showNotification, handleEditClick, updateLoadi
           transaction_amount: (
             <MDBox>
               {dataItem.received_amount > 0 &&
-                <MDTypography variant="h6">{`$${dataItem.received_amount}`}</MDTypography>
+                <MDTypography variant="h6">{`${formatCurrency(dataItem.received_amount)}`}</MDTypography>
               }
-              <MDTypography variant="caption" fontWeight="bold">{`($${dataItem.transaction_amount} solicitados)`}</MDTypography>
+              <MDTypography variant="caption" fontWeight="bold">{`(${formatCurrency(dataItem.transaction_amount)} solicitados)`}</MDTypography>
             </MDBox>
           ),
           transaction_type: <span>{dataItem.transaction_type}</span>,

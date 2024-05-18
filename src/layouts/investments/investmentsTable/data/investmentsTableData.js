@@ -10,6 +10,7 @@ import MDCopyable from 'components/MDCopyable';
 import MDBadge from 'components/MDBadge';
 import { useUser } from 'context/userContext';
 import { useNotification } from 'components/NotificationContext';
+import { formatCurrency } from 'utils';
 
 export default function DataTable(showNotification, handleEditClick, updateLoading) {
 
@@ -68,12 +69,12 @@ export default function DataTable(showNotification, handleEditClick, updateLoadi
       ),
       inv_amount: (
         <MDTypography variant="h5">
-          {`$${dataItem.inv_amount}`}
+          {`${formatCurrency(dataItem.inv_amount)}`}
         </MDTypography>
       ),
       revenue: (
         <MDTypography variant="h5">
-          {`$${dataItem.revenue}`}
+          {`${formatCurrency(dataItem.revenue)}`}
         </MDTypography>
       ),
       action: (

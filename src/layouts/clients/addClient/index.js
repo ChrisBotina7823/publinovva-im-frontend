@@ -129,7 +129,7 @@ const AddClientForm = () => {
                     <MDBox mb={2}>
                         <MDInput
                             type="password"
-                            label="Contraseña Billetera USD"
+                            label="Contraseña Billetera USDT (trc20)"
                             fullWidth
                             value={iPassword}
                             onChange={(e) => setIPassword(e.target.value)}

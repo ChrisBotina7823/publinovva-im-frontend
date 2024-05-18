@@ -55,12 +55,12 @@ function Overview() {
 
   // Agregar información específica para el tipo de usuario
   if (user.__t === "Admin") {
-    userInfo["Código de Depósito"] = <MDBox component="img" src={user.deposit_qr} alt="deposit_qr" height="5rem"/>;
+    userInfo["Código de Depósito"] = <MDBox component="img" crossOrigin="anonymous" src={user.deposit_qr} alt="deposit_qr" height="5rem"/>;
     userInfo["Dirección de Depósito"] = user.deposit_address;
   } else if (user.__t === "Client") {
     userInfo["Nombre completo"] = user.fullname;
     userInfo["Teléfono"] = user.phone;
-    userInfo["Dirección Billetera USD"] = user.usd_wallet.address || user.usd_wallet._id
+    userInfo["Dirección Billetera USDT (trc20)"] = user.usd_wallet.address || user.usd_wallet._id
   }
 
   return (

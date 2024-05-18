@@ -7,6 +7,7 @@ import MDCopyable from 'components/MDCopyable';
 import { useUser } from 'context/userContext';
 import { useConfirm } from 'material-ui-confirm';
 import { useNotification } from 'components/NotificationContext';
+import { formatCurrency } from 'utils';
 
 export default function DataTable(showNotification, handleEditClick, handleDeleteClick, updateLoading) {
   
@@ -45,17 +46,17 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
           name: <MDTypography>{dataItem.name}</MDTypography>,
           requirements: (
             <MDBox lineHeight={1}>
-              <MDTypography variant="h5">{`$${dataItem.min_opening_amount}`}</MDTypography>
+              <MDTypography variant="h5">{`${formatCurrency(dataItem.min_opening_amount)}`}</MDTypography>
               <MDTypography variant="caption">{`${dataItem.min_inv_days} días mínimo`}</MDTypography>
             </MDBox>
           ),
           benefits: (
             <MDBox lineHeight={1}>
-              <MDTypography variant="h5">{`${dataItem.revenue_percentage * 100}%`}</MDTypography>
+              <MDTypography variant="h5">{`${dataItem.revenue_percentage}%`}</MDTypography>
               <MDTypography variant="caption">{`Cada ${dataItem.revenue_freq} días`}</MDTypography>
             </MDBox>
           ),
-          global_amount: <MDTypography variant="h4">{`$${dataItem.global_amount}`}</MDTypography>,
+          global_amount: <MDTypography variant="h4">{`${formatCurrency(dataItem.global_amount)}`}</MDTypography>,
           action: (
             <MDBox key={dataItem._id}>
               <MDTypography

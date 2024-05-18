@@ -30,11 +30,12 @@ import ConfiguratorButton from "components/ConfiguratorButton";
 import { useMaterialUIController, setOpenConfigurator } from "context";
 import AddTransaction from "layouts/billing/addTransaction";
 import { useUser } from "context/userContext";
+import { formatCurrency } from "utils";
 
 function Billing() {
 
   const {user, setUser} = useUser()
-  const admin = user.__t === "Client" ? user.admin : user;
+  const admin = user ? (user.__t === "Client" ? user.admin : user) : null;
 
   const [controller, dispatch] = useMaterialUIController();
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, true);
@@ -59,25 +60,27 @@ function Billing() {
             <Grid item xs={12} lg={12}>
               <Grid container spacing={3}>
                 <Grid item xs={12} xl={6}>
-                  <MasterCard number={admin.deposit_address} holder={admin.entity_name} logo={admin.deposit_qr} expires="11/22" />
+                  { admin &&
+                    <MasterCard number={admin.deposit_address} holder={admin.entity_name} logo={admin.deposit_qr} expires="11/22" />
+                   }
                 </Grid>
                 <Grid item xs={12} md={8} xl={3}>
-                  { user.usd_wallet &&
+                  { user?.usd_wallet &&
                     <DefaultInfoCard
                       icon="wallet"
-                      title="Billetera USD"
+                      title="Billetera USDT (trc20)"
                       description={user.usd_wallet.address || user.usd_wallet._id }
-                      value={`$${user.usd_wallet.available_amount}`}
+                      value={`${formatCurrency(user.usd_wallet.available_amount)}`}
                     />
                    }
                 </Grid>
                 <Grid item xs={12} md={8} xl={3}>
-                  { user.i_wallet &&
+                  { user?.i_wallet &&
                     <DefaultInfoCard
                       icon="wallet"
                       title="Billetera de Comercio"
                       description={user.i_wallet._id}
-                      value={`$${user.i_wallet.available_amount}`}
+                      value={`${formatCurrency(user.i_wallet.available_amount)}`}
                     />
                    }
                 </Grid>
@@ -103,7 +106,7 @@ function Billing() {
         </MDBox>
       </MDBox>
       <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
-      {user.__t == "Client" &&
+      {user?.__t == "Client" &&
         <ConfiguratorButton icon="add" pos={1} f={handleAddTransactionClick} vl="Solicitar depósito/retiro"/>
       }
       <Footer />
