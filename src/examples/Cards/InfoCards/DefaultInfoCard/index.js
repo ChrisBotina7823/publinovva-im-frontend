@@ -84,6 +84,7 @@ function DefaultInfoCard({ color, icon, title, description, value, value_additio
             src={picture}
             alt="master card"
             width="auto"
+            maxWidth="100%"
             maxHeight="200px"
             mt={1}
             borderRadius={"5px"}

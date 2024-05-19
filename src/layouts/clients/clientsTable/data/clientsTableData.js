@@ -51,7 +51,13 @@ import { formatCurrency } from 'utils';
         //   </MDTypography>
         // ),
         id: (
-          <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id}/>
+          <MDBox>
+            <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id}/>
+            {dataItem.suspended &&
+              <MDBadge size="lg" variant="gradient" fontWeight="bold" color="error" badgeContent="INACTIVA"/>
+            }
+          </MDBox>
+
         ),
         profile: (
           <MDBox display="flex" alignItems="center" lineHeight={1}>
@@ -89,7 +95,7 @@ import { formatCurrency } from 'utils';
               variant="caption"
               color="secondary"
               fontWeight="medium"
-              onClick={() => handleEditClick(dataItem.username)}
+              onClick={() => handleEditClick(dataItem._id)}
             >
               Editar
             </MDTypography>
@@ -100,7 +106,7 @@ import { formatCurrency } from 'utils';
               color="error"
               fontWeight="medium"
               ml={1}
-              onClick={() => confirmDelete(dataItem.username)}
+              onClick={() => confirmDelete(dataItem._id)}
             >
               Eliminar
             </MDTypography>

@@ -39,11 +39,17 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
     const fetchData = async () => {
       try {
         console.log('Fetching data...');
-
-        const response = await axiosInstance().get(`/packages/user/${user.username}`);
+        const response = await axiosInstance().get(`/packages/user/${user._id}`);
         const dataRows = response.data.reverse().map((dataItem) => ({
           id: <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id} />,
-          name: <MDTypography>{dataItem.name}</MDTypography>,
+          name: (
+            <MDBox>
+              <MDTypography>{dataItem.name}</MDTypography>
+              {user.__t != "Client" && user.__t != "Admin" && dataItem.admin?.entity_name &&
+                <MDTypography variant="caption">Creado por: {dataItem.admin.username} ({dataItem.admin.entity_name})</MDTypography>
+              }
+            </MDBox>
+          ),
           requirements: (
             <MDBox lineHeight={1}>
               <MDTypography variant="h5">{`${formatCurrency(dataItem.min_opening_amount)}`}</MDTypography>
@@ -91,7 +97,9 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
         });
       } catch (error) {
         console.error('Error fetching data:', error);
-        if(error.response.status == 401) showNotification("error", "Tu sesión ha expirado", "Vuelve a iniciar sesión para continuar")
+        if(error.response) {
+          if(error.response.status == 401) showNotification("error", "Tu sesión ha expirado", "Vuelve a iniciar sesión para continuar")
+        }
       } finally {
         updateLoading()
       }

@@ -60,6 +60,7 @@ import Transactions from "layouts/transactions/transactionsTable"
 import Tickets from "layouts/tickets/ticketsTable"
 import Admins from "layouts/admins/adminsTable"
 import Revenues from "layouts/revenues/revenuesTable"
+import ActivateAccount from "layouts/authentication/activate-account";
 
 // @mui icons
 import Icon from "@mui/material/Icon"; 
@@ -165,11 +166,38 @@ const routes = [
   // },
   {
     type: "collapse",
-    name: "Iniciar Sesión",
-    key: "iniciar sesión",
+    name: "Cerrar Sesión",
+    key: "cerrar sesión",
+    icon: <Icon fontSize="small">logout</Icon>,
+    route: "/logout",
+    component: <PrivateRoute element={<Logout />} />,
+    hidden: ["Client", "Admin", "Superuser"]
+  },
+  {
+    type: "collapse",
+    name: "Client Sign In",
+    key: "client-sign-in",
     icon: <Icon fontSize="small">login</Icon>,
-    route: "/authentication/sign-in",
-    component: <SignIn />,
+    route: "/client/sign-in/:admin_id",
+    component: <SignIn path="/auth/client" />,
+    hidden: ["Client", "Admin", "Superuser"]
+  },
+  {
+    type: "collapse",
+    name: "Admin Sign In",
+    key: "admin-sign-in",
+    icon: <Icon fontSize="small">login</Icon>,
+    route: "/admin/sign-in",
+    component: <SignIn path="/auth/admin" />,
+    hidden: ["Client", "Admin", "Superuser"]
+  },
+  {
+    type: "collapse",
+    name: "Superuser Sign In",
+    key: "superuser-sign-in",
+    icon: <Icon fontSize="small">login</Icon>,
+    route: "/superuser/sign-in",
+    component: <SignIn path="/auth/superuser" />,
     hidden: ["Client", "Admin", "Superuser"]
   },
   {
@@ -177,17 +205,17 @@ const routes = [
     name: "Registrarse",
     key: "registrarse",
     icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/authentication/sign-up",
+    route: "client/sign-up/:admin_id",
     component: <SignUp />,
     hidden: ["Client", "Admin", "Superuser"]
   },
   {
     type: "collapse",
-    name: "Cerrar Sesión",
-    key: "cerrar sesión",
-    icon: <Icon fontSize="small">logout</Icon>,
-    route: "/logout",
-    component: <PrivateRoute element={<Logout />} />,
+    name: "Activar Cuenta",
+    key: "activar",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "auth/activate-account/:token",
+    component: <ActivateAccount />,
     hidden: ["Client", "Admin", "Superuser"]
   },
 ];

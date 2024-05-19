@@ -123,6 +123,9 @@ export default function App() {
       return null;
     });
 
+    const { user, updateUser } = useUser()
+    console.log(user)
+
   return (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <IconContext.Provider value={{ color: "blue", className: "global-class-name" }}>
@@ -132,8 +135,8 @@ export default function App() {
               <>
                 <Sidenav
                   color={sidenavColor}
-                  brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-                  brandName="Investment Manager"
+                  brand={ user?.__t == "Client" ? user.admin.profile_picture : brandWhite}
+                  brandName={user?.__t == "Client" ? user.admin.entity_name : "Investment Manager" } 
                   routes={routes}
                   onMouseEnter={handleOnMouseEnter}
                   onMouseLeave={handleOnMouseLeave}

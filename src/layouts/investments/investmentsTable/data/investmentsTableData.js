@@ -98,7 +98,7 @@ export default function DataTable(showNotification, handleEditClick, updateLoadi
     const fetchData = async () => {
       try {
         console.log("fetching data...")
-        const response = await axiosInstance().get(`/investments/user/${user.username}`);
+        const response = await axiosInstance().get(`/investments/user/${user._id}`);
         const dataRows = mapDataToJSX(response.data);
 
         setTableData({

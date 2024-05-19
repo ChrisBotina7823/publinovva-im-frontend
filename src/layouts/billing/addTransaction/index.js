@@ -37,8 +37,8 @@ const DepositWithdrawForm = () => {
 
       const endpoint =
         transactionType === "deposit"
-          ? `movements/make-deposit/${user.username}`
-          : `movements/make-withdrawal/${user.username}`;
+          ? `movements/make-deposit/${user._id}`
+          : `movements/make-withdrawal/${user._id}`;
 
       const requestBody = {
         transaction_amount: transactionAmount,

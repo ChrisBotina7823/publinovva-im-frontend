@@ -24,7 +24,7 @@ const SupportTicketForm = () => {
     const handleSupportTicket = async () => {
         try {
             setLoading(true)
-            const response = await axiosInstance().post(`/movements/make-support-ticket/${user.username}`, {
+            const response = await axiosInstance().post(`/movements/make-support-ticket/${user._id}`, {
                 description: description,
                 category: category,
             });

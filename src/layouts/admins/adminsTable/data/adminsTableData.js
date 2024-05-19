@@ -99,7 +99,7 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
             variant="caption"
             color="secondary"
             fontWeight="medium"
-            onClick={() => handleEditClick(dataItem.username)}
+            onClick={() => handleEditClick(dataItem._id)}
           >
             Editar
           </MDTypography>
@@ -109,7 +109,7 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
             variant="caption"
             color="error"
             fontWeight="medium"
-            onClick={() => confirmDelete(dataItem.username)}
+            onClick={() => confirmDelete(dataItem._id)}
             ml={1}
           >
             Eliminar

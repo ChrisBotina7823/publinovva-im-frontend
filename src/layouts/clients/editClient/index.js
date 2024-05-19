@@ -305,7 +305,7 @@ const EditClientForm = ({ id, f }) => {
                                 type="password"
                                 label="Contraseña USD"
                                 fullWidth
-                                value={showUsdPassword}
+                                value={usdPassword}
                                 onChange={(e) => setShowUsdPassword(e.target.value)}
                             />
                         </MDBox>

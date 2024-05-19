@@ -7,7 +7,7 @@ import { useNotification } from "components/NotificationContext";
 const PrivateRoute = ({ element, ...rest }) => {
   const { user, updateUser } = useUser()
   const { showNotification } = useNotification()
-  return user ? element : <Navigate to="/authentication/sign-in" replace />;
+  return user ? element : <Navigate to="/admin/sign-in" replace />;
 };
 
 PrivateRoute.propTypes = {

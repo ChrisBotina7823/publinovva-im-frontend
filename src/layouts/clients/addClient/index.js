@@ -7,9 +7,10 @@ import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
 import { setOpenConfigurator, useMaterialUIController } from "context";
 import { useUser } from "context/userContext";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-const AddClientForm = () => {
+const AddClientForm = ({admin_id=null}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
@@ -18,7 +19,6 @@ const AddClientForm = () => {
     const [fullname, setFullname] = useState('');
     const [country, setCountry] = useState('');
     const [phone, setPhone] = useState('');
-    const [adminUsername, setAdminUsername] = useState('');
     const [iPassword, setIPassword] = useState('');
     const [usdPassword, setUsdPassword] = useState('');
 
@@ -29,12 +29,23 @@ const AddClientForm = () => {
 
     const [loading, setLoading] = useState()
 
+    const navigate = useNavigate();
+    const [ admin, setAdmin ] = useState(null)
+    if (admin_id) {
+        axiosInstance().get(`/styles/${admin_id}`)
+          .then(response => {
+            setAdmin(response.data)
+          })
+          .catch(error => {
+            navigate("/admin-signin")
+            console.error(error)
+            showNotification("error", "Administrador no encontrado", "No se encontró ningún administrador con la url proporcionada");
+          });
+      }
     const handleAddClient = async () => {
         try {
             setLoading(true)
-            if (user.__t == "Admin") setAdminUsername(user.username)
-            console.log(adminUsername)
-            const response = await axiosInstance().post('/clients', {
+            const response = await axiosInstance().post((admin_id ? '/auth/registration/' : '/clients'), {
                 username,
                 password,
                 email,
@@ -44,16 +55,25 @@ const AddClientForm = () => {
                 country,
                 phone,
                 account_state: "en revision",
-                admin_username: adminUsername,
+                admin_id: admin._id || user._id,
                 i_password: iPassword,
                 usd_password: usdPassword,
             });
-
-            setOpenConfigurator(dispatch, false);
-            showNotification("success", "Cliente añadido correctamente", `El ID del cliente es ${response.data._id}`);
+            if(admin_id) {
+                console.log(admin_id)
+                navigate("/client/sign-in/" + admin_id)
+                showNotification("success", "Cuenta creada", "Tu cuenta ha sido creada correctamente, ingresa a tu correo para activarla")
+            } else {    
+                setOpenConfigurator(dispatch, false);
+                showNotification("success", "Cliente añadido correctamente", `El ID del cliente es ${response.data._id}`);
+            }
         } catch (error) {
-            console.error('Error adding client:', error.response.data.error);
-            showNotification("error", "Error al añadir el cliente", error.response.data.error);
+            if(error.response) {
+                console.error('Error adding client:', error.response.data.error);
+                showNotification("error", "Error al añadir el cliente", error.response.data.error);
+            } else {
+                showNotification("error", "Error al añadir el cliente", "Por favor, intenta de nuevo")
+            }
         } finally {
             setLoading(false)
         }
@@ -69,8 +89,8 @@ const AddClientForm = () => {
             {loading ? (
                 <CircularProgress color="secondary" size={60} />
             ) : (
-                <>
-                    <MDBox mb={2}>
+                <Grid container>
+                    <Grid xl={6} px={2} mb={2}>
                         <MDInput
                             type="text"
                             label="Usuario"
@@ -78,8 +98,8 @@ const AddClientForm = () => {
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                         />
-                    </MDBox>
-                    <MDBox mb={2}>
+                    </Grid>
+                    <Grid xl={6} px={2} mb={2}>
                         <MDInput
                             type="password"
                             label="Contraseña"
@@ -87,8 +107,8 @@ const AddClientForm = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-                    </MDBox>
-                    <MDBox mb={2}>
+                    </Grid>
+                    <Grid xl={6} px={2} mb={2}>
                         <MDInput
                             type="email"
                             label="Correo Electrónico"
@@ -96,9 +116,9 @@ const AddClientForm = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
-                    </MDBox>
+                    </Grid>
 
-                    <MDBox mb={2}>
+                    <Grid xl={6} px={2} mb={2}>
                         <MDInput
                             type="text"
                             label="Nombre completo"
@@ -106,8 +126,8 @@ const AddClientForm = () => {
                             value={fullname}
                             onChange={(e) => setFullname(e.target.value)}
                         />
-                    </MDBox>
-                    <MDBox mb={2}>
+                    </Grid>
+                    <Grid xl={6} px={2} mb={2}>
                         <MDInput
                             type="text"
                             label="País"
@@ -115,8 +135,8 @@ const AddClientForm = () => {
                             value={country}
                             onChange={(e) => setCountry(e.target.value)}
                         />
-                    </MDBox>
-                    <MDBox mb={2}>
+                    </Grid>
+                    <Grid xl={6} px={2} mb={2}>
                         <MDInput
                             type="text"
                             label="Teléfono"
@@ -124,9 +144,9 @@ const AddClientForm = () => {
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                         />
-                    </MDBox>
+                    </Grid>
 
-                    <MDBox mb={2}>
+                    <Grid xl={6} px={2} mb={2}>
                         <MDInput
                             type="password"
                             label="Contraseña Billetera USDT (trc20)"
@@ -134,8 +154,8 @@ const AddClientForm = () => {
                             value={iPassword}
                             onChange={(e) => setIPassword(e.target.value)}
                         />
-                    </MDBox>
-                    <MDBox mb={2}>
+                    </Grid>
+                    <Grid xl={6} px={2} mb={2}>
                         <MDInput
                             type="password"
                             label="Contraseña Billetera de Comercio"
@@ -143,10 +163,10 @@ const AddClientForm = () => {
                             value={usdPassword}
                             onChange={(e) => setUsdPassword(e.target.value)}
                         />
-                    </MDBox>
+                    </Grid>
 
-                    {!user.__t &&
-                        <MDBox mb={2}>
+                    {!admin_id && (user && !user.__t) &&
+                        <Grid xl={6} px={2} mb={2}>
                             <MDInput
                                 type="text"
                                 label="Username del Administrador"
@@ -154,15 +174,15 @@ const AddClientForm = () => {
                                 value={adminUsername}
                                 onChange={(e) => setAdminUsername(e.target.value)}
                             />
-                        </MDBox>
+                        </Grid>
                     }
 
-                    <MDBox mt={4} mb={1}>
+                    <MDBox mx="auto" mt={2} mb={1}>
                         <MDButton variant="gradient" color="info" fullWidth onClick={handleAddClient}>
-                            Añadir Cliente
+                            {admin_id ? "Registrarse" : "Añadir Cliente"} 
                         </MDButton>
                     </MDBox>
-                </>
+                </Grid>
             )}
         </MDBox>
 

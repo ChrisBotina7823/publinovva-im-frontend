@@ -31,7 +31,7 @@ const InvestmentRequestForm = () => {
     useEffect(() => {
         const fetchPackages = async () => {
             try {
-                const response = await axiosInstance().get(`/packages/user/${user.username}`);
+                const response = await axiosInstance().get(`/packages/user/${user._id}`);
                 setPackages(response.data);
             } catch (error) {
                 console.error('Error fetching packages:', error.response.data.error);
@@ -44,7 +44,7 @@ const InvestmentRequestForm = () => {
     const handleInvestmentRequest = async () => {
         try {
             
-            const response = await axiosInstance().post(`/investments/${user.username}`, {
+            const response = await axiosInstance().post(`/investments/${user._id}`, {
                 package_id: selectedPackage,
                 end_date: endDate.format("YYYY-MM-DD"),
                 inv_amount: invAmount,

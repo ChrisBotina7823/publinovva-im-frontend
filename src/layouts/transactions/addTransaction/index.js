@@ -31,7 +31,7 @@ const WalletTransactionForm = () => {
         try {
             setLoading(true)
             const dest = transactionType;
-            const response = await axiosInstance().post(`/movements/wallet-transactions/${user.username}/${dest}`, {
+            const response = await axiosInstance().post(`/movements/wallet-transactions/${user._id}/${dest}`, {
                 transaction_amount: transactionAmount,
                 wallet_password: walletPassword,
             });

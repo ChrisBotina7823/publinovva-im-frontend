@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -31,84 +31,61 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 
 // Images
 import bgImage from "assets/images/bg-sign-up-cover.jpeg";
+import AddClientForm from "layouts/clients/addClient";
+import { useState } from "react";
+import axiosInstance from "axiosInstance";
+import { Grid } from "@mui/material";
+import { useNotification } from "components/NotificationContext";
 
 function Cover() {
+  const { admin_id } = useParams()
+  const [ admin, setAdmin ] = useState(null)
+  const navigate = useNavigate();
+  const { showNotification } = useNotification()
+  if (admin_id) {
+    axiosInstance().get(`/styles/${admin_id}`)
+      .then(response => {
+        setAdmin(response.data)
+      })
+      .catch(error => {
+        navigate("/admin-signin")
+        console.error(error)
+        showNotification("error", "Administrador no encontrado", "No se encontró ningún administrador con la url proporcionada");
+      });
+  }
   return (
     <CoverLayout image={bgImage}>
-      <Card>
-        <MDBox
-          variant="gradient"
-          bgColor="info"
-          borderRadius="lg"
-          coloredShadow="success"
-          mx={2}
-          mt={-3}
-          p={3}
-          mb={1}
-          textAlign="center"
-        >
-          <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Join us today
-          </MDTypography>
-          <MDTypography display="block" variant="button" color="white" my={1}>
-            Enter your email and password to register
-          </MDTypography>
-        </MDBox>
-        <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
-            <MDBox mb={2}>
-              <MDInput type="text" label="Name" variant="standard" fullWidth />
-            </MDBox>
-            <MDBox mb={2}>
-              <MDInput type="email" label="Email" variant="standard" fullWidth />
-            </MDBox>
-            <MDBox mb={2}>
-              <MDInput type="password" label="Password" variant="standard" fullWidth />
-            </MDBox>
-            <MDBox display="flex" alignItems="center" ml={-1}>
-              <Checkbox />
-              <MDTypography
-                variant="button"
-                fontWeight="regular"
-                color="text"
-                sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
-              >
-                &nbsp;&nbsp;I agree the&nbsp;
-              </MDTypography>
-              <MDTypography
-                component="a"
-                href="#"
-                variant="button"
-                fontWeight="bold"
-                color="info"
-                textGradient
-              >
-                Terms and Conditions
-              </MDTypography>
-            </MDBox>
-            <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
-                sign in
-              </MDButton>
-            </MDBox>
-            <MDBox mt={3} mb={1} textAlign="center">
-              <MDTypography variant="button" color="text">
-                Already have an account?{" "}
-                <MDTypography
-                  component={Link}
-                  to="/authentication/sign-in"
-                  variant="button"
-                  color="info"
-                  fontWeight="medium"
-                  textGradient
-                >
-                  Sign In
-                </MDTypography>
-              </MDTypography>
-            </MDBox>
+      <Grid item xs={12} xm={8}>
+        <Card>
+          <MDBox
+            variant="gradient"
+            bgColor="info"
+            borderRadius="lg"
+            coloredShadow="success"
+            mx={2}
+            mt={-3}
+            p={3}
+            mb={1}
+            textAlign="center"
+          >
+            { admin?.profile_picture && (
+              <MDBox height={100} borderRadius="10px" id="logo-container" component="img" crossOrigin="anonymous" src={admin.profile_picture || ""} />
+            )}
+            {admin?.entity_name && (
+              <MDTypography variant="h6" fontWeight="bold" color="white">{admin?.entity_name}</MDTypography>
+            )}
+            <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
+              Registrarse
+            </MDTypography>
+            <MDTypography display="block" variant="button" color="white" my={1}>
+              Ingresa tu información para registrarte
+            </MDTypography>
           </MDBox>
-        </MDBox>
-      </Card>
+          <MDBox pt={4} pb={3} px={3}>
+            <AddClientForm admin_id={admin_id}></AddClientForm>
+          </MDBox>
+        </Card>
+      </Grid>
     </CoverLayout>
   );
 }

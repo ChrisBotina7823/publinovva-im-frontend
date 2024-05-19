@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 import { useState } from "react";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -49,23 +49,37 @@ import { useNotification } from "components/NotificationContext";
 import { useUser } from "context/userContext";
 import { CircularProgress } from "@mui/material";
 
-function Basic() {
+function Basic({path="/auth/superuser"}) {
   const { user, updateUser } = useUser()
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
   const { showNotification } = useNotification()
-
+  const { admin_id } = useParams();
+  if(path.includes("client") && !admin_id) {
+    navigate("/auth/admin")
+  }
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
-
+  const [ admin, setAdmin ] = useState(null)
   const [loading, setLoading] = useState(false)
+
+  if (admin_id) {
+    axiosInstance().get(`/styles/${admin_id}`)
+      .then(response => {
+        setAdmin(response.data)
+      })
+      .catch(error => {
+        navigate("/admin-signin")
+        console.error(error)
+        showNotification("error", "Administrador no encontrado", "No se encontró ningún administrador con la url proporcionada");
+      });
+  }
 
   const handleSignIn = async () => {
     try {
-
       setLoading(true)
-      const response = await axiosInstance().post("/auth", {
+      const response = await axiosInstance().post(`${path}/${admin?._id.toString() || ""}`, {
         username,
         password
       })
@@ -75,13 +89,14 @@ function Basic() {
       navigate("/dashboard");
       showNotification("success", "Inicio de sesión exitoso", `Bienvenido, ${newUser.username} `);
     } catch (error) {
-      console.error(error.response.data.error);
-      showNotification("error", "Error al iniciar sesión", error.response.data.error);
+      console.error(error)
+      if(error.response) {
+        showNotification("error", "Error al iniciar sesión", error.response.data.error)
+      }
     } finally {
       setLoading(false)
     }
   };
-
   return (
     <BasicLayout image={bgImage}>
       <Card>
@@ -97,9 +112,22 @@ function Basic() {
           textAlign="center"
         >
           <MDBox>
+            { admin?.profile_picture && (
+                <MDBox height={100} borderRadius="10px" id="logo-container" component="img" crossOrigin="anonymous" src={admin.profile_picture || ""} />
+              )
+             }
             <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
               Iniciar Sesión
             </MDTypography>
+            { path.includes("admin") && (
+              <MDTypography variant="h6" fontWeight="bold" color="white">Administradores</MDTypography>
+            )}
+            { path.includes("superuser") && (
+              <MDTypography variant="h6" fontWeight="bold" color="white">Superusuario</MDTypography>
+            )}
+            {admin?.entity_name && (
+              <MDTypography variant="h6" fontWeight="bold" color="white">{admin?.entity_name}</MDTypography>
+            )}
             <MDTypography color="white" variant="caption">Investment Manager</MDTypography>
           </MDBox>
           <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>

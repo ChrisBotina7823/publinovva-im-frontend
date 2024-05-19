@@ -49,7 +49,7 @@ function Overview() {
   const switchEdit = () => setIsEditing(!isEditing)
 
   const userInfo = {
-    "Username": user.username,
+    "Username": user._id,
     "Correo Electrónico": user.email
   };
 
@@ -63,6 +63,7 @@ function Overview() {
     userInfo["Nombre completo"] = user.fullname;
     userInfo["Teléfono"] = user.phone;
     userInfo["Dirección Billetera USDT (trc20)"] = user.usd_wallet.address || user.usd_wallet._id
+    userInfo["País"] = user.country
   }
 
   return (
@@ -79,7 +80,7 @@ function Overview() {
             />
            }
            {isEditing && 
-            <EditUserForm id={user.username} f={setIsEditing} />
+            <EditUserForm id={user._id} f={setIsEditing} />
            }
         </MDBox>
       </Header>
