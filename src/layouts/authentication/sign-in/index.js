@@ -57,6 +57,10 @@ function Basic({path="/auth/superuser"}) {
   const navigate = useNavigate();
   const { showNotification } = useNotification()
   const { admin_id } = useParams();
+
+  const [loginCode, setLoginCode] = useState(null);
+  const [view, setView] = useState('form');
+
   if(path.includes("client") && !admin_id) {
     navigate("/auth/admin")
   }
@@ -81,13 +85,22 @@ function Basic({path="/auth/superuser"}) {
       setLoading(true)
       const response = await axiosInstance().post(`${path}/${admin?._id.toString() || ""}`, {
         username,
-        password
+        password,
+        login_code: view == "code" ? loginCode : ""
       })
-      const token = response.data.token;
-      const newUser = response.data.user;
-      await updateUser(newUser, token)
-      navigate("/dashboard");
-      showNotification("success", "Inicio de sesión exitoso", `Bienvenido, ${newUser.username} `);
+      
+      if(response.data.login_code) {
+        // setLoginCode(response.data.login_code)
+        showNotification("success", "Código de verificación enviado", "Se ha enviado un código de verificación a su correo electrónico")
+        setView("code")
+      } else {
+        const token = response.data.token;
+        const newUser = response.data.user;
+        await updateUser(newUser, token)
+        navigate("/dashboard");
+        showNotification("success", "Inicio de sesión exitoso", `Bienvenido, ${newUser.username} `);
+      }
+
     } catch (error) {
       console.error(error)
       if(error.response) {
@@ -150,36 +163,39 @@ function Basic({path="/auth/superuser"}) {
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form" textAlign="center">
-            <MDBox mb={2}>
-              <MDInput
-                type="text"
-                label="Usuario"
-                fullWidth
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </MDBox>
-            <MDBox mb={2}>
-              <MDInput
-                type="password"
-                label="Contraseña"
-                fullWidth
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </MDBox>
-            {/* <MDBox display="flex" alignItems="center" ml={-1}>
-              <Switch checked={rememberMe} onChange={handleSetRememberMe} />
-              <MDTypography
-                variant="button"
-                fontWeight="regular"
-                color="text"
-                onClick={handleSetRememberMe}
-                sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
-              >
-                &nbsp;&nbsp;Remember me
-              </MDTypography>
-            </MDBox> */}
+            {view === "code" ? (
+              <MDBox mb={2}>
+                <MDInput
+                  type="text"
+                  label="Código de verificación"
+                  fullWidth
+                  value={loginCode}
+                  onChange={(e) => setLoginCode(e.target.value)}
+                />
+                </MDBox>
+              ) : (
+                <>
+                  <MDBox mb={2}>
+                    <MDInput
+                      type="text"
+                      label="Usuario"
+                      fullWidth
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                    />
+                  </MDBox>
+                  <MDBox mb={2}>
+                    <MDInput
+                      type="password"
+                      label="Contraseña"
+                      fullWidth
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      />
+                  </MDBox>
+                </>
+              )}
+
             {loading ? (
               <CircularProgress color="secondary" />
             ) : (
@@ -188,25 +204,14 @@ function Basic({path="/auth/superuser"}) {
                   <MDButton variant="gradient" color="info" autoFocus fullWidth onClick={handleSignIn}>
                     Iniciar Sesión
                   </MDButton>
+                  { view === "code" && (
+                    <MDButton variant="error" color="error" fullWidth onClick={() => setView("form")}>
+                      Cancelar
+                    </MDButton>
+                  )}
                 </MDBox>
               </>
             )}
-
-            {/* <MDBox mt={3} mb={1} textAlign="center">
-              <MDTypography variant="button" color="text">
-                Don&apos;t have an account?{" "}
-                <MDTypography
-                  component={Link}
-                  to="/authentication/sign-up"
-                  variant="button"
-                  color="info"
-                  fontWeight="medium"
-                  textGradient
-                >
-                  Sign up
-                </MDTypography>
-              </MDTypography>
-            </MDBox> */}
           </MDBox>
         </MDBox>
       </Card>
