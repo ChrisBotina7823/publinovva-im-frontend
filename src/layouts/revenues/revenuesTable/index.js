@@ -28,7 +28,7 @@ import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 import RequestInvestmentForm from "layouts/revenues/requestInvestment"
 import { useMaterialUIController, setOpenConfigurator } from "context";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNotification } from "components/NotificationContext";
 import Configurator from "components/Configurator";
 import ConfiguratorButton from "components/ConfiguratorButton";
@@ -37,6 +37,9 @@ import ConfiguratorButton from "components/ConfiguratorButton";
 import revenuesTableData from "layouts/revenues/revenuesTable/data/revenuesTableData";
 import { useUser } from "context/userContext";
 import { CircularProgress } from "@mui/material";
+import { formatCurrency } from "utils";
+import DefaultLineChart from "examples/Charts/LineCharts/DefaultLineChart";
+import axiosInstance from "axiosInstance";
 
 function Tables() {
 
@@ -67,14 +70,41 @@ function Tables() {
 
   const { columns, rows } = revenuesTableData(showNotification, updateLoading);
 
+  const [ sampleChart, setSampleChart ] = useState(null)
+  const [ totalRevenue, setTotalRevenue ] = useState(0)
+  const [ totalInvested, setTotalInvested ] = useState(0)
+
+  try {
+    useEffect(() => {
+      axiosInstance().get(`/investments/report/${user._id}`)
+        .then(response => {
+          setTotalInvested(response.data.total_invested)
+          setTotalRevenue(response.data.total_revenue)
+          console.log(response.data.chart)
+          setSampleChart(response.data.chart)
+        })
+    }, [])
+  } catch(err) {
+    console.log(err)
+    if(err.response) {
+      showNotification("error", "Error al cargar los datos", err.response.data.message)
+    }
+    showNotification("error", "Error al cargar los datos", "Ocurrió un error al cargar los datos de las inversiones")
+  }
+
+
+  // const sampleChart = {
+  //   labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  //   datasets: [{ label: "Mobile apps", data: [50, 40, 300, 320, 500, 350, 200, 230, 500] }],
+  // }
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
-          <Grid item xs={12}>
-            <Card>
+          <Grid item xs={12} md={6}>
+            <MDBox>
               <MDBox
                 mx={2}
                 mt={-3}
@@ -87,6 +117,53 @@ function Tables() {
               >
                 <MDTypography variant="h6" color="white">
                   Ingresos
+                </MDTypography>
+              </MDBox>
+            </MDBox>
+            <MDBox px={2} pt={3} textAlign="center">
+              {loading ? (
+                    <CircularProgress color="secondary" size={60} />
+                ) : (
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} md={6}>
+                      <Card>
+                        <MDBox p={2}>
+                          <MDTypography variant="h3">{formatCurrency(totalInvested)}</MDTypography>
+                          <MDTypography variant="h6">Total Invertido</MDTypography>
+                        </MDBox>
+                      </Card>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Card>
+                        <MDBox p={2}>
+                          <MDTypography variant="h3">{formatCurrency(totalRevenue)}</MDTypography>
+                          <MDTypography variant="h6">Ingresos totales</MDTypography>
+                        </MDBox>
+                      </Card>
+                    </Grid>
+                    { sampleChart && (
+                      <Grid item xs={12} md={12}>
+                        <DefaultLineChart icon="money" title="Ingresos Semanales" description="Un resumen de tus ingresos de los últimos 7 días"  chart={ sampleChart } />
+                      </Grid>                    
+                    )}
+                  </Grid>
+                )}
+              </MDBox>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Card>
+              <MDBox
+                mx={2}
+                mt={-3}
+                py={3}
+                px={2}
+                variant="gradient"
+                bgColor="info"
+                borderRadius="lg"
+                coloredShadow="info"
+              >
+                <MDTypography variant="h6" color="white">
+                  Inversiones
                 </MDTypography>
               </MDBox>
               <MDBox pt={3} textAlign="center">

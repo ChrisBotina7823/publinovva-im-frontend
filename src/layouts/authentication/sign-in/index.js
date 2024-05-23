@@ -90,7 +90,7 @@ function Basic({path="/auth/superuser"}) {
       })
       
       if(response.data.login_code) {
-        // setLoginCode(response.data.login_code)
+        setLoginCode(response.data.login_code)
         showNotification("success", "Código de verificación enviado", "Se ha enviado un código de verificación a su correo electrónico")
         setView("code")
       } else {

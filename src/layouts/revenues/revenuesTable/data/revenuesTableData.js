@@ -13,31 +13,45 @@ import { useUser } from 'context/userContext';
 import MDCopyable from 'components/MDCopyable';
 import { useNotification } from 'components/NotificationContext';
 import { formatCurrency } from 'utils';
+import MDBadge from 'components/MDBadge';
+import MDButton from 'components/MDButton';
 
-export default function DataTable(showNotification, updateLoading) {
+export default function DataTable(showNotification, updateLoading, handleDetailsClick) {
 
   const { user } = useUser()
 
   const [tableData, setTableData] = useState({
     columns: [
-      { Header: 'Inversión', accessor: 'investment', width: '30%', align: 'center' },
-      { Header: 'Fecha', accessor: 'date', width: '10%', align: 'center' },
-      { Header: 'Días de Inversión', accessor: 'daysDiff', width: '30%', align: 'center' },
-      { Header: 'Ingreso', accessor: 'revenue_amount', width: '30%', align: 'center' },
+      { Header: 'Información', accessor: 'id', width: '15%', align: 'center' },
+      { Header: 'Monto invertido', accessor: 'conditions', width: '20%', align: 'center' },
+      { Header: 'Acciones', accessor: 'status', width: '15%', align: 'center' },
     ],
     rows: [],
   });
 
   const mapDataToJSX = (rows) => {
+    console.log("rows", rows[0].actual_start_date)
     return rows.reverse().map((dataItem) => ({
-      investment: <MDCopyable variant="thin" vl={dataItem.investment} />,
-      date: <span>{(new Date(dataItem.date)).toLocaleDateString()}</span>,
-      daysDiff: <span>{dataItem.days_diff}</span>,
-      revenue_amount: (
-        <MDTypography variant="h5">
-          {`${formatCurrency(dataItem.revenue_amount)}`}
-        </MDTypography>
+      id: (
+        <MDBox>
+          <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id} />
+          <MDTypography variant="body2">{(new Date(dataItem.actual_start_date || dataItem.start_date)).toLocaleDateString()} {" - "} {(new Date(dataItem.end_date)).toLocaleDateString()} </MDTypography>
+          <MDBadge color="error" variant="gradient" badgeContent={dataItem.state}/>
+        </MDBox>
       ),
+      conditions: (
+        <>
+          <MDTypography>
+            {`${formatCurrency(dataItem.inv_amount)}`}
+          </MDTypography>
+          <MDTypography variant="body2"> {dataItem.package ? (`${dataItem.package.revenue_percentage}% cada ${dataItem.package.revenue_freq} día${dataItem.package.revenue_freq == 1 ? "" : "s"}`) : ("Sin asignar")}</MDTypography>
+        </>
+      ),
+      status: (
+        <>
+          <MDButton size="small" onClick={() => handleDetailsClick} color="secondary" fullWidth>Detalles</MDButton>
+        </>
+      )
     }));
   }
 
@@ -45,7 +59,7 @@ export default function DataTable(showNotification, updateLoading) {
     const fetchData = async () => {
       try {
         console.log("fetching data...")
-        const response = await axiosInstance().get(`/investments/revenues/${user._id}`);
+        const response = await axiosInstance().get(`/investments/user/${user._id}`);
         
         const dataRows = mapDataToJSX(response.data)
   
