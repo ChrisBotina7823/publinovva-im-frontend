@@ -51,11 +51,19 @@ const DepositWithdrawForm = () => {
       const response = await axiosInstance().post(endpoint, requestBody);
 
       setOpenConfigurator(dispatch, false);
-      showNotification(
-        "success",
-        `Solicitud de ${transactionType === "deposit" ? "Depósito" : "Retiro"} exitoso`,
-        `Se le notificará a tu administración para que tu solicitud sea procesada`
-      );
+      if(transactionType === "deposit") {
+        showNotification(
+          "success",
+          `Solicitud de depósito exitosa`,
+          `Para continuar con el proceso, realiza la transferencia a la cuenta del administrador`
+        );        
+      } else {
+        showNotification(
+          "success",
+          `Solicitud de retiro exitosa`,
+          `Se le notificará a tu administrador para que realice la transferencia a tu cuenta`
+        );    
+      }
     } catch (error) {
       console.error(`Error during ${transactionType} transaction:`, error.response.data.error);
       showNotification("error", `Error durante ${transactionType} transacción`, error.response.data.error);
