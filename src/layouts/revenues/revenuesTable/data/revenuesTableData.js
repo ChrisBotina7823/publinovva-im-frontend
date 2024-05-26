@@ -55,7 +55,9 @@ export default function DataTable(showNotification, updateLoading, handleInvestm
       ),
       status: (
         <>
-          <MDButton size="small" onClick={() => handleInvestmentDetail(dataItem._id)} color="secondary" fullWidth>Detalles</MDButton>
+          {dataItem.state != "pendiente" && (
+            <MDButton size="small" onClick={() => handleInvestmentDetail(dataItem._id)} color="secondary" fullWidth>Ingresos</MDButton>
+          )}
         </>
       )
     }));

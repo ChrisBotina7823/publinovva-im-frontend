@@ -83,7 +83,7 @@ function MasterCard({ color, number, title, holder, expires, logo, icon, isFontA
               {!isFontAwesome && <Icon fontSize="2rem" style={{"color":"white"}} >{icon}</Icon>}
               <MDTypography style={{"marginLeft":"10px"}} variant="button" color="white" fontWeight="regular" opacity={0.8}>{title}</MDTypography>
             </MDBox>
-            <MDTypography style={{cursor:"pointer"}} onClick={ handleDepositCopy } variant="h5" color="white" fontWeight="medium" sx={{ mt: 2, mb: 2, pb: 1 }}>
+            <MDTypography style={{cursor:"pointer", wordBreak: 'break-all'}} onClick={ handleDepositCopy } variant="h5" color="white" fontWeight="medium" sx={{ mt: 2, mb: 2, pb: 1 }}>
               {number}
               {/* {num1}&nbsp;&nbsp;&nbsp;{num2}&nbsp;&nbsp;&nbsp;{num3}&nbsp;&nbsp;&nbsp;{num4} */}
               <Icon sz={{ml:10}} >copy</Icon>
@@ -109,7 +109,8 @@ function MasterCard({ color, number, title, holder, expires, logo, icon, isFontA
                   mt={1}
                   borderRadius={"5px"}
                   crossOrigin="anonymous"
-                  height={150}
+                  height="auto"
+                  width="100%"
                 />
               )}
           </Grid>

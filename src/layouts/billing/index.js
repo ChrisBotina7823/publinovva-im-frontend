@@ -54,6 +54,7 @@ function Billing() {
   };
 
   useEffect(() => {
+    if(!admin) return
     const currencies = ["COINBASE:BTCUSDT", "COINBASE:ETHUSDT", "OANDA:EURUSD"]
     for(const currency of currencies) {
       const script = document.createElement('script');
@@ -86,11 +87,41 @@ function Billing() {
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox mt={4} mx={4}>
-        <MDBox mb={2}>
-          <MDTypography variant="body2">Podría interesarte:</MDTypography>
-          <div className="livecoinwatch-widget-5" lcw-base="USD" lcw-color-tx="#999999" lcw-marquee-1="coins" lcw-marquee-2="movers" lcw-marquee-items="10"></div>
-        </MDBox>
+        {admin && (
+          <MDBox mb={2}>
+            <MDTypography variant="body2">Podría interesarte:</MDTypography>
+            <div className="livecoinwatch-widget-5" lcw-base="USD" lcw-color-tx="#999999" lcw-marquee-1="coins" lcw-marquee-2="movers" lcw-marquee-items="10"></div>
+          </MDBox>
+        )}
         <Grid container spacing={3} item xs={12} lg={12} alignItems="flex-start">
+        {user.usd_wallet && user.i_wallet &&
+              <Grid container spacing={3} item xs={12} xl={4} alignItems="flex-start">
+                <Grid item xs={12} xl={12}>
+                  <Card >
+                    <MDBox p={2} mx={3}>
+                      <MDTypography my={0} variant="h5" fontWeight="medium" textTransform="capitalize">Tus Billeteras Activas</MDTypography>
+                      <MDTypography variant="body2" color="text" fontWeight="regular">{user.username}</MDTypography>
+                    </MDBox>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={6} xl={12}>
+                  <DefaultInfoCard
+                    icon="wallet"
+                    title="Tu Billetera USDT (trc20)"
+                    description={user.usd_wallet.address || user.usd_wallet._id }
+                    value={`${formatCurrency(user.usd_wallet.available_amount)}`}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6} xl={12}>
+                  <DefaultInfoCard
+                    icon="wallet"
+                    title="Tu Billetera de Comercio"
+                    description={user.i_wallet._id}
+                    value={`${formatCurrency(user.i_wallet.available_amount)}`}
+                  />
+                </Grid>
+              </Grid>
+            }
             { admin &&
               <Grid container  spacing={3} item xs={12} xl={8}>
                 <Grid item xs={12} xl={12}>
@@ -140,34 +171,6 @@ function Billing() {
                     </MDBox>
                   </Grid>
                   
-                </Grid>
-              </Grid>
-            }
-            {user.usd_wallet && user.i_wallet &&
-              <Grid container spacing={3} item xs={12} xl={4} alignItems="flex-start">
-                <Grid item xs={12} xl={12}>
-                  <Card >
-                    <MDBox p={2} mx={3}>
-                      <MDTypography my={0} variant="h5" fontWeight="medium" textTransform="capitalize">Tus Billeteras Activas</MDTypography>
-                      <MDTypography variant="body2" color="text" fontWeight="regular">{user.username}</MDTypography>
-                    </MDBox>
-                  </Card>
-                </Grid>
-                <Grid item xs={12} xl={12}>
-                  <DefaultInfoCard
-                    icon="wallet"
-                    title="Tu Billetera USDT (trc20)"
-                    description={user.usd_wallet.address || user.usd_wallet._id }
-                    value={`${formatCurrency(user.usd_wallet.available_amount)}`}
-                  />
-                </Grid>
-                <Grid item xs={12} xl={12}>
-                  <DefaultInfoCard
-                    icon="wallet"
-                    title="Tu Billetera de Comercio"
-                    description={user.i_wallet._id}
-                    value={`${formatCurrency(user.i_wallet.available_amount)}`}
-                  />
                 </Grid>
               </Grid>
             }
