@@ -3,7 +3,7 @@ import ConfiguratorButton from "components/ConfiguratorButton";
 import { useMaterialUIController } from "context";
 import { setOpenConfigurator } from "context";
 import { useUser } from "context/userContext";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import AddTransaction from "layouts/billing/addTransaction";
 import RequestInvestmentForm from "layouts/revenues/requestInvestment"
@@ -11,6 +11,7 @@ import AddWalletTransaction from 'layouts/transactions/addTransaction'
 import AddTicket from 'layouts/tickets/addTicket'
 import AddPackage from 'layouts/packages/addPackage'
 import AddClient from 'layouts/clients/addClient'; // Updated path
+import AddAdmin from 'layouts/admins/addAdmin'; // Reemplaza con el componente adecuado
 
 
 import MDButton from "components/MDButton";
@@ -20,15 +21,14 @@ import { CSSTransition } from "react-transition-group";
 import 'index.css'
 import { faChartLine, faMoneyBillTransfer, faReceipt, faTicket } from "@fortawesome/free-solid-svg-icons";
 import { TransitionButton } from "./transitionButton";
+import ConfiguratorContext from "./configuratorContext";
 
 export function ConfiguratorManager() {
-  
+  const { customContent, setCustomContent, customTitle, setCustomTitle, customDescription, setCustomDescription } = useContext(ConfiguratorContext);
   // Global configurations for the sidebar
   const [controller, dispatch] = useMaterialUIController();
   const { openConfigurator } = controller;
-  const [customContent, setCustomContent] = useState(null);
-  const [customTitle, setCustomTitle] = useState(null);
-  const [customDescription, setCustomDescription] = useState(null);
+
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
 
   // User context
@@ -84,7 +84,15 @@ export function ConfiguratorManager() {
       setCustomTitle("Añadir cliente")
       setCustomDescription("Ingresa la información del cliente")
     }
-    
+
+    const handleAddAdminClick = () => {
+      handleConfiguratorOpen();
+      setCustomContent(
+        <AddAdmin /> // Reemplaza con el componente adecuado
+      );
+      setCustomTitle("Añadir administrador")
+      setCustomDescription("Ingresa la información del administrador")
+    };
 
   // TOGGLE 
 
@@ -138,6 +146,11 @@ export function ConfiguratorManager() {
             </TransitionButton>
           </>
         }
+        { (user && !user.__t) && (
+          <TransitionButton visible={isButtonsVisible}>
+            <ConfiguratorButton icon="add" pos={6} f={handleAddAdminClick} vl="Añadir administrador" />
+          </TransitionButton>
+        ) }
       </>
     </>
   )

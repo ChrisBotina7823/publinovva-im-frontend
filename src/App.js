@@ -66,6 +66,7 @@ import ConfiguratorButton from "components/ConfiguratorButton";
 import Configurator from "components/Configurator";
 import AddTransaction from "layouts/billing/addTransaction";
 import { ConfiguratorManager } from "configurator";
+import { ConfiguratorProvider } from "configurator/configuratorContext";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -130,31 +131,38 @@ export default function App() {
 
     const { user, updateUser } = useUser()
 
+    const [customContent, setCustomContent] = useState(null);
+    const [customTitle, setCustomTitle] = useState(null);
+    const [customDescription, setCustomDescription] = useState(null);
+
+    const configuratorProps = {customContent, setCustomContent, customTitle, setCustomTitle, customDescription, setCustomDescription}
+
   return (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <IconContext.Provider value={{ color: "blue", className: "global-class-name" }}>
-        <ConfirmProvider defaultOptions={{ confirmationButtonProps: { autoFocus: true }, confirmationText: "Aceptar", cancellationText: "Cancelar" }}>
-            <CssBaseline />
-            {layout === "dashboard" && (
-              <>
-                <Sidenav
-                  color={sidenavColor}
-                  brand={ user?.__t == "Client" ? user.admin.profile_picture : brandWhite}
-                  brandName={user?.__t == "Client" ? user.admin.entity_name : "Investment Manager" } 
-                  routes={routes}
-                  onMouseEnter={handleOnMouseEnter}
-                  onMouseLeave={handleOnMouseLeave}
-                />
-              </>
-            )}
-            <Routes>
-              {getRoutes(routes)}
-              <Route path="*" element={<PrivateRoute element={<Navigate to="/dashboard" />} ></PrivateRoute> } />
-            </Routes>
-            <Notification />
-            <ConfiguratorManager/>
-
-        </ConfirmProvider>
+        <ConfiguratorProvider>
+          <ConfirmProvider defaultOptions={{ confirmationButtonProps: { autoFocus: true }, confirmationText: "Aceptar", cancellationText: "Cancelar" }}>
+              <CssBaseline />
+              {layout === "dashboard" && (
+                <>
+                  <Sidenav
+                    color={sidenavColor}
+                    brand={ user?.__t == "Client" ? user.admin.profile_picture : brandWhite}
+                    brandName={user?.__t == "Client" ? user.admin.entity_name : "Investment Manager" } 
+                    routes={routes}
+                    onMouseEnter={handleOnMouseEnter}
+                    onMouseLeave={handleOnMouseLeave}
+                  />
+                </>
+              )}
+              <Routes>
+                {getRoutes(routes)}
+                <Route path="*" element={<PrivateRoute element={<Navigate to="/dashboard" />} ></PrivateRoute> } />
+              </Routes>
+              <Notification />
+              <ConfiguratorManager/>
+          </ConfirmProvider>
+        </ConfiguratorProvider>
       </IconContext.Provider>;
     </ThemeProvider>
   );

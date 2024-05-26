@@ -26,7 +26,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Configurator from "components/Configurator";
 import ConfiguratorButton from "components/ConfiguratorButton";
 
@@ -39,6 +39,7 @@ import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
 import { useUser } from "context/userContext";
 import { CircularProgress } from "@mui/material";
+import ConfiguratorContext from "configurator/configuratorContext";
 
 function Tables() {
 
@@ -46,14 +47,13 @@ function Tables() {
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, true);
 
   
-  const [customContent, setCustomContent] = useState(null);
-  const [customTitle, setCustomTitle] = useState(null);
-  const [customDescription, setCustomDescription] = useState(null);
+  const { customContent, setCustomContent, customTitle, setCustomTitle, customDescription, setCustomDescription } = useContext(ConfiguratorContext);
   const { user } = useUser()
   const { showNotification } = useNotification();
   
 
     const handleEditClick = (id) => {
+      setOpenConfigurator(dispatch, false);
       handleConfiguratorOpen()
       setCustomContent(
         <EditClient id={id} />

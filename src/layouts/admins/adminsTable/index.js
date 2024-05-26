@@ -11,40 +11,32 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Configurator from "components/Configurator";
 import ConfiguratorButton from "components/ConfiguratorButton";
 
 // Data
 import adminsTableData from "layouts/admins/adminsTable/data/adminsTableData"; // Updated path
 import { setOpenConfigurator, useMaterialUIController } from "context";
-import AddAdmin from 'layouts/admins/addAdmin'; // Reemplaza con el componente adecuado
 import EditAdmin from 'layouts/admins/editAdmin'; // Reemplaza con el componente adecuado
 import axiosInstance from "axiosInstance";
 
 import { useNotification } from "components/NotificationContext";
 import { CircularProgress } from "@mui/material";
 import { useUser } from "context/userContext";
+import ConfiguratorContext from "configurator/configuratorContext";
 
 
 function Tables() {
   const [controller, dispatch] = useMaterialUIController();
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, true);
   
-  const [customContent, setCustomContent] = useState(null);
-  const [customTitle, setCustomTitle] = useState(null);
-  const [customDescription, setCustomDescription] = useState(null);
+  const { customContent, setCustomContent, customTitle, setCustomTitle, customDescription, setCustomDescription } = useContext(ConfiguratorContext);
+
   
   const { showNotification } = useNotification();
 
-  const handleAddClick = () => {
-    handleConfiguratorOpen();
-    setCustomContent(
-      <AddAdmin /> // Reemplaza con el componente adecuado
-    );
-    setCustomTitle("Añadir administrador")
-    setCustomDescription("Ingresa la información del administrador")
-  };
+
 
   const handleEditClick = (id) => {
     handleConfiguratorOpen();
@@ -123,7 +115,7 @@ function Tables() {
       </MDBox>
 
       <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
-      <ConfiguratorButton icon="add" pos={1} f={handleAddClick} vl="Añadir administrador" />
+      
 
       <Footer />
     </DashboardLayout>

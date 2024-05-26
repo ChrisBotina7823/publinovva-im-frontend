@@ -27,7 +27,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 import { useMaterialUIController, setOpenConfigurator } from "context";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNotification } from "components/NotificationContext";
 import Configurator from "components/Configurator";
 import ConfiguratorButton from "components/ConfiguratorButton";
@@ -40,6 +40,7 @@ import { formatCurrency } from "utils";
 import DefaultLineChart from "examples/Charts/LineCharts/DefaultLineChart";
 import axiosInstance from "axiosInstance";
 import InvestmentDetail from "../investmentDetail";
+import ConfiguratorContext from "configurator/configuratorContext";
 
 function Tables() {
 
@@ -47,9 +48,8 @@ function Tables() {
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, true);
 
   const {user} = useUser()
-  const [customContent, setCustomContent] = useState(null);
-  const [customTitle, setCustomTitle] = useState(null);
-  const [customDescription, setCustomDescription] = useState(null);
+  const { customContent, setCustomContent, customTitle, setCustomTitle, customDescription, setCustomDescription } = useContext(ConfiguratorContext);
+
 
   const { showNotification } = useNotification();
 

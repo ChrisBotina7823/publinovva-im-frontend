@@ -26,7 +26,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Configurator from "components/Configurator";
 import ConfiguratorButton from "components/ConfiguratorButton";
 import { useMaterialUIController, setOpenConfigurator } from "context";
@@ -38,11 +38,11 @@ import { useNotification } from "components/NotificationContext";
 
 import EditInvestment from 'layouts/investments/editInvestment';
 import { CircularProgress } from "@mui/material";
+import ConfiguratorContext from "configurator/configuratorContext";
 
 function Tables() {
-  const [customContent, setCustomContent] = useState(null);
-  const [customTitle, setCustomTitle] = useState(null);
-  const [customDescription, setCustomDescription] = useState(null);
+  const { customContent, setCustomContent, customTitle, setCustomTitle, customDescription, setCustomDescription } = useContext(ConfiguratorContext);
+
 
   const { showNotification } = useNotification();
 

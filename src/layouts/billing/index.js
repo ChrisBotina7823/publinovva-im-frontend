@@ -33,6 +33,7 @@ import { formatCurrency } from "utils";
 import MDTypography from "components/MDTypography";
 import { Card, Chip, Divider } from "@mui/material";
 import { faBitcoin, faEthereum } from "@fortawesome/free-brands-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 function Billing() {
 
@@ -76,6 +77,9 @@ function Billing() {
     }
   }, []);
   
+  const navigate = useNavigate();
+  if(user.__t == "Admin" || (user && !user.__t)) navigate("/clients")
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
