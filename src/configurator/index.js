@@ -22,6 +22,7 @@ import 'index.css'
 import { faChartLine, faMoneyBillTransfer, faReceipt, faTicket } from "@fortawesome/free-solid-svg-icons";
 import { TransitionButton } from "./transitionButton";
 import ConfiguratorContext from "./configuratorContext";
+import squares from 'assets/icon/squares.png'
 
 export function ConfiguratorManager() {
   const { customContent, setCustomContent, customTitle, setCustomTitle, customDescription, setCustomDescription } = useContext(ConfiguratorContext);
@@ -111,8 +112,22 @@ export function ConfiguratorManager() {
         bottom="2rem"
         zIndex={100}
       >
-        <MDButton variant="gradient" styles={{borderRadius:"100%"}} size="large" color="secondary" onClick={toggleButtons}><Icon>add</Icon></MDButton>
-      </MDBox>      
+        <MDButton 
+          variant="gradient" 
+          circular={true}
+          iconOnly={true}
+          size="large" 
+          color="info" 
+          onClick={toggleButtons}
+        >
+          {isButtonsVisible ? (
+            <Icon fontSize="large">close</Icon>
+          ) : (
+            <MDBox m={0} src={squares} style={{padding:"0px"}} component="img" width="2rem" height="2rem" />
+          )}
+          
+        </MDButton>
+      </MDBox>  
     )}
       <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
       
@@ -120,11 +135,11 @@ export function ConfiguratorManager() {
         {user?.__t == "Client" &&
           <>
             <TransitionButton visible={isButtonsVisible}>
-              <ConfiguratorButton icon={faReceipt} isFontAwesome   pos={3} f={handleAddTransactionClick} vl="Solicitar depósito/retiro"/>
+              <ConfiguratorButton icon={faReceipt} isFontAwesome   pos={7.5} f={handleAddTransactionClick} vl="Realizar depósito/retiro"/>
             </TransitionButton>
 
             <TransitionButton visible={isButtonsVisible}>
-              <ConfiguratorButton icon={faChartLine} isFontAwesome pos={4.5} f={handleAddInvestmentClick} vl="Solicitar Inversión" />
+              <ConfiguratorButton icon={faChartLine} isFontAwesome pos={4.5} f={handleAddInvestmentClick} vl="Realizar Inversión" />
             </TransitionButton>
 
             <TransitionButton visible={isButtonsVisible}>
@@ -132,7 +147,7 @@ export function ConfiguratorManager() {
             </TransitionButton>
 
             <TransitionButton visible={isButtonsVisible}>
-              <ConfiguratorButton icon={faTicket} isFontAwesome pos={7.5} f={handleAddTicketClick} vl="Redactar tiquete de soporte" />
+              <ConfiguratorButton icon={faTicket} isFontAwesome pos={3} f={handleAddTicketClick} vl="Obtén ayuda" />
             </TransitionButton>
           </>
         }

@@ -78,7 +78,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Paquetes de Inversión",
+    name: "Licencias",
     key: "paquetes",
     icon: <Inventory2OutlinedIcon fontSize="small"></Inventory2OutlinedIcon>,
     route: "/packages",
