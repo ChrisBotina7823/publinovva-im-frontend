@@ -61,7 +61,7 @@ const DepositWithdrawForm = () => {
         showNotification(
           "success",
           `Solicitud de retiro exitosa`,
-          `Se le notificará a tu administrador para que realice la transferencia a tu cuenta`
+          `Se le notificará a tu administrador para que tu solicitud sea procesada`
         );    
       }
     } catch (error) {
