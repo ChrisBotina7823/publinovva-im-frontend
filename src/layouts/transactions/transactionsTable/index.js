@@ -33,7 +33,6 @@ import ConfiguratorButton from "components/ConfiguratorButton";
 // Data
 import walletTransactionTableData from "layouts/transactions/transactionsTable/data/transactionsTableData";
 import { setOpenConfigurator, useMaterialUIController } from "context";
-import AddWalletTransaction from 'layouts/transactions/addTransaction'
 import EditWalletTransaction from 'layouts/transactions/editTransaction'
 import axiosInstance from "axiosInstance";
 
@@ -54,14 +53,7 @@ function Tables() {
 
   const { showNotification } = useNotification();
 
-  const handleAddClick = () => {
-    handleConfiguratorOpen()
-    setCustomContent(
-      <AddWalletTransaction />
-    )
-    setCustomTitle("Realizar transacción")
-    setCustomDescription("Ingresa la información del transacción")
-  }
+
 
   const handleStateChange = async (id, movement_state) => {
     try {
@@ -139,9 +131,6 @@ function Tables() {
       </MDBox>
 
       <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
-      {user.__t == "Client" &&
-        <ConfiguratorButton icon="add" pos={1} f={handleAddClick} vl="Transferir entre billeteras" />
-      }
 
       <Footer />
     </DashboardLayout>

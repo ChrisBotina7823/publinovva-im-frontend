@@ -26,7 +26,6 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
-import RequestInvestmentForm from "layouts/revenues/requestInvestment"
 import { useMaterialUIController, setOpenConfigurator } from "context";
 import { useEffect, useState } from "react";
 import { useNotification } from "components/NotificationContext";
@@ -54,14 +53,7 @@ function Tables() {
 
   const { showNotification } = useNotification();
 
-  const handleAddClick = () => {
-    handleConfiguratorOpen();
-    setCustomContent(
-      <RequestInvestmentForm   />
-    );
-    setCustomTitle("Solicitar inversión")
-    setCustomDescription("Ingresa la información del inversión")
-  };
+
 
   const handleInvestmentDetail = (id) => {
     handleConfiguratorOpen();
@@ -198,9 +190,6 @@ function Tables() {
       </MDBox>
 
       <Configurator customDescription={customDescription} customTitle={customTitle}  customContent={customContent} />
-      {user?.__t == "Client" &&
-        <ConfiguratorButton icon="add" pos={1} f={handleAddClick} vl="Solicitar Inversión" />
-      }
 
       <Footer />
     </DashboardLayout>

@@ -97,7 +97,11 @@ function Basic({path="/auth/superuser"}) {
         const token = response.data.token;
         const newUser = response.data.user;
         await updateUser(newUser, token)
-        navigate("/dashboard");
+        if(newUser.__t == "Client") {
+          navigate("/billing")
+        } else {
+          navigate("/clients");
+        }
         showNotification("success", "Inicio de sesión exitoso", `Bienvenido, ${newUser.username} `);
       }
 

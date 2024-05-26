@@ -28,7 +28,6 @@ import Transactions from "layouts/billing/components/Transactions";
 import Configurator from "components/Configurator";
 import ConfiguratorButton from "components/ConfiguratorButton";
 import { useMaterialUIController, setOpenConfigurator } from "context";
-import AddTransaction from "layouts/billing/addTransaction";
 import { useUser } from "context/userContext";
 import { formatCurrency } from "utils";
 import MDTypography from "components/MDTypography";
@@ -46,12 +45,6 @@ function Billing() {
   const [customTitle, setCustomTitle] = useState(null);
   const [customDescription, setCustomDescription] = useState(null);
 
-  const handleAddTransactionClick = () => {
-    handleConfiguratorOpen();
-    setCustomContent(<AddTransaction />);
-    setCustomTitle("Solicitar ingreso/retiro")
-    setCustomDescription("Ingresa la información de transacción")
-  };
 
   useEffect(() => {
     if(!admin) return
@@ -176,10 +169,6 @@ function Billing() {
             }
         </Grid>
       </MDBox>
-      <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
-      {user?.__t == "Client" &&
-        <ConfiguratorButton icon="add" pos={1} f={handleAddTransactionClick} vl="Solicitar depósito/retiro"/>
-      }
       <Footer />
     </DashboardLayout>
   );

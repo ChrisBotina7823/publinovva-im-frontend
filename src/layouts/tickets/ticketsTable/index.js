@@ -33,7 +33,6 @@ import ConfiguratorButton from "components/ConfiguratorButton";
 // Data
 import TicketTableData from "layouts/tickets/ticketsTable/data/ticketsTableData";
 import { setOpenConfigurator, useMaterialUIController } from "context";
-import AddTicket from 'layouts/tickets/addTicket'
 import axiosInstance from "axiosInstance";
 
 import { useNotification } from "components/NotificationContext";
@@ -52,15 +51,7 @@ function Tables() {
 
   const { showNotification } = useNotification();
 
-  const handleAddClick = () => {
-    handleConfiguratorOpen()
-    setCustomContent(
-      <AddTicket />
-    )
-    setCustomTitle("Redactar ticket de soporte")
-    setCustomDescription("Ingresa la información del ticket")
 
-  }
 
   const handleStateChange = async (id, movement_state) => {
     try {
@@ -124,11 +115,6 @@ function Tables() {
       </MDBox>
 
       <Configurator customDescription={customDescription} customTitle={customTitle}  customContent={customContent} />
-
-      {user.__t == "Client" &&
-        <ConfiguratorButton icon="add" pos={1} f={handleAddClick} vl="Redactar tiquete de soporte" />
-      }
-
       <Footer />
     </DashboardLayout>
   );

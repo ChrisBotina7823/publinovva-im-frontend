@@ -73,8 +73,8 @@ const routes = [
     key: "inicio",
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
-    component: <PrivateRoute element={<Billing />} />,
-    hidden: []
+    component: <PrivateRoute element={ <Billing />} />,
+    hidden: ["Admin", "Superuser"]
   },
   {
     type: "collapse",

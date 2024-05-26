@@ -33,7 +33,6 @@ import ConfiguratorButton from "components/ConfiguratorButton";
 // Data
 import packageTableData from "layouts/clients/clientsTable/data/clientsTableData"; // Updated path
 import { setOpenConfigurator, useMaterialUIController } from "context";
-import AddClient from 'layouts/clients/addClient'; // Updated path
 import EditClient from 'layouts/clients/editClient'; // Updated path
 import axiosInstance from "axiosInstance";
 
@@ -53,15 +52,7 @@ function Tables() {
   const { user } = useUser()
   const { showNotification } = useNotification();
   
-  const handleAddClick = () => {
-    handleConfiguratorOpen()
-    setCustomContent(
-      <AddClient />
-      )
-      setCustomTitle("Añadir cliente")
-      setCustomDescription("Ingresa la información del cliente")
-    }
-    
+
     const handleEditClick = (id) => {
       handleConfiguratorOpen()
       setCustomContent(
@@ -136,9 +127,6 @@ function Tables() {
       </MDBox>
 
       <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
-      {user?.__t == "Admin" &&
-        <ConfiguratorButton icon="add" pos={1} f={handleAddClick} vl="Añadir cliente" />
-      }
       <Footer />
     </DashboardLayout>
   );

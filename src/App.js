@@ -62,6 +62,10 @@ import axios from "axios";
 import { useUser } from "context/userContext";
 import { useNotification } from "components/NotificationContext";
 import PrivateRoute from "components/PrivateRoute";
+import ConfiguratorButton from "components/ConfiguratorButton";
+import Configurator from "components/Configurator";
+import AddTransaction from "layouts/billing/addTransaction";
+import { ConfiguratorManager } from "configurator";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -77,6 +81,8 @@ export default function App() {
   } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
+
+
 
 
   // Open sidenav when mouse enter on mini sidenav
@@ -96,7 +102,6 @@ export default function App() {
   };
 
   // Change the openConfigurator state
-  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
 
   // Setting the dir attribute for the body element
   useEffect(() => {
@@ -124,7 +129,6 @@ export default function App() {
     });
 
     const { user, updateUser } = useUser()
-    console.log(user)
 
   return (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
@@ -148,7 +152,7 @@ export default function App() {
               <Route path="*" element={<PrivateRoute element={<Navigate to="/dashboard" />} ></PrivateRoute> } />
             </Routes>
             <Notification />
-
+            <ConfiguratorManager/>
 
         </ConfirmProvider>
       </IconContext.Provider>;

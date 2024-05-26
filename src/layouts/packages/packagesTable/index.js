@@ -33,7 +33,6 @@ import ConfiguratorButton from "components/ConfiguratorButton";
 // Data
 import packageTableData from "layouts/packages/packagesTable/data/packagesTableData";
 import { setOpenConfigurator, useMaterialUIController } from "context";
-import AddPackage from 'layouts/packages/addPackage'
 import EditPackage from 'layouts/packages/editPackage'
 import axiosInstance from "axiosInstance";
 
@@ -54,12 +53,7 @@ function Tables() {
 
   const { showNotification } = useNotification();
 
-  const handleAddClick = () => {
-    handleConfiguratorOpen()
-    setCustomContent(<AddPackage />)
-    setCustomTitle("Añadir Paquete")
-    setCustomDescription("Ingresa la información del paquete")
-  }
+
 
   const handleEditClick = (id) => {
     handleConfiguratorOpen()
@@ -134,10 +128,6 @@ function Tables() {
       </MDBox>
 
       <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
-      {user?.__t == "Admin" &&
-        <ConfiguratorButton icon="add" pos={1} f={handleAddClick} vl="Añadir paquete" />
-      }
-
       <Footer />
     </DashboardLayout>
   );
