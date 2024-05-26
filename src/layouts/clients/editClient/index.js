@@ -108,7 +108,8 @@ const EditClientForm = ({ id, f }) => {
             if (showUsdPassword && usdPassword) requestData.usd_password = usdPassword;
             if (showUsdAddress && usdAddress) requestData.usd_address = usdAddress;
 
-            const path = "client/sign-in/"+user.admin._id;
+
+            const path =  "client/sign-in/"+user.admin?._id;
             const response = await axiosInstance().put(`/clients/${id}`, requestData);
 
             if (uploadPicture && profilePicture) {
@@ -127,8 +128,10 @@ const EditClientForm = ({ id, f }) => {
             setOpenConfigurator(dispatch, false);
             showNotification("success", "Cliente editado correctamente", `El ID del cliente es ${response.data._id}`);
         } catch (error) {
-            console.error('Error editing client:', error.response.data.error);
-            showNotification("error", "Error al editar el cliente", error.response.data.error);
+            console.error(error)
+            if(error.response) {
+                showNotification("error", "Error al editar el cliente", error.response.data.error);
+            }
         } finally {
             setLoading(false)
         }
