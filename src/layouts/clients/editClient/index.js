@@ -14,6 +14,7 @@ import { Switch } from "@mui/material";
 
 import { setOpenConfigurator, useMaterialUIController } from "context";
 import { useUser } from "context/userContext";
+import { useNavigate } from "react-router-dom";
 
 const EditClientForm = ({ id, f }) => {
 
@@ -85,6 +86,8 @@ const EditClientForm = ({ id, f }) => {
         fetchClientData(id);
     }, [id]);
 
+    const navigate = useNavigate()
+
     const handleEditClient = async () => {
         try {
             setLoading(true)
@@ -105,6 +108,7 @@ const EditClientForm = ({ id, f }) => {
             if (showUsdPassword && usdPassword) requestData.usd_password = usdPassword;
             if (showUsdAddress && usdAddress) requestData.usd_address = usdAddress;
 
+            const path = "client/sign-in/"+user.admin._id;
             const response = await axiosInstance().put(`/clients/${id}`, requestData);
 
             if (uploadPicture && profilePicture) {
@@ -112,6 +116,12 @@ const EditClientForm = ({ id, f }) => {
                 pictureFormData.append("profile_picture", profilePicture);
 
                 axiosInstance().post(`/users/profile-picture/${id}`, pictureFormData);
+            }
+
+            if(user.__t == "Client" && showPassword) {
+                navigate(path)
+                showNotification("success", "Usuario editado con éxito", "Contraseña cambiada correctamente. Inicia sesión nuevamente")
+                return
             }
 
             setOpenConfigurator(dispatch, false);
@@ -253,7 +263,7 @@ const EditClientForm = ({ id, f }) => {
                     {showPassword && (
                         <MDBox mb={2}>
                             <MDInput
-                                type="password"
+                                type="text"
                                 label="Contraseña perfil"
                                 fullWidth
                                 value={password}
@@ -277,7 +287,7 @@ const EditClientForm = ({ id, f }) => {
                     {showIPassword && (
                         <MDBox mb={2}>
                             <MDInput
-                                type="password"
+                                type="text"
                                 label="Contraseña Inversiones"
                                 fullWidth
                                 value={iPassword}
@@ -302,11 +312,11 @@ const EditClientForm = ({ id, f }) => {
                     {showUsdPassword && (
                         <MDBox mb={2}>
                             <MDInput
-                                type="password"
+                                type="text"
                                 label="Contraseña USD"
                                 fullWidth
                                 value={usdPassword}
-                                onChange={(e) => setShowUsdPassword(e.target.value)}
+                                onChange={(e) => setUsdPassword(e.target.value)}
                             />
                         </MDBox>
                     )}

@@ -1,10 +1,13 @@
 // Import necessary dependencies
+import ConfiguratorContext from "configurator/configuratorContext";
 import { useUser } from "context/userContext";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 
 const Logout = () => {
+  const { customContent, setCustomContent } = useContext(ConfiguratorContext);
+  setCustomContent(null)
   const { user, removeUser } = useUser()
   const navigate = useNavigate();
 

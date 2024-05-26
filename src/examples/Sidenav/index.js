@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 // react-router-dom components
 import { useLocation, NavLink } from "react-router-dom";
@@ -49,6 +49,25 @@ import {
 import { useUser } from "context/userContext";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
+
+  const node = useRef();
+  const handleClickOutside = e => {
+    if (node.current.contains(e.target)) {
+      return;
+    }
+    closeSidenav();
+  };
+
+  useEffect(() => {
+    // Agregar cuando montado
+    document.addEventListener("mousedown", handleClickOutside);
+    // Regresar función para remover cuando desmontado
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+
   const { user } = useUser()
 
   const [controller, dispatch] = useMaterialUIController();
@@ -69,9 +88,10 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   useEffect(() => {
     // A function that sets the mini state of the sidenav.
     function handleMiniSidenav() {
-      setMiniSidenav(dispatch, window.innerWidth < 1200);
+      setMiniSidenav(dispatch, true);
+      // setMiniSidenav(dispatch, window.innerWidth < 1200);
       setTransparentSidenav(dispatch, window.innerWidth < 1200 ? false : transparentSidenav);
-      setWhiteSidenav(dispatch, window.innerWidth < 1200 ? false : whiteSidenav);
+      // setWhiteSidenav(dispatch, window.innerWidth < 1200 ? false : whiteSidenav);
     }
 
     /** 
@@ -154,7 +174,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   });
 
   return (
-    <SidenavRoot
+    <SidenavRoot ref={node}
       {...rest}
       variant="permanent"
       ownerState={{ transparentSidenav, whiteSidenav, miniSidenav, darkMode }}

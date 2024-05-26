@@ -3,7 +3,7 @@ import ConfiguratorButton from "components/ConfiguratorButton";
 import { useMaterialUIController } from "context";
 import { setOpenConfigurator } from "context";
 import { useUser } from "context/userContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 import AddTransaction from "layouts/billing/addTransaction";
 import RequestInvestmentForm from "layouts/revenues/requestInvestment"
@@ -19,7 +19,7 @@ import MDBox from "components/MDBox";
 import { Icon } from "@mui/material";
 import { CSSTransition } from "react-transition-group";
 import 'index.css'
-import { faChartLine, faMoneyBillTransfer, faReceipt, faTicket } from "@fortawesome/free-solid-svg-icons";
+import { faChartLine, faCircleDollarToSlot, faCircleQuestion, faMoneyBillTransfer, faReceipt, faTicket } from "@fortawesome/free-solid-svg-icons";
 import { TransitionButton } from "./transitionButton";
 import ConfiguratorContext from "./configuratorContext";
 import squares from 'assets/icon/squares.png'
@@ -102,9 +102,23 @@ export function ConfiguratorManager() {
     setButtonsVisible(!isButtonsVisible);
   }
 
+  const node = useRef();
+
+  const handleClickOutside = e => {
+    if (!node.current.contains(e.target)) {
+      setButtonsVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
-    <>
+  <MDBox>
     {user && (
       <MDBox
         position="fixed"
@@ -131,11 +145,11 @@ export function ConfiguratorManager() {
     )}
       <Configurator customDescription={customDescription} customTitle={customTitle} customContent={customContent} />
       
-    <>
+    <MDBox ref={node}>
         {user?.__t == "Client" &&
           <>
             <TransitionButton visible={isButtonsVisible}>
-              <ConfiguratorButton icon={faReceipt} isFontAwesome   pos={7.5} f={handleAddTransactionClick} vl="Realizar depósito/retiro"/>
+              <ConfiguratorButton icon={faCircleDollarToSlot} isFontAwesome   pos={7.5} f={handleAddTransactionClick} vl="Realizar depósito/retiro"/>
             </TransitionButton>
 
             <TransitionButton visible={isButtonsVisible}>
@@ -147,7 +161,7 @@ export function ConfiguratorManager() {
             </TransitionButton>
 
             <TransitionButton visible={isButtonsVisible}>
-              <ConfiguratorButton icon={faTicket} isFontAwesome pos={3} f={handleAddTicketClick} vl="Obtén ayuda" />
+              <ConfiguratorButton icon={faCircleQuestion} isFontAwesome pos={3} f={handleAddTicketClick} vl="Obtén ayuda" />
             </TransitionButton>
           </>
         }
@@ -166,7 +180,7 @@ export function ConfiguratorManager() {
             <ConfiguratorButton icon="add" pos={6} f={handleAddAdminClick} vl="Añadir administrador" />
           </TransitionButton>
         ) }
-      </>
-    </>
+      </MDBox>
+  </MDBox>
   )
 }

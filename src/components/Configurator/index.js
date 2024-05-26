@@ -136,6 +136,7 @@ function Configurator({customContent, customTitle, customDescription}) {
         pt={4}
         pb={0.5}
         px={3}
+        maxWidth="100%"
       >
         <MDBox>
           <MDTypography variant="h5">{customTitle}</MDTypography>
