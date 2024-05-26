@@ -68,23 +68,43 @@ function Billing() {
                     </MDBox>
                   </Card>
                 </Grid>
-                <Grid item xs={12} xl={6}>
-                  <DefaultInfoCard
+                <Grid container spacing={3} item xs={12} xl={12}>
+                  <Grid item xs={12}>
+                  <MasterCard
+                      color="warning"
+                      logo={admin.btc_qr}
+                      number={admin.btc_address || "---"}
+                      title="Dirección Bitcoin"
+                      holder={admin.entity_name}
+                      icon={faBitcoin}
+                      isFontAwesome
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <MasterCard
+                      color="info"
+                      logo={admin.ethereum_qr}
+                      number={admin.ethereum_address || "---"}
+                      title="Dirección Ethereum"
+                      holder={admin.entity_name}
+                      icon={faEthereum}
+                      isFontAwesome
+                    />
+                  </Grid>
+                  {/* <DefaultInfoCard
                     icon={faBitcoin}
                     title="Dirección Bitcoin"
                     picture={admin.btc_qr}
                     value={admin.btc_address || "---"}
                     isFontAwesome
-                  />
-                </Grid>
-                <Grid item xs={12} xl={6}>
-                  <DefaultInfoCard
+                  /> */}
+                  {/* <DefaultInfoCard
                     icon={faEthereum}
                     title="Dirección Ethereum"
                     picture={admin.ethereum_qr}
                     value={admin.ethereum_address || "---"}
                     isFontAwesome
-                  />
+                  /> */}
                 </Grid>
               </Grid>
             }
@@ -93,7 +113,7 @@ function Billing() {
                 <Grid item xs={12} xl={12}>
                   <Card >
                     <MDBox p={2} mx={3}>
-                      <MDTypography my={0} variant="h4" fontWeight="medium" textTransform="capitalize">Billeteras Activas</MDTypography>
+                      <MDTypography my={0} variant="h4" fontWeight="medium" textTransform="capitalize">Tus Tu Billeteras Activas</MDTypography>
                       <MDTypography variant="body2" color="text" fontWeight="regular">{user.username}</MDTypography>
                     </MDBox>
                   </Card>
@@ -101,7 +121,7 @@ function Billing() {
                 <Grid item xs={12} xl={6}>
                   <DefaultInfoCard
                     icon="wallet"
-                    title="Billetera USDT (trc20)"
+                    title="Tu Billetera USDT (trc20)"
                     description={user.usd_wallet.address || user.usd_wallet._id }
                     value={`${formatCurrency(user.usd_wallet.available_amount)}`}
                   />
@@ -109,7 +129,7 @@ function Billing() {
                 <Grid item xs={12} xl={6}>
                   <DefaultInfoCard
                     icon="wallet"
-                    title="Billetera de Comercio"
+                    title="Tu Billetera de Comercio"
                     description={user.i_wallet._id}
                     value={`${formatCurrency(user.i_wallet.available_amount)}`}
                   />

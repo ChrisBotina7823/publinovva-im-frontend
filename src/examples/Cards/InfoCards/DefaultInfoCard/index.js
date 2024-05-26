@@ -82,7 +82,7 @@ function DefaultInfoCard({ color, icon, title, description, value, value_additio
           <MDBox
             component="img"
             src={picture}
-            alt="master card"
+            alt="logo"
             width="auto"
             maxWidth="100%"
             maxHeight="200px"

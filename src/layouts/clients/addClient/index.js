@@ -55,7 +55,7 @@ const AddClientForm = ({admin_id=null}) => {
                 country,
                 phone,
                 account_state: "en revision",
-                admin_id: admin._id || user._id,
+                admin_id: admin?._id || user._id,
                 i_password: iPassword,
                 usd_password: usdPassword,
             });
@@ -68,6 +68,7 @@ const AddClientForm = ({admin_id=null}) => {
                 showNotification("success", "Cliente añadido correctamente", `El ID del cliente es ${response.data._id}`);
             }
         } catch (error) {
+            console.error(error)
             if(error.response) {
                 console.error('Error adding client:', error.response.data.error);
                 showNotification("error", "Error al añadir el cliente", error.response.data.error);
@@ -90,7 +91,7 @@ const AddClientForm = ({admin_id=null}) => {
                 <CircularProgress color="secondary" size={60} />
             ) : (
                 <Grid container>
-                    <Grid xl={6} px={2} mb={2}>
+                    <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
                         <MDInput
                             type="text"
                             label="Usuario"
@@ -99,7 +100,7 @@ const AddClientForm = ({admin_id=null}) => {
                             onChange={(e) => setUsername(e.target.value)}
                         />
                     </Grid>
-                    <Grid xl={6} px={2} mb={2}>
+                    <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
                         <MDInput
                             type="password"
                             label="Contraseña"
@@ -108,7 +109,7 @@ const AddClientForm = ({admin_id=null}) => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </Grid>
-                    <Grid xl={6} px={2} mb={2}>
+                    <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
                         <MDInput
                             type="email"
                             label="Correo Electrónico"
@@ -118,7 +119,7 @@ const AddClientForm = ({admin_id=null}) => {
                         />
                     </Grid>
 
-                    <Grid xl={6} px={2} mb={2}>
+                    <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
                         <MDInput
                             type="text"
                             label="Nombre completo"
@@ -127,7 +128,7 @@ const AddClientForm = ({admin_id=null}) => {
                             onChange={(e) => setFullname(e.target.value)}
                         />
                     </Grid>
-                    <Grid xl={6} px={2} mb={2}>
+                    <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
                         <MDInput
                             type="text"
                             label="País"
@@ -136,7 +137,7 @@ const AddClientForm = ({admin_id=null}) => {
                             onChange={(e) => setCountry(e.target.value)}
                         />
                     </Grid>
-                    <Grid xl={6} px={2} mb={2}>
+                    <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
                         <MDInput
                             type="text"
                             label="Teléfono"
@@ -146,7 +147,7 @@ const AddClientForm = ({admin_id=null}) => {
                         />
                     </Grid>
 
-                    <Grid xl={6} px={2} mb={2}>
+                    <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
                         <MDInput
                             type="password"
                             label="Contraseña Billetera USDT (trc20)"
@@ -155,7 +156,7 @@ const AddClientForm = ({admin_id=null}) => {
                             onChange={(e) => setIPassword(e.target.value)}
                         />
                     </Grid>
-                    <Grid xl={6} px={2} mb={2}>
+                    <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
                         <MDInput
                             type="password"
                             label="Contraseña Billetera de Comercio"
@@ -166,7 +167,7 @@ const AddClientForm = ({admin_id=null}) => {
                     </Grid>
 
                     {!admin_id && (user && !user.__t) &&
-                        <Grid xl={6} px={2} mb={2}>
+                        <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
                             <MDInput
                                 type="text"
                                 label="Username del Administrador"

@@ -93,7 +93,7 @@ const WalletTransactionForm = () => {
                     <MDBox mb={2}>
                         <MDInput
                             type="password"
-                            label="Wallet Password"
+                            label="Contraseña de la billetera"
                             fullWidth
                             value={walletPassword}
                             onChange={(e) => setWalletPassword(e.target.value)}

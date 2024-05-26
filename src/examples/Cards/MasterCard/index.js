@@ -29,8 +29,10 @@ import pattern from "assets/images/illustrations/pattern-tree.svg";
 import masterCardLogo from "assets/images/logos/mastercard.png";
 import copy from 'clipboard-copy';
 import { useNotification } from "components/NotificationContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Grid } from "@mui/material";
 
-function MasterCard({ color, number, holder, expires, logo }) {
+function MasterCard({ color, number, title, holder, expires, logo, icon, isFontAwesome=false }) {
   const { showNotification } = useNotification()
 
   const handleDepositCopy = async () => {
@@ -74,51 +76,52 @@ function MasterCard({ color, number, holder, expires, logo }) {
         }}
       />
       <MDBox position="relative" zIndex={2} p={2}>
-        <MDBox color="white" p={1} lineHeight={0} display="inline-block">
-          <Icon fontSize="default">wifi</Icon>
-        </MDBox>
-        <MDTypography variant="button" color="white" fontWeight="regular" opacity={0.8}>Dirección de Depósito</MDTypography>
-        <MDTypography style={{cursor:"pointer"}} onClick={ handleDepositCopy } variant="h5" color="white" fontWeight="medium" sx={{ mt: 3, mb: 5, pb: 1 }}>
-          {number}
-          {/* {num1}&nbsp;&nbsp;&nbsp;{num2}&nbsp;&nbsp;&nbsp;{num3}&nbsp;&nbsp;&nbsp;{num4} */}
-          <Icon fontSize="default" >copy</Icon>
-        </MDTypography>
+        <Grid container spacing={3}>
+          <Grid flexDirection={"column"} item container xs={12} md={6} justifyContent={"flex-start"}>
+            <MDBox>
+              {isFontAwesome && <FontAwesomeIcon fontSize="2rem" color="white" icon={icon} />}
+              {!isFontAwesome && <Icon fontSize="2rem" style={{"color":"white"}} >{icon}</Icon>}
+              <MDTypography style={{"marginLeft":"10px"}} variant="button" color="white" fontWeight="regular" opacity={0.8}>{title}</MDTypography>
+            </MDBox>
+            <MDTypography style={{cursor:"pointer"}} onClick={ handleDepositCopy } variant="h5" color="white" fontWeight="medium" sx={{ mt: 2, mb: 2, pb: 1 }}>
+              {number}
+              {/* {num1}&nbsp;&nbsp;&nbsp;{num2}&nbsp;&nbsp;&nbsp;{num3}&nbsp;&nbsp;&nbsp;{num4} */}
+              <Icon sz={{ml:10}} >copy</Icon>
+            </MDTypography>
+            <MDTypography variant="button" color="white" fontWeight="regular" opacity={0.8}>
+                Entidad
+            </MDTypography>
+            <MDTypography
+              variant="h6"
+              color="white"
+              fontWeight="medium"
+              textTransform="capitalize"
+            >
+              {holder}
+            </MDTypography>
+          </Grid>
+          <Grid item container xs={12} md={6} justifyContent={"center"} alignItems={"center"}>
+            {logo && (
+                <MDBox
+                  component="img"
+                  src={logo}
+                  alt="master card"
+                  mt={1}
+                  borderRadius={"5px"}
+                  crossOrigin="anonymous"
+                  height={150}
+                />
+              )}
+          </Grid>
+        </Grid>
         <MDBox display="flex" justifyContent="space-between" alignItems="center">
           <MDBox display="flex" alignItems="center">
             <MDBox mr={3} lineHeight={1}>
-              <MDTypography variant="button" color="white" fontWeight="regular" opacity={0.8}>
-                Entidad
-              </MDTypography>
-              <MDTypography
-                variant="h6"
-                color="white"
-                fontWeight="medium"
-                textTransform="capitalize"
-              >
-                {holder}
-              </MDTypography>
-            </MDBox>
-            <MDBox lineHeight={1}>
-              {/* <MDTypography variant="button" color="white" fontWeight="regular" opacity={0.8}>
-                Expires
-              </MDTypography>
-              <MDTypography variant="h6" color="white" fontWeight="medium">
-                {expires}
-              </MDTypography> */}
+
             </MDBox>
           </MDBox>
           <MDBox display="flex" justifyContent="flex-end" width="20%">
-            {logo && (
-              <MDBox
-                component="img"
-                src={logo}
-                alt="master card"
-                width="100%"
-                mt={1}
-                borderRadius={"5px"}
-                crossOrigin="anonymous"
-              />
-            )}
+
           </MDBox>
         </MDBox>
       </MDBox>

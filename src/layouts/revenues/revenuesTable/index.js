@@ -40,6 +40,7 @@ import { CircularProgress } from "@mui/material";
 import { formatCurrency } from "utils";
 import DefaultLineChart from "examples/Charts/LineCharts/DefaultLineChart";
 import axiosInstance from "axiosInstance";
+import InvestmentDetail from "../investmentDetail";
 
 function Tables() {
 
@@ -61,6 +62,16 @@ function Tables() {
     setCustomTitle("Solicitar inversión")
     setCustomDescription("Ingresa la información del inversión")
   };
+
+  const handleInvestmentDetail = (id) => {
+    handleConfiguratorOpen();
+    setCustomContent(
+      <InvestmentDetail id={id} />
+    )
+    setCustomTitle("Detalles de la inversión")
+    setCustomDescription("Información detallada de la inversión")
+  };
+      
   
   const [loading, setLoading] = useState(true)
 
@@ -68,7 +79,7 @@ function Tables() {
     setLoading(false)
   }
 
-  const { columns, rows } = revenuesTableData(showNotification, updateLoading);
+  const { columns, rows } = revenuesTableData(showNotification, updateLoading, handleInvestmentDetail);
 
   const [ sampleChart, setSampleChart ] = useState(null)
   const [ totalRevenue, setTotalRevenue ] = useState(0)
@@ -143,7 +154,7 @@ function Tables() {
                     </Grid>
                     { sampleChart && (
                       <Grid item xs={12} md={12}>
-                        <DefaultLineChart icon="money" title="Ingresos Semanales" description="Un resumen de tus ingresos de los últimos 7 días"  chart={ sampleChart } />
+                        <DefaultLineChart icon="money" title="Ingresos Semanales" description="Un resumen de tus ingresos de los últimos 7 días (Tus inversiones generan ingresos a las 00:00 UTC)"  chart={ sampleChart } />
                       </Grid>                    
                     )}
                   </Grid>

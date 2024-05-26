@@ -16,9 +16,16 @@ import { formatCurrency } from 'utils';
 import MDBadge from 'components/MDBadge';
 import MDButton from 'components/MDButton';
 
-export default function DataTable(showNotification, updateLoading, handleDetailsClick) {
+export default function DataTable(showNotification, updateLoading, handleInvestmentDetail) {
 
   const { user } = useUser()
+
+  const colorsDict = {
+    "pendiente": "warning",
+    "en curso": "success",
+    "rechazado": "error",
+    "finalizado": "info",
+  };
 
   const [tableData, setTableData] = useState({
     columns: [
@@ -30,13 +37,12 @@ export default function DataTable(showNotification, updateLoading, handleDetails
   });
 
   const mapDataToJSX = (rows) => {
-    console.log("rows", rows[0].actual_start_date)
     return rows.reverse().map((dataItem) => ({
       id: (
         <MDBox>
           <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id} />
           <MDTypography variant="body2">{(new Date(dataItem.actual_start_date || dataItem.start_date)).toLocaleDateString()} {" - "} {(new Date(dataItem.end_date)).toLocaleDateString()} </MDTypography>
-          <MDBadge color="error" variant="gradient" badgeContent={dataItem.state}/>
+          <MDBadge color={colorsDict[dataItem.state]} variant="gradient" badgeContent={dataItem.state}/>
         </MDBox>
       ),
       conditions: (
@@ -49,7 +55,7 @@ export default function DataTable(showNotification, updateLoading, handleDetails
       ),
       status: (
         <>
-          <MDButton size="small" onClick={() => handleDetailsClick} color="secondary" fullWidth>Detalles</MDButton>
+          <MDButton size="small" onClick={() => handleInvestmentDetail(dataItem._id)} color="secondary" fullWidth>Detalles</MDButton>
         </>
       )
     }));

@@ -53,8 +53,8 @@ const DepositWithdrawForm = () => {
       setOpenConfigurator(dispatch, false);
       showNotification(
         "success",
-        `${transactionType === "deposit" ? "Depósito" : "Retiro"} exitoso`,
-        `Se ha realizado con éxito. ID de transacción: ${response.data._id}`
+        `Solicitud de ${transactionType === "deposit" ? "Depósito" : "Retiro"} exitoso`,
+        `Se le notificará a tu administración para que tu solicitud sea procesada`
       );
     } catch (error) {
       console.error(`Error during ${transactionType} transaction:`, error.response.data.error);
