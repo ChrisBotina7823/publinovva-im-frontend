@@ -75,7 +75,7 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
               >
                 Editar
               </MDTypography>
-              <MDTypography
+              {/* <MDTypography
                 component="a"
                 href="#"
                 variant="caption"
@@ -85,7 +85,7 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
                 onClick={() => confirmDelete(dataItem._id)}
               >
                 Eliminar
-              </MDTypography>
+              </MDTypography> */}
             </MDBox>
           ),
         }));

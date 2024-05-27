@@ -134,6 +134,12 @@ export default function App() {
 
     const configuratorProps = {customContent, setCustomContent, customTitle, setCustomTitle, customDescription, setCustomDescription}
 
+    const location = useLocation();
+
+    useEffect(() => {
+      updateUser();
+    }, [location]); // Dependencia en la ubicación
+
   return (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <IconContext.Provider value={{ color: "blue", className: "global-class-name" }}>

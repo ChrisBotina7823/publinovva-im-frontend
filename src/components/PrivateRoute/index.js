@@ -5,9 +5,7 @@ import { Route, Navigate } from "react-router-dom";
 import { useNotification } from "components/NotificationContext";
 
 const PrivateRoute = ({ element, ...rest }) => {
-  const { user, updateUser } = useUser()
-  const { showNotification } = useNotification()
-  // updateUser()
+  const {user} = useUser()
   return user ? element : <Navigate to="/admin/sign-in" replace />;
 };
 
