@@ -39,8 +39,15 @@ export default function DataTable(showNotification, handleEditClick, updateLoadi
   useEffect(() => {
     const fetchData = async () => {
       console.log("Fetching data...");
+      const transactionTypes = {
+        "deposit": "Depósito",
+        "withdrawal": "Retiro",
+        "inv-transfer": "Transferencia a billetera USDT",
+        "usd-transfer": "Transferencia a billetera de comercio",
+      }
       try {
         const response = await axiosInstance().get(`/movements/wallet-transactions/${user._id}`);
+        console.log(response.data)
         const dataRows = response.data.reverse().map((dataItem) => ({
           id: <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id} />,
           date: <span>{(new Date(dataItem.date)).toLocaleDateString()}</span>,
@@ -63,18 +70,24 @@ export default function DataTable(showNotification, handleEditClick, updateLoadi
           ),
           transaction_amount: (
             <MDBox>
-              {dataItem.received_amount > 0 &&
-                <MDTypography variant="h6">{`${formatCurrency((dataItem.transaction_type == "withdrawal" ? 0.95 : 1)*dataItem.received_amount)} ${dataItem.transaction_type == "deposit" ? "depositados" : "entregados"}`}</MDTypography>
-              }
-              {dataItem.received_amount > 0 && dataItem.transaction_type == "withdrawal" &&
-                <MDTypography variant="body2">{`${formatCurrency(0.05*dataItem.received_amount)} comisión`}</MDTypography>
-              }
-              <MDTypography variant="caption" fontWeight="bold">{`(${formatCurrency(dataItem.transaction_amount)} solicitados)`}</MDTypography>
+              { (dataItem.transaction_type == "deposit" || dataItem.transaction_type == "withdrawal") ? (
+                <>
+                  {dataItem.received_amount > 0 &&
+                    <MDTypography variant="h6">{`${formatCurrency((dataItem.transaction_type == "withdrawal" ? 0.95 : 1)*dataItem.received_amount)} ${dataItem.transaction_type == "deposit" ? "depositados" : "entregados"}`}</MDTypography>
+                  }
+                  {dataItem.received_amount > 0 && dataItem.transaction_type == "withdrawal" &&
+                    <MDTypography variant="body2">{`${formatCurrency(0.05*dataItem.received_amount)} comisión`}</MDTypography>
+                  }                  
+                  <MDTypography variant="caption" fontWeight="bold">{`(${formatCurrency(dataItem.transaction_amount)} solicitados)`}</MDTypography>
+                </>
+              ) : (
+                <MDTypography variant="h5">{formatCurrency(dataItem.transaction_amount)}</MDTypography>
+              )}
             </MDBox>
           ),
           transaction_type: (
-            <MDTypography variant="h6" fontWeight="bold">
-              {dataItem.transaction_type == "deposit" ? "Depósito" : "Retiro"}
+            <MDTypography variant="body2" fontWeight="bold">
+              {transactionTypes[dataItem.transaction_type]}
             </MDTypography>
           ),
           action: (
