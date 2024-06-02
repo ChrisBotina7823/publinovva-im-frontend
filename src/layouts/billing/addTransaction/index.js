@@ -38,6 +38,7 @@ const DepositWithdrawForm = () => {
         number={user.admin.usdt_address || "---"}
         title="Dirección USDT (trc20)"
         holder={user.admin.entity_name}
+        link={user.admin.usdt_link}
         icon="tether"
         isCustom
       />
@@ -67,10 +68,10 @@ const DepositWithdrawForm = () => {
       />
     )
   }
-  const addressesNames = {
-    "usdt": "Billetera USDT (trc20)",
-    "btc": "Billetera Bitcoin",
-    "ethereum": "Billetera Ethereum"
+  const linksMap = {
+    "usdt": user.admin.usdt_link,
+    "btc": user.admin.btc_link,
+    "ethereum": user.admin.ethereum_link
   }
 
   const handleTransactionTypeChange = (event) => {
@@ -152,11 +153,24 @@ const DepositWithdrawForm = () => {
               <Grid item xs={12}>
                 <Card>
                   <MDBox paddingY={4} paddingX={4} mx={3}>
-                    <MDTypography textAlign="center" variant="h5">Solicitud de Depósito realizada con éxito</MDTypography>
-                    <MDTypography marginBottom={2} variant="body2">Por favor, realiza la transferencia a la cuenta del administrador</MDTypography>
+                    <MDTypography marginBottom={2} textAlign="center" variant="h5">Solicitud de Depósito realizada con éxito</MDTypography>
+                    <MDTypography marginBottom={2} variant="body2">Realiza la transferencia por medio del link de pago para continuar</MDTypography>
                     {cards[depositAddress]}
                     <MDBox display="flex" paddingY={2} justifyContent="center" >
-                      <MDButton marginTop={2} marginX="auto" variant="gradient" color="info" onClick={() => setModalOpen(false)}>Aceptar</MDButton>
+                      <MDButton
+                          marginTop={2}
+                          marginX="auto"
+                          variant="gradient"
+                          color="info"
+                          onClick={() => {
+                            if(linksMap[depositAddress]) {
+                              window.open(linksMap[depositAddress], "_blank")
+                            }
+                            setModalOpen(false)
+                          }}
+                        >
+                        Aceptar
+                      </MDButton>
                     </MDBox>
                   </MDBox>
                 </Card>

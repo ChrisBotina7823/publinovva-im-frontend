@@ -115,7 +115,7 @@ function MasterCard({ color, number, title, holder, link, logo, icon, isFontAwes
               </>
             )}
           </Grid>
-          <Grid item container xs={12} md={6} justifyContent={"center"} alignItems={"center"}>
+          <Grid item flexDirection="column" container xs={12} md={6} justifyContent={"center"} alignItems={"center"}>
             {logo && (
                 <MDBox
                   component="img"
@@ -128,9 +128,9 @@ function MasterCard({ color, number, title, holder, link, logo, icon, isFontAwes
                   width="85%"
                 />
               )}
-              <MDBox display="flex" flexDirection="column">
-                <MDTypography variant="button" color="white" fontWeight="regular" opacity={0.8}>
-                    Entidad
+              <MDBox marginBottom={1} marginTop={2} display="flex" alignItems="center">
+                <MDTypography marginRight={1} variant="button" color="white" fontWeight="regular" opacity={0.8}>
+                    {"Entidad:"}
                 </MDTypography>
                 <MDTypography
                   variant="h6"
