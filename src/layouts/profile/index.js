@@ -41,6 +41,10 @@ import EditUserForm from "layouts/profile/editProfile";
 
 import { useState } from "react"
 import { useUser } from 'context/userContext';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBitcoin, faEthereum } from "@fortawesome/free-brands-svg-icons";
+import { faUsd } from "@fortawesome/free-solid-svg-icons";
+import CustomIcon from "components/CustomIcon";
 
 function Overview() {
   const { user, setUser } = useUser()
@@ -49,16 +53,54 @@ function Overview() {
   const switchEdit = () => setIsEditing(!isEditing)
 
   const userInfo = {
-    "Username": user._id,
+    "Usuario": user._id,
     "Correo Electrónico": user.email
   };
 
   // Agregar información específica para el tipo de usuario
   if (user.__t === "Admin") {
-    userInfo["Código QR Ethereum"] = <MDBox component="img" crossOrigin="anonymous" src={user.ethereum_qr} alt="ethereum_qr" height="5rem"/>;
-    userInfo["Dirección Ethereum"] = user.ethereum_address;
-    userInfo["Código QR Bitcoin"] = <MDBox component="img" crossOrigin="anonymous" src={user.btc_qr} alt="ethereum_qr" height="5rem"/>;
-    userInfo["Dirección Bitcoin"] = user.btc_address;
+    userInfo["Billetera Ethereum"] = (
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <MDBox component="img" crossOrigin="anonymous" src={user.ethereum_qr} alt="ethereum_qr" height="5rem"/>
+        </Grid>
+        <Grid item flexDirection="column" xs={6}>
+          <a href={user.ethreum_link}></a>
+          <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
+            {user.ethereum_address}
+          </MDTypography>
+          <FontAwesomeIcon icon={faEthereum} />
+        </Grid>
+      </Grid>
+    )
+    userInfo["Billetera USDT (trc20)"] = (
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <MDBox component="img" crossOrigin="anonymous" src={user.usdt_qr} alt="usdt_qr" height="5rem"/>
+        </Grid>
+        <Grid item flexDirection="column" xs={6}>
+          <a href={user.usdt_link}></a>
+          <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
+            {user.usdt_address}
+          </MDTypography>
+        </Grid>
+        <CustomIcon name="tether" size="1rem" color="black" />
+      </Grid>
+    )
+    userInfo["Billetera Bitcoin"] = (
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <MDBox component="img" crossOrigin="anonymous" src={user.bitcoin_qr} alt="bitcoin_qr" height="5rem"/>
+        </Grid>
+        <Grid item flexDirection="column" xs={6}>
+          <a href={user.bitcoin_link}></a>
+          <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
+            {user.bitcoin_address}
+          </MDTypography>
+          <FontAwesomeIcon icon={faBitcoin} />
+        </Grid>
+      </Grid>
+    )
   } else if (user.__t === "Client") {
     userInfo["Nombre completo"] = user.fullname;
     userInfo["Teléfono"] = user.phone;

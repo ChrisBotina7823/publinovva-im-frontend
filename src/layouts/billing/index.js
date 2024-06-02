@@ -34,6 +34,7 @@ import MDTypography from "components/MDTypography";
 import { Card, Chip, Divider } from "@mui/material";
 import { faBitcoin, faEthereum } from "@fortawesome/free-brands-svg-icons";
 import { useNavigate } from "react-router-dom";
+import CustomIcon from "components/CustomIcon";
 
 function Billing() {
 
@@ -131,7 +132,18 @@ function Billing() {
                 </Grid>
                 <Grid container spacing={3} item xs={12} xl={12}>
                   <Grid item xs={12} md={6}>
-                    <Grid container flexDirection={"column"} spacing={3}>
+                    <Grid container flexDirection={"column"} spacing={2}>
+                      <Grid item xs={12}>
+                        <MasterCard
+                            color="success"
+                            logo={admin.usdt_qr}
+                            number={admin.usdt_address || "---"}
+                            title="Dirección USDT (trc20)"
+                            holder={admin.entity_name}
+                            icon="tether"
+                            isCustom
+                          />
+                      </Grid>
                       <Grid item xs={12}>
                         <MasterCard
                             color="warning"

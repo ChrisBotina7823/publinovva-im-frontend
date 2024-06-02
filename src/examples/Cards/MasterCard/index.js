@@ -31,8 +31,9 @@ import copy from 'clipboard-copy';
 import { useNotification } from "components/NotificationContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid } from "@mui/material";
+import CustomIcon from "components/CustomIcon";
 
-function MasterCard({ color, number, title, holder, expires, logo, icon, isFontAwesome=false }) {
+function MasterCard({ color, number, title, holder, expires, logo, icon, isFontAwesome=false, isCustom=false }) {
   const { showNotification } = useNotification()
 
   const handleDepositCopy = async () => {
@@ -79,8 +80,13 @@ function MasterCard({ color, number, title, holder, expires, logo, icon, isFontA
         <Grid container spacing={3}>
           <Grid flexDirection={"column"} item container xs={12} md={6} justifyContent={"flex-start"}>
             <MDBox>
-              {isFontAwesome && <FontAwesomeIcon fontSize="2rem" color="white" icon={icon} />}
-              {!isFontAwesome && <Icon fontSize="2rem" style={{"color":"white"}} >{icon}</Icon>}
+              {isCustom ? (
+                <CustomIcon name={icon} size="2rem" color="white" />
+              ) : ( isFontAwesome ? (
+                <FontAwesomeIcon fontSize="2rem" color="white" icon={icon} />
+              ) : (
+                <Icon fontSize="2rem" style={{"color":"white"}} >{icon}</Icon>
+              ))}
               <MDTypography style={{"marginLeft":"10px"}} variant="button" color="white" fontWeight="regular" opacity={0.8}>{title}</MDTypography>
             </MDBox>
             <MDTypography style={{cursor:"pointer", wordBreak: 'break-all'}} onClick={ handleDepositCopy } variant="h5" color="white" fontWeight="medium" sx={{ mt: 2, mb: 2, pb: 1 }}>
