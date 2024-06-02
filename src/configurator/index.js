@@ -73,8 +73,8 @@ export function ConfiguratorManager() {
   const handleAddPackageClick = () => {
     handleConfiguratorOpen()
     setCustomContent(<AddPackage />)
-    setCustomTitle("Añadir Paquete")
-    setCustomDescription("Ingresa la información del paquete")
+    setCustomTitle("Añadir Licencia")
+    setCustomDescription("Ingresa la información de la licencia")
   }
 
   const handleAddClientClick = () => {
@@ -168,7 +168,7 @@ export function ConfiguratorManager() {
         { ((user?.__t == "Admin") || (user && !user.__t)) &&
           <>
             <TransitionButton visible={isButtonsVisible}>
-              <ConfiguratorButton icon="add" pos={3} f={handleAddPackageClick} vl="Añadir paquete" />
+              <ConfiguratorButton icon="add" pos={3} f={handleAddPackageClick} vl="Añadir licencia" />
             </TransitionButton>
             <TransitionButton visible={isButtonsVisible}>
               <ConfiguratorButton icon="add" pos={4.5} f={handleAddClientClick} vl="Añadir cliente" />

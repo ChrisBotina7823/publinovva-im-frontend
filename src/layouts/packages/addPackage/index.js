@@ -40,10 +40,10 @@ const AddPackageForm = () => {
             });
 
             setOpenConfigurator(dispatch, false)
-            showNotification("success", "Paquete añadido correctamente", `El ID del paquete es ${response.data._id} `);
+            showNotification("success", "Licencia añadido correctamente", `El ID de la licencia es ${response.data._id} `);
         } catch (error) {
             console.error('Error adding package:', error.response.data.error);
-            showNotification("error", "Error al añadir el paquete", error.response.data.error);
+            showNotification("error", "Error al añadir la licencia", error.response.data.error);
         } finally {
             setLoading(false)
         }
@@ -62,7 +62,7 @@ const AddPackageForm = () => {
                     <MDBox mb={2}>
                         <MDInput
                             type="text"
-                            label="Nombre del paquete"
+                            label="Nombre de la licencia"
                             fullWidth
                             value={packageName}
                             onChange={(e) => setPackageName(e.target.value)}
@@ -114,7 +114,7 @@ const AddPackageForm = () => {
                         />
                     </MDBox>
                     <MDButton variant="gradient" color="info" fullWidth onClick={handleAddPackage}>
-                        Añadir Paquete
+                        Añadir Licencia
                     </MDButton>
                 </>
             )}

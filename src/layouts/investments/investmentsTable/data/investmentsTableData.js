@@ -25,7 +25,7 @@ export default function DataTable(showNotification, handleEditClick, updateLoadi
   const [tableData, setTableData] = useState({
     columns: [
       { Header: 'ID', accessor: 'id', width: '10%', align: 'center' },
-      { Header: 'Paquete', accessor: 'package', width: '15%', align: 'center' },
+      { Header: 'Licencia', accessor: 'package', width: '15%', align: 'center' },
       { Header: 'Cliente', accessor: 'client', width: '15%', align: 'center' },
       { Header: 'Fecha de Solicitud', accessor: 'start_date', width: '30%', align: 'center' },
       { Header: 'Fecha de Inicio', accessor: 'actual_start_date', width: '30%', align: 'center' },

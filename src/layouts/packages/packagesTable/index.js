@@ -60,19 +60,19 @@ function Tables() {
     setCustomContent(
       <EditPackage id={id} />
     )
-    setCustomTitle("Editar Paquete")
-    setCustomDescription("Cambia los datos del paquete")
+    setCustomTitle("Editar Licencia")
+    setCustomDescription("Cambia los datos de la licencia")
   }
 
   const handleDeleteClick = (id) => {
     const deletePackage = async () => {
       try {
         const response = await axiosInstance().delete(`/packages/${id}`)
-        showNotification("success", "Paquete eliminado correctamente", `El paquete identificado con ${id} se ha eliminado `);
+        showNotification("success", "Licencia eliminado correctamente", `El licencia identificado con ${id} se ha eliminado `);
       } catch (error) {
         console.error(error)
         console.error('Error deleting package:', error.response.data.error);
-        showNotification("error", "Error al eliminar el paquete", error.response.data.error);
+        showNotification("error", "Error al eliminar la licencia", error.response.data.error);
       }
 
     }
@@ -104,7 +104,7 @@ function Tables() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Paquetes
+                  Licencias
                 </MDTypography>
               </MDBox>
               <MDBox pt={3} textAlign="center">

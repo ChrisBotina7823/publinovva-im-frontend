@@ -38,7 +38,7 @@ const EditPackageForm = ({ id }) => {
                 setGlobalAmount(packageData.global_amount || '');
             } catch (error) {
                 console.error('Error fetching package data:', error.response.data.error);
-                showNotification("error", "Error al obtener datos del paquete", error.response.data.error);
+                showNotification("error", "Error al obtener datos de la licencia", error.response.data.error);
             } finally {
                 setLoading(false);
             }
@@ -61,10 +61,10 @@ const EditPackageForm = ({ id }) => {
             });
 
             setOpenConfigurator(dispatch, false);
-            showNotification("success", "Paquete editado correctamente", `El ID del paquete es ${response.data._id}`);
+            showNotification("success", "Licencia editado correctamente", `El ID de la licencia es ${response.data._id}`);
         } catch (error) {
             console.error('Error editing package:', error.response.data.error);
-            showNotification("error", "Error al editar el paquete", error.response.data.error);
+            showNotification("error", "Error al editar la licencia", error.response.data.error);
         } finally {
             setLoading(false);
         }
@@ -83,7 +83,7 @@ const EditPackageForm = ({ id }) => {
                     <MDBox mb={2}>
                         <MDInput
                             type="text"
-                            label="Nombre del Paquete"
+                            label="Nombre de la licencia"
                             fullWidth
                             value={packageName}
                             onChange={(e) => setPackageName(e.target.value)}
@@ -136,7 +136,7 @@ const EditPackageForm = ({ id }) => {
                     </MDBox>
                     <MDBox mt={4} mb={1} textAlign="center">
                         <MDButton variant="gradient" color="info" fullWidth onClick={handleEditPackage}>
-                            Editar Paquete
+                            Editar Licencia
                         </MDButton>
                     </MDBox>
                 </>

@@ -26,7 +26,7 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
 
   const confirm = useConfirm()
   const confirmDelete = (element) => {
-    confirm({ title: "Eliminar Paquete", description: `¿Estás seguro de que quieres eliminar el paquete ${element}?\n(Esta acción no se puede revertir)` })
+    confirm({ title: "Eliminar Licencia", description: `¿Estás seguro de que quieres eliminar la licencia ${element}?\n(Esta acción no se puede revertir)` })
     .then(() => {
       console.log("a")
       handleDeleteClick(element)

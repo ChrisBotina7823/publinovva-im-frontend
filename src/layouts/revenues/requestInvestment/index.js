@@ -63,7 +63,7 @@ const InvestmentRequestForm = () => {
         <MDBox component="form" role="form">
             <MDBox mb={2}>
                 <FormControl fullWidth>
-                    <InputLabel id="package-selector-label">Seleccionar Paquete</InputLabel>
+                    <InputLabel id="package-selector-label">Seleccionar Licencia</InputLabel>
                     <Select
                         labelId="package-selector-label"
                         id="package-selector"

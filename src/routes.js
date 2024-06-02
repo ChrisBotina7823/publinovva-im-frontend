@@ -79,9 +79,9 @@ const routes = [
   {
     type: "collapse",
     name: "Licencias",
-    key: "paquetes",
+    key: "licences",
     icon: <Inventory2OutlinedIcon fontSize="small"></Inventory2OutlinedIcon>,
-    route: "/packages",
+    route: "/licences",
     component: <PrivateRoute element={<Packages />} />,
     hidden: []
   },
