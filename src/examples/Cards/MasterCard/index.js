@@ -32,8 +32,9 @@ import { useNotification } from "components/NotificationContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid } from "@mui/material";
 import CustomIcon from "components/CustomIcon";
+import { OpenInNew } from "@mui/icons-material";
 
-function MasterCard({ color, number, title, holder, expires, logo, icon, isFontAwesome=false, isCustom=false }) {
+function MasterCard({ color, number, title, holder, link, logo, icon, isFontAwesome=false, isCustom=false }) {
   const { showNotification } = useNotification()
 
   const handleDepositCopy = async () => {
@@ -79,7 +80,7 @@ function MasterCard({ color, number, title, holder, expires, logo, icon, isFontA
       <MDBox position="relative" zIndex={2} p={2}>
         <Grid container spacing={3}>
           <Grid flexDirection={"column"} item container xs={12} md={6} justifyContent={"flex-start"}>
-            <MDBox>
+            <MDBox display="flex" alignItems="center"  >
               {isCustom ? (
                 <CustomIcon name={icon} size="2rem" color="white" />
               ) : ( isFontAwesome ? (
@@ -94,17 +95,25 @@ function MasterCard({ color, number, title, holder, expires, logo, icon, isFontA
               {/* {num1}&nbsp;&nbsp;&nbsp;{num2}&nbsp;&nbsp;&nbsp;{num3}&nbsp;&nbsp;&nbsp;{num4} */}
               <Icon sz={{ml:10}} >copy</Icon>
             </MDTypography>
-            <MDTypography variant="button" color="white" fontWeight="regular" opacity={0.8}>
-                Entidad
-            </MDTypography>
-            <MDTypography
-              variant="h6"
-              color="white"
-              fontWeight="medium"
-              textTransform="capitalize"
-            >
-              {holder}
-            </MDTypography>
+            
+            {link && (
+              <>
+                <MDTypography variant="button" color="white" fontWeight="regular" opacity={0.8}>
+                    Link de pago
+                </MDTypography>
+                <a
+                  href={link}
+                  color="white"
+                  fontWeight="medium"
+                  target="_blank"
+                > 
+                  <MDTypography style={{wordBreak: 'break-all', lineHeight:1}} variant="h6" color="white" fontWeight="medium" >
+                    {link}
+                    <OpenInNew />
+                  </MDTypography>
+                </a>
+              </>
+            )}
           </Grid>
           <Grid item container xs={12} md={6} justifyContent={"center"} alignItems={"center"}>
             {logo && (
@@ -116,9 +125,23 @@ function MasterCard({ color, number, title, holder, expires, logo, icon, isFontA
                   borderRadius={"5px"}
                   crossOrigin="anonymous"
                   height="auto"
-                  width="100%"
+                  width="85%"
                 />
               )}
+              <MDBox display="flex" flexDirection="column">
+                <MDTypography variant="button" color="white" fontWeight="regular" opacity={0.8}>
+                    Entidad
+                </MDTypography>
+                <MDTypography
+                  variant="h6"
+                  color="white"
+                  fontWeight="medium"
+                  textTransform="capitalize"
+                >
+                  {holder}
+                </MDTypography>
+
+              </MDBox>
           </Grid>
         </Grid>
         <MDBox display="flex" justifyContent="space-between" alignItems="center">
@@ -146,7 +169,7 @@ MasterCard.propTypes = {
   color: PropTypes.oneOf(["primary", "secondary", "info", "success", "warning", "error", "dark"]),
   number: PropTypes.string,
   holder: PropTypes.string,
-  expires: PropTypes.string,
+  link: PropTypes.string,
 };
 
 export default MasterCard;

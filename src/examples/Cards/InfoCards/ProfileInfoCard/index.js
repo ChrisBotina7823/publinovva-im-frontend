@@ -32,6 +32,7 @@ import MDTypography from "components/MDTypography";
 // Material Dashboard 2 React base styles
 import colors from "assets/theme/base/colors";
 import typography from "assets/theme/base/typography";
+import { Grid } from "@mui/material";
 
 function ProfileInfoCard({ title, description, info, social, action, shadow }) {
   const labels = [];
@@ -56,14 +57,18 @@ function ProfileInfoCard({ title, description, info, social, action, shadow }) {
 
   // Render the card info items
   const renderItems = labels.map((label, key) => (
-    <MDBox key={label} display="flex" py={1} pr={2}>
-      <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
-        {label}: &nbsp;
-      </MDTypography>
-      <MDTypography variant="button" fontWeight="regular" color="text">
-        &nbsp;{values[key]}
-      </MDTypography>
-    </MDBox>
+    <Grid item xs={12} md={6} flexDirection={"column"} key={label} display="flex" py={1} pr={2}>
+      <Card>
+        <MDBox marginX={2} marginY={2}>
+          <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
+            {label}: &nbsp;
+          </MDTypography>
+          <MDBox>
+            &nbsp;{values[key]}
+          </MDBox>
+        </MDBox>
+      </Card>
+    </Grid>
   ));
 
   // Render the card social media icons
@@ -109,9 +114,9 @@ function ProfileInfoCard({ title, description, info, social, action, shadow }) {
         <MDBox opacity={0.3}>
           <Divider />
         </MDBox>
-        <MDBox>
+        <Grid container spacing={3}>
           {renderItems}
-        </MDBox>
+        </Grid>
       </MDBox>
     </Card>
   );

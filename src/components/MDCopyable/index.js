@@ -2,8 +2,9 @@ import MDBox from "components/MDBox"
 import MDTypography from "components/MDTypography"
 import copy from 'clipboard-copy'
 import { useNotification } from "components/NotificationContext"
+import { CopyAllRounded } from "@mui/icons-material"
 
-export default ({vl, variant}) => {
+export default ({vl, variant, children, showIcon=false}) => {
     const { showNotification } = useNotification()
 
     let style
@@ -22,7 +23,7 @@ export default ({vl, variant}) => {
 
     return (
         <MDBox>
-            <MDTypography style={style} variant={variant} sx={{cursor:"pointer"}} onClick={() => handleCopy()}>{vl}</MDTypography>   
+            <MDTypography style={style} variant={variant} sx={{cursor:"pointer"}} onClick={() => handleCopy()}>{vl}{children}{showIcon && <CopyAllRounded/>}</MDTypography>   
         </MDBox>
     )
 }

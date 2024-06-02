@@ -11,7 +11,7 @@ export default function CustomIcon({name, size, color}) {
     }
 
     return (
-        <MDBox style={{height:size,width:size}}>
+        <MDBox style={{height:size,width:size, display:"inline-block"}}>
             <svg style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} viewBox="0 0 226.777 226.777">
                 {svgs[name]}
             </svg>

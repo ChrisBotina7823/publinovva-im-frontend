@@ -45,6 +45,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBitcoin, faEthereum } from "@fortawesome/free-brands-svg-icons";
 import { faUsd } from "@fortawesome/free-solid-svg-icons";
 import CustomIcon from "components/CustomIcon";
+import { CopyAll, OpenInNew } from "@mui/icons-material";
+import MDCopyable from "components/MDCopyable";
 
 function Overview() {
   const { user, setUser } = useUser()
@@ -61,43 +63,91 @@ function Overview() {
   if (user.__t === "Admin") {
     userInfo["Billetera Ethereum"] = (
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <MDBox component="img" crossOrigin="anonymous" src={user.ethereum_qr} alt="ethereum_qr" height="5rem"/>
+        <Grid item xs={12} md={4} textAlign="center">
+          <MDBox component="img" crossOrigin="anonymous" src={user.ethereum_qr} alt="ethereum_qr" width="90%"/>
         </Grid>
-        <Grid item flexDirection="column" xs={6}>
-          <a href={user.ethreum_link}></a>
-          <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
-            {user.ethereum_address}
-          </MDTypography>
-          <FontAwesomeIcon icon={faEthereum} />
+        <Grid item flexDirection="column" xs={12} md={8}>
+            {user.ethereum_link && (
+              <>
+                <MDTypography variant="h6">Link de pago</MDTypography>
+                <a target="_blank" href={user.ethereum_link}>
+                  <MDTypography variant="body2" textTransform="capitalize">
+                    {user.ethereum_link}
+                    <OpenInNew />
+                  </MDTypography>
+                </a>
+              </>
+            )}
+            {user.ethereum_address && (
+              <>
+              <MDTypography variant="h6">Dirección</MDTypography>
+                <MDCopyable showIcon>
+                  <MDTypography display="inline" variant="body2">
+                    {user.ethereum_address}
+                  </MDTypography>
+                </MDCopyable>
+              </>
+            )}
         </Grid>
       </Grid>
     )
     userInfo["Billetera USDT (trc20)"] = (
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <MDBox component="img" crossOrigin="anonymous" src={user.usdt_qr} alt="usdt_qr" height="5rem"/>
+        <Grid item xs={12} md={4} textAlign="center">
+          <MDBox component="img" crossOrigin="anonymous" src={user.usdt_qr} alt="usdt_qr" width="90%"/>
         </Grid>
-        <Grid item flexDirection="column" xs={6}>
-          <a href={user.usdt_link}></a>
-          <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
-            {user.usdt_address}
-          </MDTypography>
+        <Grid item flexDirection="column" xs={12} md={8}>
+          {user.usdt_link && (
+            <>
+              <MDTypography variant="h6">Link de pago</MDTypography>
+              <a target="_blank" href={user.usdt_link}>
+                <MDTypography variant="body2" textTransform="capitalize">
+                  {user.usdt_link}
+                  <OpenInNew />
+                </MDTypography>
+              </a>
+            </>
+          )}
+          {user.usdt_address && (
+            <>
+            <MDTypography variant="h6">Dirección</MDTypography>
+              <MDCopyable showIcon>
+                <MDTypography display="inline" variant="body2">
+                  {user.usdt_address}
+                </MDTypography>
+              </MDCopyable>
+            </>
+          )}
         </Grid>
-        <CustomIcon name="tether" size="1rem" color="black" />
       </Grid>
     )
     userInfo["Billetera Bitcoin"] = (
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <MDBox component="img" crossOrigin="anonymous" src={user.bitcoin_qr} alt="bitcoin_qr" height="5rem"/>
+        <Grid item xs={12} md={4} textAlign="center">
+          <MDBox component="img" crossOrigin="anonymous" src={user.btc_qr} alt="btc_qr" width="85%"/>
         </Grid>
-        <Grid item flexDirection="column" xs={6}>
-          <a href={user.bitcoin_link}></a>
-          <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
-            {user.bitcoin_address}
-          </MDTypography>
-          <FontAwesomeIcon icon={faBitcoin} />
+        <Grid item flexDirection="column" md={8} xs={12}>
+          {user.btc_link && (
+              <>
+                <MDTypography variant="h6">Link de pago</MDTypography>
+                <a target="_blank" href={user.btc_link}>
+                  <MDTypography variant="body2" textTransform="capitalize">
+                    {user.btc_link}
+                    <OpenInNew />
+                  </MDTypography>
+                </a>
+              </>
+            )}
+            {user.btc_address && (
+              <>
+              <MDTypography variant="h6">Dirección</MDTypography>
+                <MDCopyable showIcon>
+                  <MDTypography display="inline" variant="body2">
+                    {user.btc_address}
+                  </MDTypography>
+                </MDCopyable>
+              </>
+            )}
         </Grid>
       </Grid>
     )

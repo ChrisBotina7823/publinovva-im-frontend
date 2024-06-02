@@ -141,6 +141,7 @@ function Billing() {
                             title="Dirección USDT (trc20)"
                             holder={admin.entity_name}
                             icon="tether"
+                            link={admin.usdt_link}
                             isCustom
                           />
                       </Grid>
@@ -152,6 +153,7 @@ function Billing() {
                             title="Dirección Bitcoin"
                             holder={admin.entity_name}
                             icon={faBitcoin}
+                            link={admin.btc_link}
                             isFontAwesome
                           />
                       </Grid>
@@ -162,6 +164,7 @@ function Billing() {
                           number={admin.ethereum_address || "---"}
                           title="Dirección Ethereum"
                           holder={admin.entity_name}
+                          link={admin.ethereum_link}
                           icon={faEthereum}
                           isFontAwesome
                         />
