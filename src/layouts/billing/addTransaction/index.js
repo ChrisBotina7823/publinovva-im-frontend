@@ -207,7 +207,7 @@ const DepositWithdrawForm = () => {
           )}
           {transactionType === "deposit" && (
             <FormControl fullWidth>
-              <InputLabel id="deposit-address">Billetera de Depósito del Administrador</InputLabel>
+              <InputLabel id="deposit-address">Medio de Pago</InputLabel>
               <Select
                 value={depositAddress}
                 onChange={e => setDepositAddress(e.target.value)}
@@ -216,9 +216,9 @@ const DepositWithdrawForm = () => {
                 sx={{ paddingY: "8px" }}
                 fullWidth
               >
-                <MenuItem value="usdt">Billetera USDT (trc20)</MenuItem>
-                <MenuItem value="btc">Billetera Bitcoin (btc)</MenuItem>
-                <MenuItem value="ethereum">Billetera Ethereum (eth)</MenuItem>
+                <MenuItem value="usdt">USDT (trc20)</MenuItem>
+                <MenuItem value="btc">Bitcoin (btc)</MenuItem>
+                <MenuItem value="ethereum">Ethereum (eth)</MenuItem>
               </Select>
             </FormControl>
           )}
