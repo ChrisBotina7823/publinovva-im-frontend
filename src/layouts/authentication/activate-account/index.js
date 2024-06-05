@@ -22,6 +22,7 @@ export default function ActivateAccount() {
             try {
                 const response = await axiosInstance().get('/auth/activate-account/' + token)
                 const admin = response.data.admin
+                console.log(admin)
                 setAdmin(admin)
                 setSuccess(true)
             } catch(err) {
@@ -37,7 +38,7 @@ export default function ActivateAccount() {
     const [ success, setSuccess ] = useState(false)
     
     const handleSuccessfulRedirect = (admin) => {
-        navigate("/client/sign-in/" + admin)
+        navigate("/client/sign-in/" + admin._id)
     }
     const handleUnsuccessfulRedirect = () => {
         navigate("/admin/sign-in")
