@@ -27,6 +27,7 @@ const InvestmentRequestForm = () => {
     const { user } = useUser();
     const { showNotification } = useNotification();
     const [controller, dispatch] = useMaterialUIController();
+    const [ minInvDate, setMinInvDate ] = useState(null);
 
     useEffect(() => {
         const fetchPackages = async () => {
@@ -34,7 +35,10 @@ const InvestmentRequestForm = () => {
                 const response = await axiosInstance().get(`/packages/user/${user._id}`);
                 setPackages(response.data);
             } catch (error) {
-                console.error('Error fetching packages:', error.response.data.error);
+                console.error(error)
+                if(error.response) {
+                    console.error('Error fetching packages:', error.response.data.error);
+                }
             }
         };
 
@@ -68,7 +72,12 @@ const InvestmentRequestForm = () => {
                         labelId="package-selector-label"
                         id="package-selector"
                         value={selectedPackage}
-                        onChange={(e) => setSelectedPackage(e.target.value)}
+                        onChange={(e) => {
+                            setSelectedPackage(e.target.value)
+                            const minInvDays = packages.find(p => p._id === e.target.value).min_inv_days
+                            // console.log(minInvDays)
+                            setMinInvDate(dayjs().add(minInvDays, 'days').format('DD/MM/YYYY'))
+                        }}
                         sx={{ paddingY: '8px' }}
                     >
                         {packages.map((inv_package) => (
@@ -103,6 +112,13 @@ const InvestmentRequestForm = () => {
                         onChange={(date) => setEndDate(date)}
                     />
                 </LocalizationProvider>
+                <MDBox >
+                    {minInvDate && (
+                        <MDTypography variant="body2">
+                            {`La fecha mínima de inversión es ${minInvDate}`}
+                        </MDTypography>
+                    )}
+                </MDBox>
             </MDBox>
             <MDTypography variant="caption">
                 {`Disponible billetera de comercio: ${formatCurrency(user.i_wallet.available_amount)}`}

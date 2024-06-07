@@ -20,15 +20,15 @@ export default function InvestmentDetail({id}) {
             try {
                 setLoading(true)
                 const response = await axiosInstance().get(`/investments/${id}`)
-                console.log(response.data)
+                // console.log(response.data)
                 const investment = response.data.investment
                 const stats = response.data.stats
-                console.log(stats)
-                console.log(investment)
+                // console.log(stats)
+                // console.log(investment)
                 setInvestment(investment)
                 setStats(stats)
             } catch(err) {
-                console.log(err)
+                // console.log(err)
                 showNotification("error", "Error al cargar la inversión. Intente nuevamente.")                
             } finally {
                 setLoading(false)

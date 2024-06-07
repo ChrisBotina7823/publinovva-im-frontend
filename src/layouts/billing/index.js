@@ -176,8 +176,8 @@ function Billing() {
                   <Grid item xs={12} md={6}>
                     <MDBox p={2}>
                       <div id="tradingview-widget">
-                        <div class="tradingview-widget-container">
-                          <div class="tradingview-widget-container__widget"></div>
+                        <div className="tradingview-widget-container">
+                          <div className="tradingview-widget-container__widget"></div>
                         </div>
                       </div>                      
                     </MDBox>

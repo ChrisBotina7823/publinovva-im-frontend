@@ -66,7 +66,7 @@ export default function DataTable(showNotification, updateLoading, handleInvestm
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("fetching data...")
+        // console.log("fetching data...")
         const response = await axiosInstance().get(`/investments/user/${user._id}`);
         
         const dataRows = mapDataToJSX(response.data)

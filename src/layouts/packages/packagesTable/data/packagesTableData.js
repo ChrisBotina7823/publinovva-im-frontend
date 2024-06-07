@@ -28,7 +28,6 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
   const confirmDelete = (element) => {
     confirm({ title: "Eliminar Licencia", description: `¿Estás seguro de que quieres eliminar la licencia ${element}?\n(Esta acción no se puede revertir)` })
     .then(() => {
-      console.log("a")
       handleDeleteClick(element)
     })
     .catch(() => {
@@ -38,7 +37,7 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('Fetching data...');
+        // console.log('Fetching data...');
         const response = await axiosInstance().get(`/packages/user/${user._id}`);
         const dataRows = response.data.reverse().map((dataItem) => ({
           id: <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id} />,

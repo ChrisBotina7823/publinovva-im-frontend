@@ -38,7 +38,7 @@ export default function DataTable(showNotification, handleEditClick, updateLoadi
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("Fetching data...");
+      // console.log("Fetching data...");
       const transactionTypes = {
         "deposit": "Depósito",
         "withdrawal": "Retiro",
@@ -47,7 +47,7 @@ export default function DataTable(showNotification, handleEditClick, updateLoadi
       }
       try {
         const response = await axiosInstance().get(`/movements/wallet-transactions/${user._id}`);
-        console.log(response.data)
+        // console.log(response.data)
         const dataRows = response.data.reverse().map((dataItem) => ({
           id: <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id} />,
           date: <span>{(new Date(dataItem.date)).toLocaleDateString()}</span>,

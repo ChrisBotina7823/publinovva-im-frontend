@@ -41,6 +41,7 @@ import DefaultLineChart from "examples/Charts/LineCharts/DefaultLineChart";
 import axiosInstance from "axiosInstance";
 import InvestmentDetail from "../investmentDetail";
 import ConfiguratorContext from "configurator/configuratorContext";
+import { faChartLine } from "@fortawesome/free-solid-svg-icons";
 
 function Tables() {
 
@@ -83,12 +84,12 @@ function Tables() {
         .then(response => {
           setTotalInvested(response.data.total_invested)
           setTotalRevenue(response.data.total_revenue)
-          console.log(response.data.chart)
+          // console.log(response.data.chart)
           setSampleChart(response.data.chart)
         })
     }, [])
   } catch(err) {
-    console.log(err)
+    // console.log(err)
     if(err.response) {
       showNotification("error", "Error al cargar los datos", err.response.data.message)
     }
@@ -146,7 +147,7 @@ function Tables() {
                     </Grid>
                     { sampleChart && (
                       <Grid item xs={12} md={12}>
-                        <DefaultLineChart icon="money" title="Ingresos Semanales" description="Un resumen de tus ingresos de los últimos 7 días (Tus inversiones generan ingresos a las 00:00 UTC)"  chart={ sampleChart } />
+                        <DefaultLineChart icon={faChartLine} title="Ingresos Semanales" description="Un resumen de tus ingresos de los últimos 7 días (Tus inversiones generan ingresos a las 00:00 UTC)"  chart={ sampleChart } />
                       </Grid>                    
                     )}
                   </Grid>

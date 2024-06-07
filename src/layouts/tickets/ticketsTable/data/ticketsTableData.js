@@ -41,7 +41,7 @@ export default function DataTable(showNotification, handleEditClick, updateLoadi
 
   const fetchData = async () => {
     try {
-      console.log("fetching data...");
+      // console.log("fetching data...");
       const response = await axiosInstance().get(`/movements/support-tickets/${user._id}`);
       const dataRows = response.data.reverse().map((dataItem) => ({
         id: <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id} />,

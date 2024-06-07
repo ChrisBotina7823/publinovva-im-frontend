@@ -65,6 +65,7 @@ import ActivateAccount from "layouts/authentication/activate-account";
 // @mui icons
 import Icon from "@mui/material/Icon"; 
 import { QuestionAnswerRounded } from '@mui/icons-material';
+import VerifyAccount from 'layouts/authentication/verify-account';
 
 const routes = [
   {
@@ -216,6 +217,15 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "auth/activate-account/:token",
     component: <ActivateAccount />,
+    hidden: ["Client", "Admin", "Superuser"]
+  },
+  {
+    type: "collapse",
+    name: "Verificar cuenta",
+    key: "verificar",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "auth/verify-account/:adminId",
+    component: <VerifyAccount />,
     hidden: ["Client", "Admin", "Superuser"]
   },
 ];

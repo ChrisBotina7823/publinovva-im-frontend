@@ -60,9 +60,9 @@ const AddClientForm = ({admin_id=null}) => {
                 usd_password: usdPassword,
             });
             if(admin_id) {
-                console.log(admin_id)
-                navigate("/client/sign-in/" + admin_id)
-                showNotification("success", "Cuenta creada", "Tu cuenta ha sido creada correctamente, ingresa a tu correo para activarla")
+                // console.log(admin_id)
+                navigate("/auth/verify-account/" + admin_id)
+                // showNotification("success", "Cuenta creada", "Tu cuenta ha sido creada correctamente, ingresa a tu correo para activarla")
             } else {    
                 setOpenConfigurator(dispatch, false);
                 showNotification("success", "Cliente añadido correctamente", `El ID del cliente es ${response.data._id}`);

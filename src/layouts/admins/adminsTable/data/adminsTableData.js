@@ -32,7 +32,6 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
   const confirmDelete = (element) => {
     confirm({ title: "Eliminar Administrador", description: `¿Estás seguro de que quieres eliminar el administrador ${element}?\n(Esta acción no se puede revertir)` })
     .then(() => {
-      console.log("a")
       handleDeleteClick(element)
     })
     .catch(() => {
@@ -40,7 +39,7 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
   }
 
   const mapDataToJSX = (data) => {
-    console.log(data)
+    // console.log(data)
     return data.reverse().map((dataItem) => ({
       // admin: (
       //   <MDBox key={dataItem.username}>
@@ -122,7 +121,7 @@ export default function DataTable(showNotification, handleEditClick, handleDelet
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("fetching data...")
+        // console.log("fetching data...")
         const response = await axiosInstance().get('admins');
         const dataRows = mapDataToJSX(response.data);
 

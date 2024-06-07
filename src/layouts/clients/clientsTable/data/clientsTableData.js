@@ -35,7 +35,6 @@ import { formatCurrency } from 'utils';
     const confirmDelete = (element) => {
       confirm({ title: "Eliminar Cliente", description: `¿Estás seguro de que quieres eliminar el cliente ${element}?\n(Esta acción no se puede revertir)` })
       .then(() => {
-        console.log("a")
         handleDeleteClick(element)
       })
       .catch(() => {
@@ -43,7 +42,7 @@ import { formatCurrency } from 'utils';
     }
 
     const mapDataToJSX = (data) => {
-      console.log(data)
+      // console.log(data)
       return data.reverse().map((dataItem) => ({
         // client: (
         //   <MDTypography key={dataItem.username}>

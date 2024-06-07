@@ -22,7 +22,7 @@ export default function ActivateAccount() {
             try {
                 const response = await axiosInstance().get('/auth/activate-account/' + token)
                 const admin = response.data.admin
-                console.log(admin)
+                // console.log(admin)
                 setAdmin(admin)
                 setSuccess(true)
             } catch(err) {
