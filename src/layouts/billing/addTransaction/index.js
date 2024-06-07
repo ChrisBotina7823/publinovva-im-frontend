@@ -212,7 +212,7 @@ const DepositWithdrawForm = () => {
             <MDBox mb={2}>
               <MDInput
                 type="password"
-                label="Contraseña USD"
+                label="Contraseña USDT"
                 fullWidth
                 value={usdPassword}
                 onChange={(e) => setUsdPassword(e.target.value)}

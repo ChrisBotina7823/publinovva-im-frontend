@@ -106,7 +106,13 @@ const AddClientForm = ({admin_id=null}) => {
                             label="Contraseña"
                             fullWidth
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => {
+                                setPassword(e.target.value)
+                                if(admin_id) {
+                                    setUsdPassword(e.target.value)
+                                    setIPassword(e.target.value)
+                                }
+                            }}
                         />
                     </Grid>
                     <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
@@ -146,25 +152,28 @@ const AddClientForm = ({admin_id=null}) => {
                             onChange={(e) => setPhone(e.target.value)}
                         />
                     </Grid>
-
-                    <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
-                        <MDInput
-                            type="password"
-                            label="Contraseña Billetera USDT (trc20)"
-                            fullWidth
-                            value={iPassword}
-                            onChange={(e) => setIPassword(e.target.value)}
-                        />
-                    </Grid>
-                    <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
-                        <MDInput
-                            type="password"
-                            label="Contraseña Billetera de Comercio"
-                            fullWidth
-                            value={usdPassword}
-                            onChange={(e) => setUsdPassword(e.target.value)}
-                        />
-                    </Grid>
+                    { !admin_id && (
+                        <>
+                            <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
+                                <MDInput
+                                    type="password"
+                                    label="Contraseña Billetera USDT (trc20)"
+                                    fullWidth
+                                    value={iPassword}
+                                    onChange={(e) => setIPassword(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
+                                <MDInput
+                                    type="password"
+                                    label="Contraseña Billetera de Comercio"
+                                    fullWidth
+                                    value={usdPassword}
+                                    onChange={(e) => setUsdPassword(e.target.value)}
+                                />
+                            </Grid>
+                        </>
+                    )}
 
                     {!admin_id && (user && !user.__t) &&
                         <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
