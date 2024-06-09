@@ -53,7 +53,7 @@ import { formatCurrency } from 'utils';
           <MDBox>
             <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id}/>
             {dataItem.suspended &&
-              <MDBadge size="lg" variant="gradient" fontWeight="bold" color="error" badgeContent="INACTIVA"/>
+              <MDBadge size="lg" variant="gradient" fontWeight="bold" color="error" badgeContent="NO VERIFICADA"/>
             }
           </MDBox>
 

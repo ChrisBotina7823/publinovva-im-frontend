@@ -7,8 +7,9 @@ import axiosInstance from "axiosInstance";
 import { useNotification } from "components/NotificationContext";
 import { setOpenConfigurator, useMaterialUIController } from "context";
 import { useUser } from "context/userContext";
-import { CircularProgress, Grid } from "@mui/material";
+import { Checkbox, CircularProgress, FormControlLabel, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const AddClientForm = ({admin_id=null}) => {
     const [username, setUsername] = useState('');
@@ -28,6 +29,9 @@ const AddClientForm = ({admin_id=null}) => {
     const { user, setUser } = useUser()
 
     const [loading, setLoading] = useState()
+
+    const [captchaValue, setCaptchaValue] = useState(null);
+    const [termsAccepted, setTermsAccepted] = useState(false);
 
     const navigate = useNavigate();
     const [ admin, setAdmin ] = useState(null)
@@ -187,8 +191,34 @@ const AddClientForm = ({admin_id=null}) => {
                         </Grid>
                     }
 
+                    {admin_id && (
+                        <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={termsAccepted}
+                                        onChange={event => setTermsAccepted(event.target.checked)}
+                                        name="termsAccepted"
+                                        color="primary"
+                                    />
+                                }
+                                label="Acepto los términos y condiciones"
+                            />
+                        </Grid>
+                    )}
+                    <Grid item xl={admin_id ? 6 : 12} px={2} mb={2}>
+                        {admin_id && (
+                            // 6LeydPQpAAAAALS8HTNVRGsyP2IPIiMPh26-IYZn
+                            // 6LeydPQpAAAAACJ57YkHbGqw05trEHdOfgcMhyln
+                            <ReCAPTCHA
+                                sitekey="6LcCdvQpAAAAAD1iAjHRHLpIx6LglNVZc55h8ktn"
+                                onChange={value => setCaptchaValue(value)}
+                            />
+                        )}
+                    </Grid>
+
                     <MDBox mx="auto" mt={2} mb={1}>
-                        <MDButton variant="gradient" color="info" fullWidth onClick={handleAddClient}>
+                        <MDButton disabled={admin_id && !(captchaValue && termsAccepted && username && password && email && fullname && country && phone)} variant="gradient" color="info" fullWidth onClick={handleAddClient}>
                             {admin_id ? "Registrarse" : "Añadir Cliente"} 
                         </MDButton>
                     </MDBox>
