@@ -42,6 +42,7 @@ export default function DataTable(showNotification, updateLoading, handleInvestm
         <MDBox>
           <MDCopyable variant="thin" vl={dataItem.shortId || dataItem._id} />
           <MDTypography variant="body2">{(new Date(dataItem.actual_start_date || dataItem.start_date)).toLocaleDateString()} {" - "} {(new Date(dataItem.end_date)).toLocaleDateString()} </MDTypography>
+          <MDTypography variant="body2"> {`Hora: ${new Date(dataItem.end_date).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`} </MDTypography>
           <MDBadge color={colorsDict[dataItem.state]} variant="gradient" badgeContent={dataItem.state}/>
         </MDBox>
       ),

@@ -18,6 +18,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
 import { setOpenConfigurator, useMaterialUIController } from "context";
+import { DateTimePicker, MobileTimePicker, TimePicker } from "@mui/x-date-pickers";
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 
 
 const EditInvestmentForm = ({ investmentId }) => {
@@ -30,6 +32,7 @@ const EditInvestmentForm = ({ investmentId }) => {
 
     const { showNotification } = useNotification();
     const [controller, dispatch] = useMaterialUIController();
+    const [time, setTime] = useState(dayjs());
 
     const [loading, setLoading] = useState()
 
@@ -38,12 +41,13 @@ const EditInvestmentForm = ({ investmentId }) => {
             try {
                 setLoading(true)
                 const response = await axiosInstance().get(`/investments/${investmentId}`);
-                const investmentData = response.data;
+                const investmentData = response.data.investment;
 
                 setInitialInvestmentData(investmentData);
 
                 setActualStartDate(dayjs(investmentData.actual_start_date));
                 setEndDate(dayjs(investmentData.end_date));
+                setTime(dayjs(investmentData.end_date));
                 setState(investmentData.state || '');
             } catch (error) {
                 console.error('Error fetching investment data:', error.response.data.error);
@@ -61,6 +65,7 @@ const EditInvestmentForm = ({ investmentId }) => {
             const requestData = {
                 actual_start_date: actualStartDate.toISOString(),
                 end_date: endDate.toISOString(),
+                time: time.toISOString(),
                 ...(showState && { state }),
             };
 
@@ -85,7 +90,7 @@ const EditInvestmentForm = ({ investmentId }) => {
             {loading ? (
                 <CircularProgress color="secondary" size={60} />
             ) : (
-                <>
+                <>  
                     <MDBox mb={2}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
@@ -105,6 +110,16 @@ const EditInvestmentForm = ({ investmentId }) => {
                             />
                         </LocalizationProvider>
                     </MDBox>
+
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoContainer components={['TimePicker']}>
+                            <MobileTimePicker
+                                label="Hora de solicitud"
+                                value={time}
+                                onChange={(newTime) => setTime(newTime)}
+                            />
+                        </DemoContainer>
+                    </LocalizationProvider>
 
                     {/* Toggle para mostrar/ocultar el campo de estado */}
                     <MDBox mb={1}>

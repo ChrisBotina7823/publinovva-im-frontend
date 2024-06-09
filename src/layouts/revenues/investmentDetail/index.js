@@ -57,7 +57,12 @@ export default function InvestmentDetail({id}) {
                             color="success"
                             icon="expand_less"
                             name={investment.package.name}
-                            description={new Date(revenue.date).toLocaleDateString('en-GB')}
+                            description={
+                                new Date(revenue.date).toLocaleString('en-GB', {
+                                    year: 'numeric', month: '2-digit', day: '2-digit',
+                                    hour: '2-digit', minute: '2-digit'
+                                })
+                            }
                             value={`+ ${formatCurrency(revenue.amount)}`}
                           />
                         )

@@ -147,7 +147,7 @@ function Tables() {
                     </Grid>
                     { sampleChart && (
                       <Grid item xs={12} md={12}>
-                        <DefaultLineChart icon={faChartLine} title="Ingresos Semanales" description="Un resumen de tus ingresos de los últimos 7 días (Tus inversiones generan ingresos a las 00:00 UTC)"  chart={ sampleChart } />
+                        <DefaultLineChart icon={faChartLine} title="Ingresos Semanales" description="Un resumen de tus ingresos de los últimos 7 días"  chart={ sampleChart } />
                       </Grid>                    
                     )}
                   </Grid>
